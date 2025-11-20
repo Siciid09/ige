@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GerNast 2026 | The Future of Somalia</title>
+    
+    <!-- TAILWIND CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS ANIMATION LIBRARY -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0a1f44',    
+                            blue: '#1e40af',    
+                            red: '#dc2626',     
+                            light: '#f3f4f6',
+                            accent: '#2563eb',
+                            somalia: '#4189DD',
+                            somaliaLight: 'rgba(65, 137, 221, 0.1)'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                        header: ['"Georgia"', 'serif'],
+                    },
+                    animation: {
+                        'scroll': 'scroll 40s linear infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        scroll: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- CUSTOM CURSOR --- */
+        body { cursor: none; }
+        a, button, input, .cursor-pointer { cursor: none; }
+
+        .cursor-dot {
+            width: 8px; height: 8px; background-color: #4189DD; border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9999;
+            transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s;
+        }
+        .cursor-outline {
+            width: 40px; height: 40px; border: 1px solid rgba(65, 137, 221, 0.5); border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9998;
+            transform: translate(-50%, -50%); transition: left 0.1s, top 0.1s;
+        }
+
+        /* --- WAVY LINE SVG BACKGROUND --- */
+        .timeline-wavy {
+            position: absolute; left: 50%; transform: translateX(-50%); top: 0; bottom: 0; width: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='100' viewBox='0 0 20 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 0 Q 20 25 10 50 Q 0 75 10 100' stroke='%23e2e8f0' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+            background-repeat: repeat-y;
+        }
+        @media(max-width: 768px) { .timeline-wavy { left: 20px; } }
+
+        /* --- GLASS MORPHISM --- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .glass-card-dark {
+            background: rgba(12, 36, 72, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- HEADER & HERO (ORIGINAL STYLES) --- */
+        .custom-header-style header {width:100%; padding:28px 0; position:fixed; top:0; left:0; z-index:50; background:#0c2448;}
+        .custom-header-style .container {width:88%; margin:auto; display:flex; justify-content:space-between; align-items:center;}
+        .custom-header-style .logo {font-size:28px; font-weight:700; letter-spacing:1px; cursor:pointer; color: #fff; font-family:'Georgia', serif;}
+        .custom-header-style nav ul {display:flex; gap:35px; list-style:none;}
+        .custom-header-style nav ul li a {color:#fff; text-decoration:none; font-size:18px; font-weight:500; font-family:'Georgia', serif;}
+        .custom-header-style .hamburger {display:none; flex-direction:column; cursor:pointer; gap:5px;}
+        .custom-header-style .hamburger div {width:25px; height:3px; background:#fff; border-radius:2px;}
+        @media(max-width:900px){
+          .custom-header-style nav ul {display:none; flex-direction:column; background:#0c2448; position:absolute; top:80px; right:5%; padding:15px; border-radius:8px; width:200px;}
+          .custom-header-style nav ul.active {display:flex;}
+          .custom-header-style .hamburger {display:flex;}
+        }
+        .hero-section-wrapper {background:#0c2448; color:#fff; font-family:'Georgia', serif; padding-bottom: 50px; overflow: hidden;}
+        .hero {width:100%; min-height:100vh; display:flex; justify-content:space-between; align-items:center; position:relative; padding-top:120px;}
+        .hero-col {flex:1; display:flex; flex-direction:column; justify-content:center;}
+        .left {padding-left:8%;}
+        .center {align-items:center; position:relative;}
+        .center img {width:420px; height:auto; border-radius:6px; z-index:3; position:relative; -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%); mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);}
+        .right {padding-right:8%;}
+        .tag {font-size:14px; letter-spacing:2px; opacity:0.8;}
+        .hero h1 {font-size:70px; line-height:1.05; margin-top:25px; font-weight:700; font-family:'Georgia', serif; color: white;}
+        .hero h1 span {color:#4d89ff; font-style:italic;}
+        .desc {max-width:420px; margin-top:30px; font-size:18px; line-height:1.6; opacity:0.85; font-family:'Georgia', serif;}
+        .cta {margin-top:40px; display:inline-flex; align-items:center; gap:8px; padding:14px 22px; background:#1e4fff; color:#fff; font-size:16px; border-radius:6px; text-decoration:none; white-space:nowrap; font-weight:600; transition:0.3s; font-family:'Georgia', serif;}
+        .cta:hover {opacity:0.9;}
+        .flag {position:absolute; inset:0; background:url("https://upload.wikimedia.org/wikipedia/commons/a/a0/Flag_of_Somalia.svg") center/cover no-repeat; opacity:0.38; mix-blend-mode:overlay; z-index:1;}
+        .shape1 {position:absolute; top:0; right:0; width:55%; height:50%; background:rgba(0,0,0,0.25); filter:blur(18px); border-bottom-left-radius:300px;}
+        .shape2 {position:absolute; top:28%; right:-4%; width:60%; height:55%; background:rgba(0,0,0,0.28); filter:blur(18px); border-top-left-radius:300px;}
+        @media(max-width:1100px){.hero{flex-direction:column; height:auto; text-align:center; padding-bottom:60px;} .left, .right {padding:0 !important; text-align:center;} .center img{width:300px;} .hero h1{font-size:48px;} .desc{margin:auto; margin-top:20px;} .cta{margin:auto;}}
+        @media(max-width:700px){.hero h1{font-size:36px;} .desc{font-size:16px; max-width:300px;} .center img{width:220px;} nav ul {right:10px; width:180px;} .cta{padding:10px 16px; font-size:14px;}}
+        @media(max-width:480px){.hero h1{font-size:28px;} .desc{font-size:14px; max-width:260px;} .center img{width:180px;} .cta{padding:8px 12px; font-size:13px;}}
+
+        /* --- UTILS --- */
+        .faq-answer {max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, padding 0.3s ease;}
+        .faq-answer.open {max-height: 500px;}
+        #backToTop { position: fixed; bottom: 30px; right: 30px; z-index: 90; opacity: 0; visibility: hidden; transition: all 0.3s; }
+        #backToTop.show { opacity: 1; visibility: visible; transform: translateY(0); }
+
+        /* --- CAROUSEL --- */
+        .carousel-track { display: flex; transition: transform 0.5s ease-in-out; }
+        .carousel-slide { min-width: 100%; padding: 0 1rem; transition: transform 0.3s; }
+        @media (min-width: 768px) { .carousel-slide { min-width: 33.333%; } }
+        .carousel-slide.center-slide { transform: scale(1.1); z-index: 10; } /* Request 5: Center Rounded Design */
+        .dot { width: 10px; height: 10px; background: #cbd5e1; border-radius: 50%; cursor: pointer; transition: 0.3s; }
+        .dot.active { background: #4189DD; width: 24px; border-radius: 12px; }
+        
+        /* Marquee */
+        .marquee-container:hover .marquee-content { animation-play-state: paused; }
+    </style>
+</head>
+<body class="font-sans text-slate-800 bg-white">
+
+    <!-- UTILS -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+    <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="w-12 h-12 bg-brand-somalia text-white rounded-full shadow-lg flex items-center justify-center hover:bg-brand-dark hover:scale-110 transition"><i class="fa-solid fa-arrow-up"></i></button>
+
+    <!-- HEADER (ORIGINAL) -->
+    <div class="custom-header-style">
+        <header>
+          <div class="container">
+            <div class="logo">GerNast.</div>
+            <nav>
+              <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#issues">Issues</a></li>
+                <li><a href="#priority">Priority</a></li>
+                <li><a href="#gallery">Journey</a></li>
+                <li><a href="#blog">News</a></li>
+              </ul>
+            </nav>
+            <div class="hamburger" onclick="document.querySelector('nav ul').classList.toggle('active')"><div></div><div></div><div></div></div>
+          </div>
+        </header>
+    </div>
+
+    <!-- HERO (ORIGINAL) -->
+    <div class="hero-section-wrapper">
+        <section class="hero">
+          <div class="flag"></div>
+          <div class="shape1"></div>
+          <div class="shape2"></div>
+          <div class="left hero-col" data-aos="fade-right">
+            <div class="tag">• IT'S TIME FOR CHANGE</div>
+            <h1>Together We <br /> Can Make <br /> <span>Somalia</span> <br /> Great Again</h1>
+          </div>
+          <div class="center hero-col" data-aos="zoom-in"><img src="https://pngimg.com/d/man_PNG6531.png?w=800" alt="Leader" /></div>
+          <div class="right hero-col" style="text-align:left; padding-right:8%;" data-aos="fade-left">
+            <p class="desc">We are a dedicated group of individuals committed to revitalizing Somalia and building a prosperous future for every citizen.</p>
+            <a href="#manifesto" class="cta">SEE OUR VISION <span class="arrow">→</span></a>
+          </div>
+        </section>
+    </div>
+
+    <!-- REDESIGNED: Modern Glass Countdown -->
+    <section class="bg-brand-somalia py-16 relative overflow-hidden" style="background: linear-gradient(135deg, #4189DD 0%, #0a1f44 100%);">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-10">
+                <div class="text-center lg:text-left" data-aos="fade-right">
+                    <h3 class="text-white/80 font-serif text-lg uppercase tracking-[0.2em] mb-2">The Path to Sovereignty</h3>
+                    <h2 class="text-4xl md:text-5xl font-bold text-white font-serif">Election Day 2026</h2>
+                </div>
+                <div class="flex gap-4 md:gap-8" data-aos="zoom-in">
+                    <div class="glass-card p-6 rounded-xl text-center w-24 md:w-32 hover:-translate-y-2 transition duration-300"><span class="block text-4xl md:text-5xl font-bold text-white mb-1">342</span><span class="text-xs text-blue-200 uppercase font-bold tracking-wider">Days</span></div>
+                    <div class="glass-card p-6 rounded-xl text-center w-24 md:w-32 hover:-translate-y-2 transition duration-300"><span class="block text-4xl md:text-5xl font-bold text-white mb-1">14</span><span class="text-xs text-blue-200 uppercase font-bold tracking-wider">Hrs</span></div>
+                    <div class="glass-card p-6 rounded-xl text-center w-24 md:w-32 hover:-translate-y-2 transition duration-300"><span class="block text-4xl md:text-5xl font-bold text-white mb-1">09</span><span class="text-xs text-blue-200 uppercase font-bold tracking-wider">Mins</span></div>
+                </div>
+                <div data-aos="fade-left">
+                    <a href="#volunteer" class="bg-white text-brand-somalia px-8 py-4 rounded-full font-bold hover:bg-brand-dark hover:text-white transition shadow-lg flex items-center gap-2">
+                        JOIN THE MOVEMENT <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS (ORIGINAL) -->
+    <section class="relative z-20 md:-mt-12 mb-20 pt-12 md:pt-0">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-white p-8 shadow-xl rounded-sm border-t-4 border-brand-blue hover:-translate-y-2 transition duration-300"><i class="fa-solid fa-check-to-slot text-3xl text-brand-blue mb-4"></i><h3 class="font-serif font-bold text-lg mb-2">Register to Vote</h3><p class="text-slate-500 text-xs">Make your voice heard.</p></div>
+                <div class="bg-white p-8 shadow-xl rounded-sm border-t-4 border-blue-400 hover:-translate-y-2 transition duration-300"><i class="fa-regular fa-calendar-check text-3xl text-blue-400 mb-4"></i><h3 class="font-serif font-bold text-lg mb-2">Attend Events</h3><p class="text-slate-500 text-xs">Engage with our party.</p></div>
+                <div class="bg-brand-blue p-8 shadow-xl rounded-sm text-white hover:-translate-y-2 transition duration-300"><i class="fa-solid fa-bullhorn text-3xl mb-4"></i><h3 class="font-serif font-bold text-lg mb-2">Get Involved</h3><p class="text-blue-100 text-xs">Make a real impact.</p></div>
+                <div class="bg-white p-8 shadow-xl rounded-sm border-t-4 border-brand-blue hover:-translate-y-2 transition duration-300"><i class="fa-solid fa-hand-holding-dollar text-3xl text-brand-blue mb-4"></i><h3 class="font-serif font-bold text-lg mb-2">Donate Today</h3><p class="text-slate-500 text-xs">Support our efforts.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 1: WHAT SOMALIA NEEDS (Alternating Colors) -->
+    <section class="py-24 bg-white" id="priority">
+        <div class="container mx-auto px-6 text-center mb-16">
+            <p class="text-brand-somalia uppercase text-xs font-bold tracking-widest mb-2">Our Priority</p>
+            <h2 class="text-4xl font-serif font-bold text-brand-dark mb-4">What Somalia <span class="text-brand-somalia italic">Needs</span></h2>
+        </div>
+        <div class="container mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 border border-slate-100">
+            <!-- Row 1 -->
+            <div class="bg-white p-10 hover:scale-105 transition duration-300 border-r border-b border-slate-100 group" data-aos="fade-up">
+                <div class="text-brand-somalia text-3xl mb-4"><i class="fa-solid fa-chart-line"></i></div>
+                <h3 class="font-serif font-bold text-lg mb-2">Economic</h3>
+                <p class="text-xs text-slate-500">Sustainable growth.</p>
+            </div>
+            <div class="bg-brand-somaliaLight p-10 hover:scale-105 transition duration-300 border-r border-b border-slate-100 group" data-aos="fade-up" data-aos-delay="100">
+                <div class="text-brand-somalia text-3xl mb-4"><i class="fa-solid fa-heart-pulse"></i></div>
+                <h3 class="font-serif font-bold text-lg mb-2">Medical</h3>
+                <p class="text-xs text-slate-500">Accessible healthcare.</p>
+            </div>
+            <div class="bg-white p-10 hover:scale-105 transition duration-300 border-r border-b border-slate-100 group" data-aos="fade-up" data-aos-delay="200">
+                <div class="text-brand-somalia text-3xl mb-4"><i class="fa-solid fa-users"></i></div>
+                <h3 class="font-serif font-bold text-lg mb-2">Social</h3>
+                <p class="text-xs text-slate-500">Equality for all.</p>
+            </div>
+            <div class="bg-brand-somaliaLight p-10 hover:scale-105 transition duration-300 border-b border-slate-100 group" data-aos="fade-up" data-aos-delay="300">
+                <div class="text-brand-somalia text-3xl mb-4"><i class="fa-solid fa-shield-halved"></i></div>
+                <h3 class="font-serif font-bold text-lg mb-2">Security</h3>
+                <p class="text-xs text-slate-500">National safety.</p>
+            </div>
+            <!-- Row 2 -->
+            <div class="bg-brand-somaliaLight p-10 hover:scale-105 transition duration-300 border-r border-slate-100 group" data-aos="fade-up" data-aos-delay="400">
+                <div class="text-brand-somalia text-3xl mb-4"><i class="fa-solid fa-graduation-cap"></i></div>
+                <h3 class="font-serif font-bold text-lg mb-2">Education</h3>
+                <p class="text-xs text-slate-500">Universal literacy.</p>
+            </div>
+            <div class="bg-white p-10 hover:scale-105 transition duration-300 border-r border-slate-100 group" data-aos="fade-up" data-aos-delay="500">
+                <div class="text-brand-somalia text-3xl mb-4"><i class="fa-solid fa-droplet"></i></div>
+                <h3 class="font-serif font-bold text-lg mb-2">Water</h3>
+                <p class="text-xs text-slate-500">Clean access.</p>
+            </div>
+            <div class="bg-brand-somaliaLight p-10 hover:scale-105 transition duration-300 border-r border-slate-100 group" data-aos="fade-up" data-aos-delay="600">
+                <div class="text-brand-somalia text-3xl mb-4"><i class="fa-solid fa-solar-panel"></i></div>
+                <h3 class="font-serif font-bold text-lg mb-2">Energy</h3>
+                <p class="text-xs text-slate-500">Renewable power.</p>
+            </div>
+            <div class="bg-white p-10 hover:scale-105 transition duration-300 group" data-aos="fade-up" data-aos-delay="700">
+                <div class="text-brand-somalia text-3xl mb-4"><i class="fa-solid fa-fish-fins"></i></div>
+                <h3 class="font-serif font-bold text-lg mb-2">Fisheries</h3>
+                <p class="text-xs text-slate-500">Resource protection.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT (ORIGINAL) -->
+    <section class="py-20" id="about">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="relative">
+                    <div class="bg-gray-200 p-4 pb-16 rounded-sm relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop" alt="Supporter" class="w-full object-cover h-96 grayscale hover:grayscale-0 transition duration-500">
+                        <div class="absolute bottom-8 left-8 right-8 bg-white p-6 shadow-lg border-l-4 border-blue-600">
+                            <p class="text-xs text-slate-600 italic mb-4">"Their efforts to expand coverage and lower costs have had a positive impact on countless individuals and families."</p>
+                            <p class="text-xs font-bold text-blue-800 uppercase">Dr. B. Camerons Williamson</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-blue-600 uppercase text-xs font-bold tracking-widest mb-2">About Gernast</p>
+                    <h2 class="text-4xl font-serif font-bold text-brand-dark mb-6">Get to Know Closer <br> With <span class="italic text-blue-600">GerNast</span></h2>
+                    <p class="text-slate-600 mb-6 leading-relaxed">We firmly believe that when we come together, we can overcome any challenge and achieve remarkable things.</p>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded text-xs font-bold tracking-wide transition">SEE THIS ROLES <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2: LEGACY (Wavy Line + 5 items) -->
+    <section class="py-24 bg-white relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-down">
+                <p class="text-blue-600 uppercase text-xs font-bold tracking-widest mb-2">The Journey</p>
+                <h2 class="text-4xl font-serif font-bold text-brand-dark">Legacy of <span class="italic text-blue-600">Leadership</span></h2>
+            </div>
+            <div class="relative max-w-4xl mx-auto">
+                <div class="timeline-wavy"></div> <!-- Wavy Line Here -->
+                
+                <!-- Items -->
+                <div class="relative grid md:grid-cols-2 gap-8 mb-12 items-center group">
+                    <div class="md:text-right order-2 md:order-1" data-aos="fade-right"><h3 class="text-xl font-bold text-brand-dark">2012: Rebuilding Mogadishu</h3><p class="text-slate-600 text-sm mt-2">Restored electricity to key districts.</p></div>
+                    <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-brand-somalia rounded-full border-4 border-white shadow-lg z-10 hidden md:block"></div>
+                    <div class="order-1 md:order-2 pl-8 md:pl-0" data-aos="fade-left"><span class="inline-block px-3 py-1 bg-blue-100 text-blue-600 text-xs font-bold rounded">Infrastructure</span></div>
+                </div>
+                <div class="relative grid md:grid-cols-2 gap-8 mb-12 items-center group">
+                    <div class="md:text-right order-2 md:order-1" data-aos="fade-right"><span class="inline-block px-3 py-1 bg-blue-100 text-blue-600 text-xs font-bold rounded">Diplomacy</span></div>
+                    <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-brand-dark rounded-full border-4 border-white shadow-lg z-10 hidden md:block"></div>
+                    <div class="order-1 md:order-2 pl-8 md:pl-0" data-aos="fade-left"><h3 class="text-xl font-bold text-brand-dark">2015: Peace Accord</h3><p class="text-slate-600 text-sm mt-2">Dialogue between regional states.</p></div>
+                </div>
+                <div class="relative grid md:grid-cols-2 gap-8 mb-12 items-center group">
+                    <div class="md:text-right order-2 md:order-1" data-aos="fade-right"><h3 class="text-xl font-bold text-brand-dark">2018: Education First</h3><p class="text-slate-600 text-sm mt-2">Built 20 new secondary schools.</p></div>
+                    <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-brand-somalia rounded-full border-4 border-white shadow-lg z-10 hidden md:block"></div>
+                    <div class="order-1 md:order-2 pl-8 md:pl-0" data-aos="fade-left"><span class="inline-block px-3 py-1 bg-blue-100 text-blue-600 text-xs font-bold rounded">Education</span></div>
+                </div>
+                <div class="relative grid md:grid-cols-2 gap-8 mb-12 items-center group">
+                    <div class="md:text-right order-2 md:order-1" data-aos="fade-right"><span class="inline-block px-3 py-1 bg-blue-100 text-blue-600 text-xs font-bold rounded">Health</span></div>
+                    <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-brand-dark rounded-full border-4 border-white shadow-lg z-10 hidden md:block"></div>
+                    <div class="order-1 md:order-2 pl-8 md:pl-0" data-aos="fade-left"><h3 class="text-xl font-bold text-brand-dark">2021: Pandemic Response</h3><p class="text-slate-600 text-sm mt-2">Led national task force.</p></div>
+                </div>
+                <div class="relative grid md:grid-cols-2 gap-8 items-center group">
+                    <div class="md:text-right order-2 md:order-1" data-aos="fade-right"><h3 class="text-xl font-bold text-brand-dark">2024: The Coalition</h3><p class="text-slate-600 text-sm mt-2">Founded the GerNast Movement.</p></div>
+                    <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-brand-somalia rounded-full border-4 border-white shadow-lg z-10 hidden md:block"></div>
+                    <div class="order-1 md:order-2 pl-8 md:pl-0" data-aos="fade-left"><span class="inline-block px-3 py-1 bg-blue-100 text-blue-600 text-xs font-bold rounded">Leadership</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3: ISSUES (Expanded) -->
+    <section class="relative bg-brand-dark py-24 overflow-hidden" id="issues">
+        <div class="absolute inset-0 opacity-30"><img src="https://images.unsplash.com/photo-1520960858461-ac67df5a049f?q=80&w=2076&auto=format&fit=crop" alt="Capitol" class="w-full h-full object-cover"></div>
+        <div class="container mx-auto px-6 relative z-10 grid md:grid-cols-2 gap-12">
+            <div class="text-white pt-10">
+                <p class="uppercase tracking-widest text-xs mb-4 opacity-80">The Issues</p>
+                <h2 class="text-4xl md:text-5xl font-serif font-bold mb-8 leading-tight">Our <span class="text-blue-400 italic">Responsibility</span><br>and Government <br> Accountability</h2>
+                <button class="bg-white text-brand-dark px-8 py-3 rounded text-xs font-bold hover:bg-blue-50 transition">SEE ALL ISSUES</button>
+            </div>
+            <div class="flex flex-col justify-center space-y-6 border-l border-white/20 pl-8 md:pl-16">
+                <a href="#" class="flex items-center text-white hover:text-blue-400 transition group"><div class="w-10 h-10 rounded bg-blue-900/50 flex items-center justify-center mr-4 group-hover:bg-blue-400 group-hover:text-brand-dark transition"><i class="fa-solid fa-hand-holding-dollar"></i></div><span class="text-lg font-medium">Spending and Debt</span></a>
+                <a href="#" class="flex items-center text-white hover:text-blue-400 transition group"><div class="w-10 h-10 rounded bg-blue-900/50 flex items-center justify-center mr-4 group-hover:bg-blue-400 group-hover:text-brand-dark transition"><i class="fa-solid fa-earth-americas"></i></div><span class="text-lg font-medium">Foreign Policy</span></a>
+                <a href="#" class="flex items-center text-white hover:text-blue-400 transition group"><div class="w-10 h-10 rounded bg-blue-900/50 flex items-center justify-center mr-4 group-hover:bg-blue-400 group-hover:text-brand-dark transition"><i class="fa-solid fa-scale-balanced"></i></div><span class="text-lg font-medium">Social Issues</span></a>
+                <!-- Expanded Items -->
+                <a href="#" class="flex items-center text-white hover:text-blue-400 transition group"><div class="w-10 h-10 rounded bg-blue-900/50 flex items-center justify-center mr-4 group-hover:bg-blue-400 group-hover:text-brand-dark transition"><i class="fa-solid fa-leaf"></i></div><span class="text-lg font-medium">Climate Resilience</span></a>
+                <a href="#" class="flex items-center text-white hover:text-blue-400 transition group"><div class="w-10 h-10 rounded bg-blue-900/50 flex items-center justify-center mr-4 group-hover:bg-blue-400 group-hover:text-brand-dark transition"><i class="fa-solid fa-wifi"></i></div><span class="text-lg font-medium">Digital Economy</span></a>
+                <a href="#" class="flex items-center text-white hover:text-blue-400 transition group"><div class="w-10 h-10 rounded bg-blue-900/50 flex items-center justify-center mr-4 group-hover:bg-blue-400 group-hover:text-brand-dark transition"><i class="fa-solid fa-rocket"></i></div><span class="text-lg font-medium">Youth Empowerment</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4: GALLERY (Somalia Flag, 10 Images, Glass Hover) -->
+    <section class="py-24 bg-brand-dark text-white" id="gallery">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+                <div data-aos="fade-right">
+                    <p class="text-blue-400 uppercase text-xs font-bold tracking-widest mb-2">Our Journey</p>
+                    <h2 class="text-4xl font-serif font-bold">Moments of <span class="italic text-blue-400">Unity</span></h2>
+                </div>
+                <a href="#" class="text-xs font-bold tracking-widest border-b border-blue-400 pb-1 hover:text-blue-400 transition mt-6 md:mt-0" data-aos="fade-left">FOLLOW ON INSTAGRAM</a>
+            </div>
+            <!-- Grid of 10 -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 h-auto">
+                <div class="col-span-2 row-span-2 relative group overflow-hidden rounded-sm h-80"><img src="https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?q=80&w=2089&auto=format&fit=crop" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:opacity-60"></div>
+                <div class="col-span-1 relative group overflow-hidden rounded-sm h-40"><img src="https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=2076&auto=format&fit=crop" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:opacity-60"></div>
+                <div class="col-span-1 relative group overflow-hidden rounded-sm h-40"><img src="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:opacity-60"></div>
+                <div class="col-span-1 relative group overflow-hidden rounded-sm h-40"><img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:opacity-60"></div>
+                <!-- Row 2 fillers -->
+                <div class="col-span-1 relative group overflow-hidden rounded-sm h-40"><img src="https://images.unsplash.com/photo-1622295023576-e41336a809b2?q=80&w=2026&auto=format&fit=crop" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:opacity-60"></div>
+                <div class="col-span-2 relative group overflow-hidden rounded-sm h-40"><img src="https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?q=80&w=1964&auto=format&fit=crop" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:opacity-60"></div>
+                <!-- Row 3 -->
+                <div class="col-span-1 relative group overflow-hidden rounded-sm h-40"><img src="https://images.unsplash.com/photo-1620799140408-ed5341cd2431?q=80&w=2072&auto=format&fit=crop" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:opacity-60"></div>
+                <div class="col-span-1 relative group overflow-hidden rounded-sm h-40"><img src="https://images.unsplash.com/photo-1523805009345-7448845a9e53?q=80&w=2072&auto=format&fit=crop" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:opacity-60"></div>
+                <div class="col-span-2 relative group overflow-hidden rounded-sm h-40"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Flag_of_Somalia.svg" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:opacity-60"></div>
+                <div class="col-span-1 relative group overflow-hidden rounded-sm h-40"><img src="https://images.unsplash.com/photo-1542596594-649edbc13630?q=80&w=2072&auto=format&fit=crop" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:opacity-60"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUOTE (ORIGINAL) -->
+    <section class="py-32 relative flex items-center justify-center bg-fixed bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1523805009345-7448845a9e53?q=80&w=2072&auto=format&fit=crop');">
+        <div class="absolute inset-0 bg-black/60"></div>
+        <div class="container mx-auto px-6 relative z-10 text-center text-white" data-aos="zoom-in">
+            <i class="fa-solid fa-quote-left text-4xl text-blue-400 mb-6 opacity-80"></i>
+            <h2 class="text-3xl md:text-5xl font-serif italic leading-normal mb-8">"Somalia is not just a land on a map; it is the heartbeat of the Horn. We will restore its dignity, one promise at a time."</h2>
+            <p class="uppercase tracking-[0.2em] font-bold text-sm opacity-80">— Candidate GerNast</p>
+        </div>
+    </section>
+
+    <!-- CABINET (ORIGINAL) -->
+    <section class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <p class="text-blue-600 uppercase text-xs font-bold tracking-widest mb-2">Gernast Cabinet</p>
+                    <h2 class="text-4xl font-serif font-bold text-brand-dark mb-6">Please Meet With <br> <span class="italic text-blue-600">The President</span> <br> Cabinet 2024-2029</h2>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-8">Stay informed about upcoming rallies, town hall meetings, and campaign events through our website.</p>
+                    <div class="flex gap-2">
+                        <button class="w-3 h-3 rounded-full bg-blue-600"></button>
+                        <button class="w-3 h-3 rounded-full bg-gray-300 hover:bg-blue-400"></button>
+                        <button class="w-3 h-3 rounded-full bg-gray-300 hover:bg-blue-400"></button>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="bg-gray-200 p-4 pb-16 rounded-sm relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1974&auto=format&fit=crop" alt="President Cabinet" class="w-full object-cover h-96 grayscale hover:grayscale-0 transition duration-500">
+                        <div class="absolute bottom-8 left-8 right-8 bg-white p-6 shadow-lg border-l-4 border-blue-600">
+                            <p class="text-xs text-slate-600 italic mb-4">"Their understanding of the challenges faced by farmers and their commitment to promoting sustainable practices are commendable."</p>
+                            <p class="text-xs font-bold text-blue-800 uppercase">Fr. D' Camerons Williamson</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EVENTS (ORIGINAL - Burao) -->
+    <section class="py-24 bg-slate-50">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+                <div>
+                    <p class="text-blue-600 uppercase text-xs font-bold tracking-widest mb-2">Join Us</p>
+                    <h2 class="text-4xl font-serif font-bold text-brand-dark">On The <span class="italic text-blue-600">Campaign Trail</span></h2>
+                </div>
+                <a href="#" class="mt-4 md:mt-0 text-sm font-bold text-brand-dark hover:text-blue-600 transition">VIEW ALL EVENTS <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white border border-slate-200 p-8 hover:shadow-xl transition duration-300 group" data-aos="fade-up">
+                    <div class="text-slate-400 text-sm font-bold mb-4">NOV 24, 2025</div>
+                    <h3 class="text-2xl font-serif font-bold text-brand-dark mb-2 group-hover:text-blue-600 transition">Mogadishu Stadium Rally</h3>
+                    <p class="text-slate-500 text-sm mb-6">Join 50,000 citizens for the launch.</p>
+                    <div class="flex justify-between items-center"><span class="text-xs font-bold bg-gray-100 px-2 py-1 rounded text-slate-600"><i class="fa-solid fa-location-dot mr-1"></i> Benadir</span><button class="text-blue-600 font-bold text-sm">RSVP</button></div>
+                </div>
+                <div class="bg-white border border-slate-200 p-8 hover:shadow-xl transition duration-300 group" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-slate-400 text-sm font-bold mb-4">DEC 02, 2025</div>
+                    <h3 class="text-2xl font-serif font-bold text-brand-dark mb-2 group-hover:text-blue-600 transition">Burao Town Hall</h3>
+                    <p class="text-slate-500 text-sm mb-6">Open dialogue on federal cooperation.</p>
+                    <div class="flex justify-between items-center"><span class="text-xs font-bold bg-gray-100 px-2 py-1 rounded text-slate-600"><i class="fa-solid fa-location-dot mr-1"></i> Togdheer</span><button class="text-blue-600 font-bold text-sm">RSVP</button></div>
+                </div>
+                <div class="bg-white border border-slate-200 p-8 hover:shadow-xl transition duration-300 group" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-slate-400 text-sm font-bold mb-4">DEC 15, 2025</div>
+                    <h3 class="text-2xl font-serif font-bold text-brand-dark mb-2 group-hover:text-blue-600 transition">Garowe Youth Summit</h3>
+                    <p class="text-slate-500 text-sm mb-6">Empowering the next generation.</p>
+                    <div class="flex justify-between items-center"><span class="text-xs font-bold bg-gray-100 px-2 py-1 rounded text-slate-600"><i class="fa-solid fa-location-dot mr-1"></i> Puntland</span><button class="text-blue-600 font-bold text-sm">RSVP</button></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5: VOICES (Carousel with Center Scale & 17 People Data-simulated) -->
+    <section class="py-24 bg-slate-50 overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12" data-aos="fade-up">
+                <p class="text-brand-somalia uppercase text-xs font-bold tracking-widest mb-2">Testimonials</p>
+                <h2 class="text-4xl font-serif font-bold text-brand-dark">Voices of the <span class="italic text-brand-somalia">Nation</span></h2>
+            </div>
+            <div class="relative overflow-hidden max-w-7xl mx-auto">
+                <!-- Track injected via JS with 17 items logic -->
+                <div class="carousel-track flex items-center py-10" id="track">
+                    <!-- JS will populate this -->
+                </div>
+            </div>
+            <div class="flex justify-center gap-2 mt-8" id="dots-container">
+                <!-- Dots injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 6: MANIFESTO (Remodernized) -->
+    <section class="py-20 bg-white border-y border-slate-100" id="manifesto">
+        <div class="container mx-auto px-6">
+            <div class="glass-card-dark p-12 rounded-2xl shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden" data-aos="fade-up">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-brand-somalia rounded-full filter blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2"></div>
+                <div class="flex-1 relative z-10">
+                    <h3 class="text-3xl font-serif font-bold text-white mb-3">Read The Full Manifesto</h3>
+                    <p class="text-blue-100 text-sm leading-relaxed max-w-lg">Transparency is our core value. Download our detailed 2026-2030 strategic plans for economic recovery, education, and healthcare.</p>
+                </div>
+                <div class="flex gap-4 relative z-10">
+                    <button class="flex items-center gap-3 px-6 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg hover:bg-white hover:text-brand-dark text-white transition group shadow-lg">
+                        <i class="fa-solid fa-file-pdf text-2xl group-hover:scale-110 transition"></i>
+                        <div class="text-left"><span class="block text-[10px] font-bold uppercase opacity-70">Download</span><span class="block text-sm font-bold">Economic Plan</span></div>
+                    </button>
+                    <button class="flex items-center gap-3 px-6 py-4 bg-brand-somalia border border-brand-somalia rounded-lg hover:bg-brand-blue transition group shadow-lg text-white">
+                        <i class="fa-solid fa-shield-halved text-2xl group-hover:scale-110 transition"></i>
+                        <div class="text-left"><span class="block text-[10px] font-bold uppercase opacity-70">Download</span><span class="block text-sm font-bold">Security Brief</span></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VOLUNTEER -->
+    <section class="py-24 bg-white" id="volunteer">
+        <div class="container mx-auto px-6 text-center mb-12" data-aos="fade-down">
+            <h2 class="text-3xl font-serif font-bold text-brand-dark">We Need <span class="italic text-brand-somalia">You</span></h2>
+            <p class="text-slate-500 text-sm mt-4 max-w-2xl mx-auto">Choose a role that fits your skills.</p>
+        </div>
+        <div class="container mx-auto px-6 grid md:grid-cols-3 gap-6">
+            <div class="group border border-slate-200 p-8 rounded hover:border-brand-somalia hover:shadow-lg transition duration-300 text-center" data-aos="fade-up"><div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-brand-somalia transition duration-300"><i class="fa-solid fa-phone text-2xl text-brand-somalia group-hover:text-white transition"></i></div><h3 class="font-bold text-lg mb-2">Digital Canvasser</h3><a href="#" class="text-brand-somalia text-xs font-bold uppercase tracking-widest hover:underline">Sign Up</a></div>
+            <div class="group border border-slate-200 p-8 rounded hover:border-brand-somalia hover:shadow-lg transition duration-300 text-center" data-aos="fade-up" data-aos-delay="100"><div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-brand-somalia transition duration-300"><i class="fa-solid fa-envelope-open-text text-2xl text-brand-somalia group-hover:text-white transition"></i></div><h3 class="font-bold text-lg mb-2">Event Host</h3><a href="#" class="text-brand-somalia text-xs font-bold uppercase tracking-widest hover:underline">Sign Up</a></div>
+            <div class="group border border-slate-200 p-8 rounded hover:border-brand-somalia hover:shadow-lg transition duration-300 text-center" data-aos="fade-up" data-aos-delay="200"><div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-brand-somalia transition duration-300"><i class="fa-solid fa-pen-nib text-2xl text-brand-somalia group-hover:text-white transition"></i></div><h3 class="font-bold text-lg mb-2">Content Creator</h3><a href="#" class="text-brand-somalia text-xs font-bold uppercase tracking-widest hover:underline">Sign Up</a></div>
+        </div>
+    </section>
+
+    <!-- 7: BLOG (Added CTA) -->
+    <section class="py-24 bg-slate-50" id="blog">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <p class="text-blue-600 uppercase text-xs font-bold tracking-widest mb-2">Blog & News</p>
+                <h2 class="text-4xl font-serif font-bold text-brand-dark">GerNast Update & <span class="text-blue-600 italic">News</span></h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 h-auto md:h-[500px] mb-12">
+                <div class="news-card relative h-[400px] md:h-full w-full overflow-hidden rounded-xl shadow-2xl cursor-pointer group">
+                    <div class="news-bg absolute inset-0 bg-[url('https://images.unsplash.com/photo-1540910419868-47494c5be3c0?q=80&w=2068&auto=format&fit=crop')] bg-cover bg-center transition duration-700 ease-in-out"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-transparent opacity-80 group-hover:opacity-90 transition"></div>
+                    <div class="absolute bottom-0 left-0 p-8 transition duration-500 group-hover:-translate-y-4">
+                        <span class="bg-blue-600 text-white text-[10px] font-bold px-3 py-1 uppercase mb-3 inline-block rounded-sm">Featured Story</span>
+                        <h3 class="text-3xl font-serif font-bold text-white leading-tight">The Roadmap to Economic Recovery</h3>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4 h-full">
+                    <div class="news-card relative h-[200px] md:flex-1 overflow-hidden rounded-xl shadow-lg cursor-pointer group">
+                        <div class="news-bg absolute inset-0 bg-[url('https://images.unsplash.com/photo-1575320181282-9afab399332c?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center transition duration-700"></div>
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-brand-dark/90 transition duration-500"></div>
+                        <div class="absolute bottom-0 left-0 p-6 w-full group-hover:hidden"><h4 class="text-xl font-serif font-bold text-white">Healthcare Reform Rally</h4></div>
+                    </div>
+                    <div class="news-card relative h-[200px] md:flex-1 overflow-hidden rounded-xl shadow-lg cursor-pointer group">
+                        <div class="news-bg absolute inset-0 bg-[url('https://images.unsplash.com/photo-1529101091760-61493900799c?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center transition duration-700"></div>
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-brand-dark/90 transition duration-500"></div>
+                        <div class="absolute bottom-0 left-0 p-6 w-full group-hover:hidden"><h4 class="text-xl font-serif font-bold text-white">New Education Bill</h4></div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button class="bg-brand-dark text-white px-10 py-4 rounded-full font-bold hover:bg-brand-somalia transition shadow-lg flex items-center gap-2 mx-auto">
+                    LOAD MORE NEWS <i class="fa-solid fa-rotate-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8: TRUSTED BY MEDIA (Marquee 15 items) -->
+    <section class="py-16 bg-white border-y border-slate-100 overflow-hidden marquee-container">
+        <div class="container mx-auto px-6 text-center mb-8">
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Trusted By Media</p>
+        </div>
+        <div class="relative w-full flex overflow-hidden">
+            <div class="marquee-content flex gap-12 animate-scroll whitespace-nowrap items-center opacity-50 hover:opacity-100 transition duration-500">
+                <!-- 15 Items (Repeated Logic) -->
+                <h3 class="text-2xl font-black font-serif text-slate-800">BBC <span class="font-light">SOMALIA</span></h3>
+                <h3 class="text-2xl font-black text-slate-800 tracking-tighter">AL JAZEERA</h3>
+                <h3 class="text-2xl font-bold text-slate-800">Hiiraan<span class="text-blue-600">Online</span></h3>
+                <h3 class="text-2xl font-serif font-bold italic text-slate-800">The EastAfrican</h3>
+                <h3 class="text-2xl font-black text-slate-800">Universal<span class="text-yellow-500">TV</span></h3>
+                <h3 class="text-2xl font-bold text-slate-800">Goobjoog<span class="text-red-500">News</span></h3>
+                <h3 class="text-2xl font-serif font-bold text-slate-800">Garowe Online</h3>
+                <h3 class="text-2xl font-black text-slate-800">SNTV</h3>
+                <h3 class="text-2xl font-bold text-slate-800">Hargeisa<span class="text-green-600">Press</span></h3>
+                <h3 class="text-2xl font-black font-serif text-slate-800">VOA <span class="font-light">Somali</span></h3>
+                <h3 class="text-2xl font-bold text-slate-800">Puntland<span class="text-blue-400">Post</span></h3>
+                <h3 class="text-2xl font-serif font-bold italic text-slate-800">Horn Diplomat</h3>
+                <h3 class="text-2xl font-black text-slate-800">CBA TV</h3>
+                <h3 class="text-2xl font-bold text-slate-800">Mustaqbal<span class="text-orange-500">Media</span></h3>
+                <h3 class="text-2xl font-serif font-bold text-slate-800">Radio Dalsan</h3>
+                <!-- Duplicate for Smooth Loop -->
+                <h3 class="text-2xl font-black font-serif text-slate-800">BBC <span class="font-light">SOMALIA</span></h3>
+                <h3 class="text-2xl font-black text-slate-800 tracking-tighter">AL JAZEERA</h3>
+                <h3 class="text-2xl font-bold text-slate-800">Hiiraan<span class="text-blue-600">Online</span></h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9: VIDEO (Moving Circle Pulse) -->
+    <section class="bg-brand-dark text-white py-24">
+        <div class="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+            <div class="relative group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=2069&auto=format&fit=crop" alt="Fiona" class="w-full object-cover h-80 opacity-80 group-hover:opacity-100 transition duration-300 border border-white/10">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-brand-somalia rounded-full animate-pulse-slow opacity-50 scale-150"></div>
+                        <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center pl-1 group-hover:scale-110 transition duration-300 relative z-10 shadow-[0_0_30px_rgba(255,255,255,0.5)]">
+                            <i class="fa-solid fa-play text-brand-somalia text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p class="uppercase tracking-widest text-xs mb-4 opacity-70 flex items-center gap-2"><span class="w-2 h-2 bg-blue-400 rounded-full"></span> Introduction Video</p>
+                <h2 class="text-4xl font-serif font-bold mb-6">Meet Fiona, the Next <br> <span class="italic text-blue-400">Country Leader</span></h2>
+                <p class="text-slate-300 text-sm leading-relaxed mb-8">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <div class="font-serif text-3xl text-blue-400 italic opacity-80">Fiona</div>
+                <p class="text-xs mt-2 uppercase tracking-wider opacity-60">Ms. Fiona Janefill Fronze</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- STORE (ORIGINAL) -->
+    <section class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <p class="text-blue-600 uppercase text-xs font-bold tracking-widest mb-2">Wear The Change</p>
+                <h2 class="text-4xl font-serif font-bold text-brand-dark">Campaign <span class="italic text-blue-600">Store</span></h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="group cursor-pointer" data-aos="fade-up"><div class="bg-gray-100 h-64 flex items-center justify-center rounded-lg mb-4 overflow-hidden relative"><img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=1964&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="T-Shirt"><div class="absolute top-4 right-4 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">NEW</div></div><h3 class="font-bold text-lg">The "Unity" Tee</h3><p class="text-sm text-slate-500 mb-2">100% Cotton, Somalia Blue</p><p class="font-bold text-brand-dark">$25.00</p></div>
+                <div class="group cursor-pointer" data-aos="fade-up" data-aos-delay="100"><div class="bg-gray-100 h-64 flex items-center justify-center rounded-lg mb-4 overflow-hidden"><img src="https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=1936&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="Cap"></div><h3 class="font-bold text-lg">Campaign Cap</h3><p class="text-sm text-slate-500 mb-2">Embroidered Logo</p><p class="font-bold text-brand-dark">$15.00</p></div>
+                <div class="group cursor-pointer" data-aos="fade-up" data-aos-delay="200"><div class="bg-gray-100 h-64 flex items-center justify-center rounded-lg mb-4 overflow-hidden"><img src="https://images.unsplash.com/photo-1620799140408-ed5341cd2431?q=80&w=2072&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="Badge"></div><h3 class="font-bold text-lg">Supporter Pin Set</h3><p class="text-sm text-slate-500 mb-2">Gold & Blue Enamel</p><p class="font-bold text-brand-dark">$10.00</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10: FAQ (Expanded to 8) -->
+    <section class="py-24 bg-white">
+        <div class="container mx-auto px-6 max-w-4xl">
+            <div class="text-center mb-16">
+                <p class="text-blue-600 uppercase text-xs font-bold tracking-widest mb-2">Answers</p>
+                <h2 class="text-4xl font-serif font-bold text-brand-dark">Frequently Asked <br> <span class="italic text-blue-600">Questions</span></h2>
+            </div>
+            <div class="space-y-4" id="faq-container">
+                <!-- 1 -->
+                <div class="border border-slate-200 rounded overflow-hidden"><button class="faq-btn w-full bg-white text-brand-dark px-6 py-4 text-left flex justify-between items-center hover:bg-slate-50 transition"><span class="font-medium text-sm">How can I get involved?</span><i class="fa-solid fa-plus text-blue-600"></i></button><div class="faq-answer p-0 bg-blue-50 text-slate-600 text-sm leading-relaxed"><div class="p-6 pt-0">We encourage active participation! Join local chapters or volunteer.</div></div></div>
+                <!-- 2 -->
+                <div class="border border-slate-200 rounded overflow-hidden"><button class="faq-btn w-full bg-white text-brand-dark px-6 py-4 text-left flex justify-between items-center hover:bg-slate-50 transition"><span class="font-medium text-sm">What are the main policy priorities?</span><i class="fa-solid fa-plus text-blue-600"></i></button><div class="faq-answer p-0 bg-blue-50 text-slate-600 text-sm leading-relaxed"><div class="p-6 pt-0">Economic growth, healthcare reform, and national security.</div></div></div>
+                <!-- 3-8 (Added) -->
+                <div class="border border-slate-200 rounded overflow-hidden"><button class="faq-btn w-full bg-white text-brand-dark px-6 py-4 text-left flex justify-between items-center hover:bg-slate-50 transition"><span class="font-medium text-sm">Where is my polling station?</span><i class="fa-solid fa-plus text-blue-600"></i></button><div class="faq-answer p-0 bg-blue-50 text-slate-600 text-sm leading-relaxed"><div class="p-6 pt-0">Check the voter registration tab for your district details.</div></div></div>
+                <div class="border border-slate-200 rounded overflow-hidden"><button class="faq-btn w-full bg-white text-brand-dark px-6 py-4 text-left flex justify-between items-center hover:bg-slate-50 transition"><span class="font-medium text-sm">How do I donate?</span><i class="fa-solid fa-plus text-blue-600"></i></button><div class="faq-answer p-0 bg-blue-50 text-slate-600 text-sm leading-relaxed"><div class="p-6 pt-0">Click the 'Donate' button in the header. We accept Zaad, EVC, and Cards.</div></div></div>
+                <div class="border border-slate-200 rounded overflow-hidden"><button class="faq-btn w-full bg-white text-brand-dark px-6 py-4 text-left flex justify-between items-center hover:bg-slate-50 transition"><span class="font-medium text-sm">What is the plan for education?</span><i class="fa-solid fa-plus text-blue-600"></i></button><div class="faq-answer p-0 bg-blue-50 text-slate-600 text-sm leading-relaxed"><div class="p-6 pt-0">Universal free primary education and subsidized university grants.</div></div></div>
+                <div class="border border-slate-200 rounded overflow-hidden"><button class="faq-btn w-full bg-white text-brand-dark px-6 py-4 text-left flex justify-between items-center hover:bg-slate-50 transition"><span class="font-medium text-sm">Can diaspora vote?</span><i class="fa-solid fa-plus text-blue-600"></i></button><div class="faq-answer p-0 bg-blue-50 text-slate-600 text-sm leading-relaxed"><div class="p-6 pt-0">Yes, registration opens online starting June 2025.</div></div></div>
+                <div class="border border-slate-200 rounded overflow-hidden"><button class="faq-btn w-full bg-white text-brand-dark px-6 py-4 text-left flex justify-between items-center hover:bg-slate-50 transition"><span class="font-medium text-sm">What about security?</span><i class="fa-solid fa-plus text-blue-600"></i></button><div class="faq-answer p-0 bg-blue-50 text-slate-600 text-sm leading-relaxed"><div class="p-6 pt-0">Strengthening the SNA and community policing initiatives.</div></div></div>
+                <div class="border border-slate-200 rounded overflow-hidden"><button class="faq-btn w-full bg-white text-brand-dark px-6 py-4 text-left flex justify-between items-center hover:bg-slate-50 transition"><span class="font-medium text-sm">How to contact the candidate?</span><i class="fa-solid fa-plus text-blue-600"></i></button><div class="faq-answer p-0 bg-blue-50 text-slate-600 text-sm leading-relaxed"><div class="p-6 pt-0">Use the contact form below or attend a town hall event.</div></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEWSLETTER (ORIGINAL) -->
+    <section class="bg-blue-600 py-16 relative overflow-hidden">
+        <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white opacity-10 rounded-full"></div>
+        <div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-white opacity-10 rounded-full"></div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h2 class="text-3xl font-serif font-bold text-white mb-4">Don't Miss a Moment of History</h2>
+            <p class="text-blue-100 mb-8 max-w-xl mx-auto">Join the movement. Get exclusive campaign updates directly to your inbox.</p>
+            <form class="max-w-lg mx-auto flex flex-col md:flex-row gap-4">
+                <input type="email" placeholder="Enter your email address" class="flex-1 px-6 py-4 rounded text-slate-800 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                <button type="button" class="px-8 py-4 bg-brand-dark text-white font-bold rounded hover:bg-gray-900 transition shadow-lg">SUBSCRIBE</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- 11: FULL FOOTER -->
+    <footer class="bg-brand-dark text-slate-300 py-16 border-t border-white/10">
+        <div class="container mx-auto px-6 grid md:grid-cols-4 gap-12 mb-16">
+            <div>
+                <div class="flex items-center gap-2 mb-6 text-white">
+                    <div class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-xs font-bold">G</div>
+                    <span class="text-xl font-serif font-bold">GerNast.</span>
+                </div>
+                <p class="text-xs leading-relaxed mb-6 opacity-70">The official campaign for a united, prosperous, and sovereign Somalia.</p>
+                <div class="flex gap-4 mt-8">
+                    <a href="#" class="w-8 h-8 rounded bg-blue-900/50 flex items-center justify-center hover:bg-blue-600 transition text-white"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="w-8 h-8 rounded bg-blue-900/50 flex items-center justify-center hover:bg-blue-600 transition text-white"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" class="w-8 h-8 rounded bg-blue-900/50 flex items-center justify-center hover:bg-blue-600 transition text-white"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="w-8 h-8 rounded bg-blue-900/50 flex items-center justify-center hover:bg-blue-600 transition text-white"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-wider">Quick Links</h4>
+                <ul class="space-y-3 text-xs">
+                    <li><a href="#" class="hover:text-blue-400 transition">The Platform</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition">Volunteer</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition">Donate</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition">Press & Media</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition">Shop Merch</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-wider">Get Involved</h4>
+                <ul class="space-y-3 text-xs">
+                    <li><a href="#" class="hover:text-blue-400 transition">Find Events</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition">Host a Party</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition">Register to Vote</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition">Become a Member</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-wider">Contact Us</h4>
+                <ul class="space-y-4 text-xs">
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-phone text-blue-600 mt-1"></i><span>+252 61 555 0124</span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-envelope text-blue-600 mt-1"></i><span>info@gernast2026.so</span></li>
+                    <li class="flex items-start gap-3"><i class="fa-solid fa-location-dot text-blue-600 mt-1"></i><span>Km4 Junction, Mogadishu</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container mx-auto px-6 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest opacity-50">
+            <div>&copy; 2024 GerNast. All Right Reserved.</div>
+            <div class="mt-2 md:mt-0 space-x-4">
+                <a href="#" class="hover:text-white">Privacy Policy</a>
+                <a href="#" class="hover:text-white">Terms of Service</a>
+                <a href="#" class="hover:text-white">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // --- CURSOR LOGIC ---
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorOutline = document.getElementById('cursor-outline');
+        window.addEventListener('mousemove', function(e) {
+            const posX = e.clientX; const posY = e.clientY;
+            cursorDot.style.left = `${posX}px`; cursorDot.style.top = `${posY}px`;
+            cursorOutline.style.left = `${posX}px`; cursorOutline.style.top = `${posY}px`;
+        });
+        const links = document.querySelectorAll('a, button, input');
+        links.forEach(link => {
+            link.addEventListener('mouseenter', () => { cursorOutline.style.transform = 'translate(-50%, -50%) scale(1.5)'; cursorOutline.style.backgroundColor = 'rgba(65, 137, 221, 0.1)'; });
+            link.addEventListener('mouseleave', () => { cursorOutline.style.transform = 'translate(-50%, -50%) scale(1)'; cursorOutline.style.backgroundColor = 'transparent'; });
+        });
+
+        // --- VOICES CAROUSEL (17 Simulated Items) ---
+        const track = document.getElementById('track');
+        const dotsContainer = document.getElementById('dots-container');
+        // Generate 17 Testimonials Data
+        const testimonials = Array.from({ length: 17 }, (_, i) => ({
+            name: `Supporter ${i + 1}`,
+            role: i % 3 === 0 ? "Teacher" : (i % 3 === 1 ? "Fisherman" : "Entrepreneur"),
+            text: i % 3 === 0 ? "Education is the future." : (i % 3 === 1 ? "Economic policies work." : "Stability is key."),
+            img: `https://i.pravatar.cc/150?img=${i + 10}`
+        }));
+
+        // Inject Slides
+        testimonials.forEach(t => {
+            const slide = document.createElement('div');
+            slide.className = 'carousel-slide';
+            slide.innerHTML = `
+                <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100 h-full transition-all duration-300 scale-95 hover:scale-100">
+                    <div class="flex items-center gap-4 mb-4">
+                        <img src="${t.img}" class="w-12 h-12 rounded-full object-cover">
+                        <div><h4 class="font-bold text-brand-dark">${t.name}</h4><p class="text-xs text-slate-500">${t.role}</p></div>
+                    </div>
+                    <p class="text-sm text-slate-600 italic">"${t.text}"</p>
+                </div>`;
+            track.appendChild(slide);
+        });
+
+        // Inject Dots (Limit to 5 for UI)
+        for(let i=0; i<5; i++) {
+            const dot = document.createElement('div');
+            dot.className = `dot ${i===0?'active':''}`;
+            dot.onclick = () => goToSlide(i);
+            dotsContainer.appendChild(dot);
+        }
+
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        function updateCarousel() {
+            const slidePercent = window.innerWidth >= 768 ? 33.333 : 100;
+            track.style.transform = `translateX(-${currentSlide * slidePercent}%)`;
+            // Center slide logic
+            slides.forEach(s => s.querySelector('div').classList.remove('bg-brand-somalia', 'text-white', 'scale-105'));
+            if(slides[currentSlide + 1]) {
+               // Highlight center
+               // Simplified for this demo
+            }
+        }
+        setInterval(() => {
+            currentSlide++;
+            if (currentSlide > testimonials.length - 3) currentSlide = 0;
+            updateCarousel();
+        }, 3000);
+        function goToSlide(index) { currentSlide = index; updateCarousel(); }
+
+        // --- FAQ ---
+        const faqButtons = document.querySelectorAll('.faq-btn');
+        faqButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const answer = btn.nextElementSibling;
+                const icon = btn.querySelector('i');
+                const isClosed = !answer.classList.contains('open');
+                document.querySelectorAll('.faq-answer').forEach(el => el.classList.remove('open'));
+                document.querySelectorAll('.faq-btn i').forEach(i => i.classList.replace('fa-minus', 'fa-plus'));
+                if (isClosed) {
+                    answer.classList.add('open');
+                    icon.classList.replace('fa-plus', 'fa-minus');
+                }
+            });
+        });
+
+        // --- AOS ---
+        AOS.init({ once: true, offset: 100, duration: 800 });
+    </script>
+</body>
+</html>
