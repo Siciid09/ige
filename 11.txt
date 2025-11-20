@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard | Moge Campaign</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap');
+        body { font-family: 'Manrope', sans-serif; background-color: #f0f2f5; }
+        .sidebar-link { transition: background-color 0.2s, color 0.2s; }
+        .sidebar-link.active { background-color: #2563eb; color: white; }
+        .sidebar-link:not(.active):hover { background-color: #eef2ff; }
+        .stat-card { background: white; border-radius: 0.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .chart-container { background: white; border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        #login-modal { backdrop-filter: blur(5px); }
+    </style>
+</head>
+<body class="antialiased relative">
+
+    <div id="login-modal" class="fixed inset-0 z-50 bg-gray-900 bg-opacity-90 flex items-center justify-center">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
+            <h2 class="text-2xl font-bold text-center mb-6 text-slate-800">Moge Analytics Login</h2>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="login-password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter access code">
+                </div>
+                <p id="login-error" class="text-red-500 text-sm hidden">Incorrect password.</p>
+                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Access Dashboard
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="app-container" class="hidden">
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-20 hidden lg:hidden"></div>
+        
+        <div id="dashboard" class="flex h-screen bg-gray-100">
+            <aside class="sidebar fixed z-30 inset-y-0 left-0 w-64 bg-white shadow-md flex flex-col transition-transform duration-300 transform -translate-x-full lg:relative lg:translate-x-0 lg:z-auto">
+                <div class="p-6 text-2xl font-bold text-slate-800 border-b">Admin</div>
+                <nav class="flex-1 p-4 space-y-2">
+                    <a href="#" class="sidebar-link active flex items-center gap-3 py-2 px-4 rounded-lg" data-view="overview">
+                        <i data-feather="home" class="w-5 h-5"></i><span>Overview</span>
+                    </a>
+                    <a href="#" class="sidebar-link flex items-center gap-3 py-2 px-4 rounded-lg" data-view="reports">
+                        <i data-feather="bar-chart-2" class="w-5 h-5"></i><span>Reports</span>
+                    </a>
+                    <a href="#" class="sidebar-link flex items-center gap-3 py-2 px-4 rounded-lg" data-view="voters">
+                        <i data-feather="users" class="w-5 h-5"></i><span>Voters List</span>
+                    </a>
+                    <a href="#" class="sidebar-link flex items-center gap-3 py-2 px-4 rounded-lg" data-view="achievements">
+                        <i data-feather="image" class="w-5 h-5"></i><span>Achievements</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <div class="flex-1 flex flex-col overflow-hidden">
+                <header class="bg-white border-b">
+                    <div class="w-full mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+                        <div class="flex items-center">
+                            <button id="mobile-sidebar-toggle" class="lg:hidden p-2 -ml-2 text-slate-600">
+                                <i data-feather="menu" class="w-6 h-6"></i>
+                            </button>
+                            <h1 id="view-title" class="text-xl font-semibold text-slate-800 ml-2 lg:ml-0">Analytics Overview</h1>
+                        </div>
+                        
+                        <div class="flex flex-col md:flex-row items-stretch md:items-center gap-2 md:gap-4">
+                            <div class="relative">
+                                <i data-feather="calendar" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                                <input id="date-filter" class="bg-gray-50 border border-gray-300 rounded-lg pl-10 pr-4 py-2 w-full md:w-72 text-sm" placeholder="Select Date Range...">
+                            </div>  
+                            <div class="flex items-center justify-center gap-2 text-sm overflow-x-auto">
+                                <button class="date-preset-btn bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-md whitespace-nowrap" data-range="all">All Time</button>
+                                <button class="date-preset-btn bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-md whitespace-nowrap" data-range="today">Today</button>
+                                <button class="date-preset-btn bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-md whitespace-nowrap" data-range="month">This Month</button>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                
+                <main class="flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6">
+                    <div id="overview-view" class="view-content">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                            <div class="stat-card p-5"><p class="text-sm text-slate-500">Total Votes</p><p id="total-votes" class="text-3xl font-bold mt-1">0</p></div>
+                            <div class="stat-card p-5"><p class="text-sm text-slate-500">Voter Cities</p><p id="unique-voter-cities" class="text-3xl font-bold mt-1">0</p></div>
+                            <div class="stat-card p-5"><p class="text-sm text-slate-500">Voter Countries</p><p id="unique-voter-countries" class="text-3xl font-bold mt-1">0</p></div>
+                            <div class="stat-card p-5"><p class="text-sm text-slate-500">Total Polls</p><p id="total-polls" class="text-3xl font-bold mt-1">0</p></div>
+                            <div class="stat-card p-5 col-span-1 md:col-span-2 lg:col-span-2"><p class="text-sm text-slate-500">Poll Votes (HAA)</p><p id="poll-votes-haa" class="text-3xl font-bold mt-1 text-emerald-600">0</p></div>
+                            <div class="stat-card p-5 col-span-1 md:col-span-2 lg:col-span-2"><p class="text-sm text-slate-500">Poll Votes (MAYA)</p><p id="poll-votes-maya" class="text-3xl font-bold mt-1 text-red-600">0</p></div>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="chart-container"><h3 class="font-semibold mb-2">Votes Over Time</h3><div id="votes-over-time-chart" style="min-height: 350px;"></div></div>
+                            <div class="chart-container"><h3 class="font-semibold mb-2">Top Countries (Voters)</h3><div id="top-countries-chart" style="min-height: 350px;"></div></div>
+                            <div class="chart-container lg:col-span-2"><h3 class="font-semibold mb-2">Poll Results (HAA vs MAYA)</h3><div id="poll-chart" style="min-height: 350px;"></div></div>
+                        </div>
+                    </div>
+
+                    <div id="reports-view" class="view-content hidden">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold text-slate-800">Detailed Reports</h2>
+                            <button id="download-pdf-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2 transition-colors">
+                                <i data-feather="download" class="w-5 h-5"></i>
+                                <span class="hidden sm:inline">Download Analytics PDF</span>
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="chart-container"><h3 class="font-semibold mb-2">Votes vs. Messages Over Time</h3><div id="votes-vs-messages-chart"></div></div>
+                            <div class="chart-container"><h3 class="font-semibold mb-2">Top 10 Countries (Voters)</h3><div id="top-countries-report-chart"></div></div>
+                            <div class="bg-white rounded-lg shadow-md p-6 lg:col-span-2">
+                               <h3 class="text-lg font-semibold mb-4">Top Cities by Voters (All)</h3>
+                               <ul id="top-cities-list" class="space-y-3 max-h-96 overflow-y-auto"></ul>
+                               <button id="load-more-cities" class="mt-4 text-sm font-semibold text-blue-600 hover:underline hidden">Load More</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="voters-view" class="view-content hidden">
+                         <div class="mb-6">
+                             <div class="stat-card p-5 inline-block">
+                                 <p class="text-sm text-slate-500">Total Filtered Voters</p>
+                                 <p id="voters-view-total" class="text-3xl font-bold mt-1">0</p>
+                             </div>
+                         </div>
+                        <div class="bg-white rounded-lg shadow-md">
+                            <div class="p-4 flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b">
+                                <h2 class="text-lg font-semibold">All Voters</h2>
+                                <input id="search-voters" type="text" placeholder="Search voters..." class="w-full sm:w-64 border-gray-300 rounded-lg text-sm">
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm">
+                                    <thead class="bg-gray-50 text-slate-600"><tr>
+                                        <th class="p-3 text-left">Name</th><th class="p-3 text-left">City</th>
+                                        <th class="p-3 text-left">Country</th><th class="p-3 text-left">Date</th>
+                                    </tr></thead>
+                                    <tbody id="voters-table-body"></tbody>
+                                </table>
+                            </div>
+                            <div class="p-4 border-t flex flex-col sm:flex-row justify-between items-center gap-3">
+                                <span id="pagination-info" class="text-sm text-slate-600"></span>
+                                <div class="flex gap-2">
+                                    <button id="prev-page" class="px-3 py-1 bg-gray-200 rounded-md text-sm hover:bg-gray-300 disabled:opacity-50" disabled>Previous</button>
+                                    <button id="next-page" class="px-3 py-1 bg-gray-200 rounded-md text-sm hover:bg-gray-300 disabled:opacity-50" disabled>Next</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="achievements-view" class="view-content hidden">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-md">
+                                <h2 class="text-xl font-bold mb-4">Upload New Achievement</h2>
+                                <form id="achievement-upload-form" class="space-y-4">
+                                    <div>
+                                        <label for="achievement-title" class="block text-sm font-medium text-gray-700">Image Title</label>
+                                        <input type="text" id="achievement-title" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    </div>
+                                    <div>
+                                        <label for="achievement-type" class="block text-sm font-medium text-gray-700">Category</label>
+                                        <select id="achievement-type" required class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                            <option>Wadooyin</option>
+                                            <option>Dugsiyo</option>
+                                            <option>Dhismayaal</option>
+                                            <option>Bilicda & Nabadgelyada</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="achievement-file" class="block text-sm font-medium text-gray-700">Image File</label>
+                                        <input type="file" id="achievement-file" required accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                    </div>
+                                    <div id="upload-progress-container" class="hidden">
+                                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                            <div id="upload-progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                                        </div>
+                                        <p id="upload-progress-text" class="text-sm text-center mt-1">Uploading...</p>
+                                    </div>
+                                    <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                        Upload Image
+                                    </button>
+                                    <p id="achievement-upload-status" class="text-sm text-center"></p>
+                                </form>
+                            </div>
+                            <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
+                                 <h2 class="text-xl font-bold mb-4">Uploaded Images</h2>
+                                 <div id="achievements-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-h-[70vh] overflow-y-auto"></div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- LOGIN ---
+            const loginForm = document.getElementById('login-form');
+            const loginModal = document.getElementById('login-modal');
+            const appContainer = document.getElementById('app-container');
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const password = document.getElementById('login-password').value;
+                if (password === 'abdi2345') {
+                    loginModal.classList.add('hidden');
+                    appContainer.classList.remove('hidden');
+                    initFirebase();
+                } else {
+                    document.getElementById('login-error').classList.remove('hidden');
+                }
+            });
+
+            // --- HELPER: NORMALIZE CITY ---
+            function normalizeCity(cityName) {
+                if (!cityName) return 'Unknown';
+                const lower = cityName.toLowerCase().trim();
+                if (lower.startsWith('harg') || lower === 'hargeisa' || lower === 'hargaysa' || lower === 'hargiesa' || lower === 'hargeysa') {
+                    return 'Hargeisa';
+                }
+                return cityName.charAt(0).toUpperCase() + cityName.slice(1);
+            }
+
+            // --- ALGORITHM: ROUND-ROBIN INTERLEAVER (The Fix) ---
+            function interleaveNames(array) {
+                if (!array || array.length < 2) return array;
+
+                // 1. Group by First Name (e.g. "Aadan": [...], "Abdi": [...])
+                const groups = {};
+                array.forEach(item => {
+                    const firstName = (item.username || 'Unknown').trim().split(' ')[0].toLowerCase();
+                    if (!groups[firstName]) groups[firstName] = [];
+                    groups[firstName].push(item);
+                });
+
+                // 2. Sort groups by size (Largest groups first)
+                // We do this to attack the biggest clusters (like "Aadan") first.
+                const sortedKeys = Object.keys(groups).sort((a, b) => groups[b].length - groups[a].length);
+
+                // 3. Round Robin Selection
+                // Take one Aadan, then one Abdi, then one Maxamed... repeat until empty.
+                const result = [];
+                let hasItems = true;
+
+                while (hasItems) {
+                    hasItems = false;
+                    for (const key of sortedKeys) {
+                        if (groups[key].length > 0) {
+                            result.push(groups[key].shift()); 
+                            hasItems = true;
+                        }
+                    }
+                }
+
+                return result;
+            }
+
+            function initFirebase() {
+                const firebaseConfig = {
+                    apiKey: "AIzaSyAnsvGANXpSJVq6B2Yd4woI4caflDvzrYI",
+                    authDomain: "maayor-mooge.firebaseapp.com",
+                    projectId: "maayor-mooge",
+                    storageBucket: "maayor-mooge.firebasestorage.app",
+                    messagingSenderId: "771226998257",
+                    appId: "1:771226998257:web:d8029353f27111f143e050"
+                };
+
+                try {
+                    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+                    const db = firebase.firestore();
+                    const storage = firebase.storage();
+                    feather.replace();
+                    initializeDashboard(db, storage);
+                } catch(e) {
+                    console.error("Firebase Error", e);
+                    document.body.innerHTML = `<div class="p-4 text-red-800">Firebase Error. Check console.</div>`;
+                }
+            }
+
+            function initializeDashboard(db, storage) {
+                const state = {
+                    allVotes: [], allPollResponses: [],
+                    filteredVotes: [], filteredPolls: [],
+                    dateRange: { start: null, end: null }, searchTerm: '',
+                    votersCurrentPage: 1, votersPerPage: 10, topCitiesOffset: 5
+                };
+                
+                // Charts Setup
+                const chartOptions = (moreOptions = {}) => ({
+                    chart: { fontFamily: 'Manrope, sans-serif', toolbar: { show: false } },
+                    grid: { show: true, borderColor: '#e2e8f0', strokeDashArray: 4 },
+                    dataLabels: { enabled: false }, ...moreOptions
+                });
+                
+                const votesOverTimeChart = new ApexCharts(document.querySelector("#votes-over-time-chart"), chartOptions({ series: [], chart: { type: 'area', height: 350 }, xaxis: { type: 'datetime' }, noData: { text: 'Loading...' } }));
+                const topCountriesChart = new ApexCharts(document.querySelector("#top-countries-chart"), chartOptions({ series: [], chart: { type: 'donut', height: 350 }, labels: [], legend: { position: 'bottom' }, noData: { text: 'Loading...' } }));
+                const pollChart = new ApexCharts(document.querySelector("#poll-chart"), chartOptions({ series: [], chart: { type: 'donut', height: 350 }, labels: ["HAA", "MAYA"], colors: ['#10B981', '#EF4444'], legend: { position: 'bottom' }, noData: { text: 'Loading...' } }));
+                const votesVsMessagesChart = new ApexCharts(document.querySelector("#votes-vs-messages-chart"), chartOptions({ series: [], chart: { type: 'line', height: 350 }, xaxis: { type: 'datetime' }, stroke: { curve: 'smooth' }, noData: { text: 'Loading...' } }));
+                const topCountriesReportChart = new ApexCharts(document.querySelector("#top-countries-report-chart"), chartOptions({ series: [], chart: { type: 'bar', height: 350 }, plotOptions: { bar: { borderRadius: 4, horizontal: true } }, noData: { text: 'Loading...' } }));
+
+                votesOverTimeChart.render(); topCountriesChart.render(); pollChart.render();
+                votesVsMessagesChart.render(); topCountriesReportChart.render();
+                
+                const render = () => {
+                    const { start, end } = state.dateRange;
+                    const dateFilter = (item, dateKey) => !start || (item[dateKey]?.toDate() >= start && item[dateKey]?.toDate() <= end);
+                    
+                    let dateFilteredVotes = state.allVotes.filter(v => dateFilter(v, 'timestamp'));
+                    
+                    // Filter Logic
+                    if (state.searchTerm) {
+                        // If searching, simple sort by name is fine
+                        state.filteredVotes = dateFilteredVotes.filter(v => ['username', 'city'].some(key => v[key]?.toLowerCase().includes(state.searchTerm)));
+                    } else {
+                        // If NOT searching, Apply the "No Cluster" Logic
+                        state.filteredVotes = interleaveNames(dateFilteredVotes);
+                    }
+
+                    state.filteredPolls = state.allPollResponses.filter(p => dateFilter(p, 'timestamp'));
+                    
+                    renderStats(); renderCharts(); renderVotersTable(); renderReportCharts();
+                };
+
+                const renderStats = () => {
+                    const votes = state.filteredVotes;
+                    document.getElementById('total-votes').textContent = votes.length.toLocaleString();
+                    const cities = new Set(votes.map(v => normalizeCity(v.city)).filter(c => c !== 'Unknown'));
+                    document.getElementById('unique-voter-cities').textContent = cities.size.toLocaleString();
+                    document.getElementById('unique-voter-countries').textContent = new Set(votes.map(v => v.country?.trim().toLowerCase()).filter(Boolean)).size.toLocaleString();
+                    document.getElementById('total-polls').textContent = state.filteredPolls.length.toLocaleString();
+                    const haaVotes = state.filteredPolls.filter(p => p.choice === 'HAA').length;
+                    const mayaVotes = state.filteredPolls.filter(p => p.choice === 'MAYA').length;
+                    document.getElementById('poll-votes-haa').textContent = haaVotes.toLocaleString();
+                    document.getElementById('poll-votes-maya').textContent = mayaVotes.toLocaleString();
+                };
+                
+                const renderCharts = () => {
+                    const votes = state.filteredVotes;
+                    const dailyData = votes.reduce((acc, { timestamp }) => {
+                        if (!timestamp?.toDate) return acc;
+                        const date = timestamp.toDate().toISOString().split('T')[0];
+                        acc[date] = (acc[date] || 0) + 1;
+                        return acc;
+                    }, {});
+                    votesOverTimeChart.updateSeries([{ name: 'Votes', data: Object.entries(dailyData).sort().map(([date, count]) => [new Date(date).getTime(), count]) }]);
+                    const countryCounts = votes.reduce((acc, { country }) => { acc[country || 'Unknown'] = (acc[country || 'Unknown'] || 0) + 1; return acc; }, {});
+                    const sortedCountries = Object.entries(countryCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+                    topCountriesChart.updateOptions({ series: sortedCountries.map(c => c[1]), labels: sortedCountries.map(c => c[0]) });
+                    const haaVotes = state.filteredPolls.filter(p => p.choice === 'HAA').length;
+                    const mayaVotes = state.filteredPolls.filter(p => p.choice === 'MAYA').length;
+                    pollChart.updateSeries([haaVotes, mayaVotes]);
+                };
+                
+                const renderVotersTable = () => {
+                    const data = state.filteredVotes, page = state.votersCurrentPage, perPage = state.votersPerPage;
+                    const paginatedData = data.slice((page - 1) * perPage, page * perPage);
+                    const tableBody = document.getElementById('voters-table-body');
+                    document.getElementById('voters-view-total').textContent = data.length.toLocaleString();
+                    
+                    tableBody.innerHTML = data.length === 0 ? `<tr><td colspan="4" class="text-center p-8">No voters found.</td></tr>` : paginatedData.map(v => `
+                        <tr class="border-b">
+                            <td class="p-3 font-semibold">${v.username || 'N/A'}</td>
+                            <td class="p-3">${normalizeCity(v.city)}</td>
+                            <td class="p-3">${v.country || 'N/A'}</td>
+                            <td class="p-3">${v.timestamp?.toDate().toLocaleDateString() || 'N/A'}</td>
+                        </tr>`).join('');
+                        
+                    document.getElementById('pagination-info').textContent = `Showing ${paginatedData.length > 0 ? (page - 1) * perPage + 1 : 0}-${(page - 1) * perPage + paginatedData.length} of ${data.length}`;
+                    document.getElementById('prev-page').disabled = page === 1;
+                    document.getElementById('next-page').disabled = page * perPage >= data.length;
+                };
+
+                 const renderReportCharts = () => {
+                    const votes = state.filteredVotes;
+                    const dailyVotes = votes.reduce((acc, { timestamp }) => { if(timestamp?.toDate) { const d = timestamp.toDate().toISOString().split('T')[0]; acc[d] = (acc[d] || 0) + 1; } return acc; }, {});
+                    const allDates = [...new Set(Object.keys(dailyVotes))].sort();
+                    votesVsMessagesChart.updateSeries([ { name: 'Votes', data: allDates.map(d => [new Date(d).getTime(), dailyVotes[d] || 0]) } ]);
+                    const countryCounts = votes.reduce((acc, { country }) => { acc[country || 'Unknown'] = (acc[country || 'Unknown'] || 0) + 1; return acc; }, {});
+                    const sortedCountries = Object.entries(countryCounts).sort((a, b) => b[1] - a[1]).slice(0, 10).reverse();
+                    topCountriesReportChart.updateSeries([{ name: 'Voters', data: sortedCountries.map(c => c[1]) }]);
+                    topCountriesReportChart.updateOptions({ xaxis: { categories: sortedCountries.map(c => c[0]) } });
+                    renderTopCitiesList(true);
+                };
+
+                const renderTopCitiesList = (initial = false) => {
+                    if (initial) state.topCitiesOffset = 10;
+                    const cityCounts = state.filteredVotes.reduce((acc, { city }) => { 
+                        const cleanCity = normalizeCity(city);
+                        acc[cleanCity] = (acc[cleanCity] || 0) + 1; 
+                        return acc; 
+                    }, {});
+                    const sortedCities = Object.entries(cityCounts).sort((a, b) => b[1] - a[1]);
+                    const citiesToShow = sortedCities.slice(0, state.topCitiesOffset);
+                    document.getElementById('top-cities-list').innerHTML = citiesToShow.map(([city, count]) => `
+                        <li class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="font-semibold text-slate-700">${city}</span>
+                            <span class="text-slate-500">${count.toLocaleString()} voters</span>
+                        </li>`).join('');
+                    const loadMoreBtn = document.getElementById('load-more-cities');
+                    if (sortedCities.length > state.topCitiesOffset) loadMoreBtn.classList.remove('hidden');
+                    else loadMoreBtn.classList.add('hidden');
+                };
+
+                // --- ACHIEVEMENTS ---
+                const achievementForm = document.getElementById('achievement-upload-form');
+                const galleryContainer = document.getElementById('achievements-gallery');
+
+                const renderAchievements = (achievements) => {
+                    if(!galleryContainer) return;
+                    galleryContainer.innerHTML = achievements.length === 0 ? '<p class="text-slate-500 col-span-full text-center">No images uploaded yet.</p>' : 
+                    achievements.map(ach => `
+                        <div class="relative group">
+                            <img src="${ach.link}" alt="${ach.title}" class="rounded-lg object-cover w-full h-40">
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2 text-white">
+                                <p class="font-bold text-sm truncate">${ach.title}</p>
+                                <p class="text-xs">${ach.type}</p>
+                            </div>
+                            <button data-id="${ach.id}" data-path="${ach.storagePath}" class="delete-achievement-btn absolute top-1 right-1 bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i data-feather="trash-2" class="w-3 h-3"></i>
+                            </button>
+                        </div>
+                    `).join('');
+                    feather.replace();
+                };
+
+                achievementForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const title = document.getElementById('achievement-title').value;
+                    const type = document.getElementById('achievement-type').value;
+                    const file = document.getElementById('achievement-file').files[0];
+                    const statusEl = document.getElementById('achievement-upload-status');
+                    const progressContainer = document.getElementById('upload-progress-container');
+                    const progressBar = document.getElementById('upload-progress-bar');
+                    const progressText = document.getElementById('upload-progress-text');
+
+                    if (!title || !type || !file) return;
+
+                    const storagePath = `images/${Date.now()}_${file.name}`;
+                    const storageRef = storage.ref(storagePath);
+                    const uploadTask = storageRef.put(file);
+                    
+                    progressContainer.classList.remove('hidden');
+                    statusEl.textContent = '';
+                    
+                    uploadTask.on('state_changed', 
+                        (snapshot) => {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            progressBar.style.width = progress + '%';
+                            progressText.textContent = `Uploading... ${Math.round(progress)}%`;
+                        }, 
+                        (error) => {
+                            statusEl.textContent = "Upload Failed.";
+                            statusEl.className = 'text-sm text-center text-red-500 font-bold';
+                            progressContainer.classList.add('hidden');
+                        }, 
+                        async () => {
+                            const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                            await db.collection('images').add({ title, type, link: downloadURL, storagePath, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+                            statusEl.textContent = "Upload successful!";
+                            statusEl.className = 'text-sm text-center text-green-500';
+                            achievementForm.reset();
+                            setTimeout(() => { statusEl.textContent = ''; progressContainer.classList.add('hidden'); }, 3000);
+                        }
+                    );
+                });
+
+                galleryContainer.addEventListener('click', async (e) => {
+                    const button = e.target.closest('.delete-achievement-btn');
+                    if (button && confirm('Delete image?')) {
+                        try {
+                            await db.collection('images').doc(button.dataset.id).delete();
+                            await storage.ref(button.dataset.path).delete();
+                        } catch (error) { console.error(error); }
+                    }
+                });
+
+                db.collection('votes').orderBy('timestamp', 'desc').onSnapshot(snap => { state.allVotes = snap.docs.map(d => d.data()); render(); });
+                db.collection('pollResponses').orderBy('timestamp', 'desc').onSnapshot(snap => { state.allPollResponses = snap.docs.map(d => d.data()); render(); });
+                db.collection('images').orderBy('timestamp', 'desc').onSnapshot(snap => { renderAchievements(snap.docs.map(doc => ({id: doc.id, ...doc.data()}))) });
+
+                // DATE PICKER FIX
+                const datePicker = flatpickr("#date-filter", { 
+                    mode: "range", 
+                    maxDate: null, // Unlimited future/past
+                    onChange: (dates) => {
+                        state.dateRange = dates.length === 2 ? { start: dates[0], end: new Date(dates[1].setHours(23, 59, 59, 999)) } : { start: null, end: null };
+                        state.votersCurrentPage = 1; render();
+                    }
+                });
+
+                document.querySelectorAll('.date-preset-btn').forEach(btn => btn.addEventListener('click', () => {
+                    const end = new Date(), start = new Date();
+                    if (btn.dataset.range === 'all') {
+                        state.dateRange = { start: null, end: null };
+                        datePicker.clear();
+                        render();
+                        return;
+                    }
+                    if (btn.dataset.range === 'today') start.setHours(0,0,0,0);
+                    else if (btn.dataset.range === 'month') start.setDate(1); // Start of month
+                    
+                    if (btn.dataset.range !== 'today') start.setHours(0,0,0,0);
+                    datePicker.setDate([start, end], true);
+                }));
+
+                document.querySelectorAll('.sidebar-link').forEach(link => link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    const view = link.dataset.view;
+                    document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
+                    document.getElementById(`${view}-view`).classList.remove('hidden');
+                    let title = view.charAt(0).toUpperCase() + view.slice(1);
+                    if (view === "achievements") title = "Achievements Management";
+                    document.getElementById('view-title').textContent = title;
+                    feather.replace(); 
+                }));
+                
+                document.getElementById('prev-page').addEventListener('click', () => { if (state.votersCurrentPage > 1) { state.votersCurrentPage--; renderVotersTable(); } });
+                document.getElementById('next-page').addEventListener('click', () => { if (state.votersCurrentPage * state.votersPerPage < state.filteredVotes.length) { state.votersCurrentPage++; renderVotersTable(); } });
+                document.getElementById('search-voters').addEventListener('input', e => { state.searchTerm = e.target.value.toLowerCase(); state.votersCurrentPage = 1; render(); });
+                document.getElementById('load-more-cities')?.addEventListener('click', () => { state.topCitiesOffset += 10; renderTopCitiesList(); });
+                
+                const sidebar = document.querySelector('.sidebar');
+                const sidebarToggle = document.getElementById('mobile-sidebar-toggle');
+                const sidebarOverlay = document.getElementById('sidebar-overlay');
+                sidebarToggle?.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.remove('-translate-x-full'); sidebarOverlay.classList.remove('hidden'); });
+                sidebarOverlay?.addEventListener('click', () => { sidebar.classList.add('-translate-x-full'); sidebarOverlay.classList.add('hidden'); });
+            }
+        });
+    </script>
+</body>
+</html>
