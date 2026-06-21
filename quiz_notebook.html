@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flutter & Supabase Master Quiz</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Kalam:wght@300;400;700&display=swap');
+
+        :root {
+            --line-height: 36px;
+            --paper: #fcfbf7;
+            --line: #cdd9e8;
+            --margin: #f48282;
+            --ink: #1e293b;
+            --ink-blue: #1d4ed8;
+            --ink-red: #be123c;
+            --ink-green: #15803d;
+            --hover-bg: rgba(29, 78, 216, 0.1);
+            --correct-bg: rgba(21, 128, 61, 0.2);
+            --wrong-bg: rgba(190, 18, 60, 0.2);
+        }
+
+        body {
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            background-image: radial-gradient(#334155 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .notebook {
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--paper);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7), inset 4px 0 15px rgba(0,0,0,0.05);
+            border-radius: 5px 15px 15px 5px;
+            background-image:
+                linear-gradient(var(--line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--margin) 2px, transparent 2px);
+            background-size: 100% var(--line-height), 100% 100%;
+            background-position: 0 35px, 80px 0;
+            padding: 36px 40px 72px 100px;
+            font-family: 'Kalam', cursive;
+            font-size: 22px;
+            line-height: var(--line-height);
+            color: var(--ink);
+            position: relative;
+            min-height: 80vh;
+        }
+
+        h1, h2, p {
+            margin-top: 0;
+            margin-bottom: var(--line-height);
+        }
+
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 48px;
+            color: var(--ink-blue);
+            text-align: center;
+            transform: rotate(-1deg);
+            text-decoration: underline;
+            text-underline-offset: 8px;
+            padding-top: 10px;
+            margin-bottom: calc(var(--line-height) * 2);
+        }
+
+        h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 38px;
+            color: var(--ink-red);
+            border-bottom: 2px dashed var(--ink-red);
+            display: inline-block;
+        }
+
+        .view { display: none; }
+        .view.active { display: block; }
+
+        /* Group Selection Buttons */
+        .group-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .btn-group {
+            font-family: 'Caveat', cursive;
+            font-size: 28px;
+            color: var(--ink-blue);
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid var(--ink-blue);
+            border-radius: 10px;
+            padding: 10px 30px;
+            cursor: pointer;
+            transform: rotate(-2deg);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .btn-group:hover {
+            transform: rotate(1deg) scale(1.05);
+            background: var(--hover-bg);
+        }
+
+        /* Quiz Question Styling */
+        .question-box {
+            margin-bottom: calc(var(--line-height) * 1.5);
+        }
+
+        .term {
+            font-family: 'Caveat', cursive;
+            font-size: 34px;
+            font-weight: bold;
+            color: var(--ink-blue);
+            margin-bottom: 10px;
+        }
+
+        .options-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .option-item {
+            border: 2px dashed rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 5px 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            line-height: 1.4;
+            font-size: 20px;
+        }
+
+        .option-item:hover {
+            border-color: var(--ink-blue);
+            background: var(--hover-bg);
+        }
+
+        .option-item.selected {
+            border: 2px solid var(--ink-blue);
+            background: var(--hover-bg);
+            font-weight: bold;
+        }
+
+        .option-item.correct {
+            border: 2px solid var(--ink-green);
+            background: var(--correct-bg);
+        }
+
+        .option-item.wrong {
+            border: 2px solid var(--ink-red);
+            background: var(--wrong-bg);
+        }
+
+        .btn-submit {
+            font-family: 'Caveat', cursive;
+            font-size: 32px;
+            color: white;
+            background: var(--ink-red);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 40px;
+            cursor: pointer;
+            transform: rotate(1deg);
+            display: block;
+            margin: 40px auto 0;
+            box-shadow: 2px 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .btn-submit:hover {
+            transform: rotate(-1deg) scale(1.05);
+        }
+
+        .results-box {
+            text-align: center;
+            font-size: 32px;
+        }
+        .score { font-size: 64px; font-family: 'Caveat'; color: var(--ink-green); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="notebook">
+    <h1>📱 Flutter & Supabase Master Quiz</h1>
+
+    <!-- View 1: Select Group -->
+    <div id="view-groups" class="view active">
+        <h2>Select a Study Block</h2>
+        <p>I've gathered every single definition from Chapters 1-4 and grouped them. Pick a group to test your knowledge!</p>
+        <div id="group-container" class="group-grid">
+            <!-- Buttons injected here by JS -->
+        </div>
+    </div>
+
+    <!-- View 2: Quiz -->
+    <div id="view-quiz" class="view">
+        <h2 id="quiz-title">Quiz Group</h2>
+        <button onclick="showGroups()" style="float: right; font-family: 'Caveat'; font-size: 20px; background: none; border: 1px underline var(--ink-blue); color: var(--ink-blue); cursor: pointer;">Back to Groups</button>
+        <div id="quiz-container">
+            <!-- Questions injected here by JS -->
+        </div>
+        <button id="submit-btn" class="btn-submit" onclick="gradeQuiz()">Grade My Test</button>
+    </div>
+
+    <!-- View 3: Results -->
+    <div id="view-results" class="view">
+        <h2>Test Graded! 💯</h2>
+        <div class="results-box">
+            <p>Your Score:</p>
+            <div id="score-display" class="score">0 / 15</div>
+            <p id="feedback-msg"></p>
+        </div>
+        <button class="btn-submit" onclick="showGroups()" style="background: var(--ink-blue);">Study Another Group</button>
+    </div>
+</div>
+
+<script>
+    // The Complete Master Definition List (80 items)
+    const definitions = [
+        { term: "Mobile Application Development", def: "The process of creating software applications that run on mobile devices such as smartphones and tablets." },
+        { term: "Mobile Application (App)", def: "Software designed to run on smartphones, tablets, or other mobile devices providing specific functionality." },
+        { term: "Native Apps", def: "Platform-specific applications built with languages like Swift (Apple) or Kotlin (Android)." },
+        { term: "Web Apps", def: "Browser-based applications built with HTML, CSS, and JS." },
+        { term: "Cross-Platform Apps", def: "Applications built from a single codebase that run on multiple platforms (e.g., Flutter, React Native)." },
+        { term: "Flutter", def: "An open-source UI toolkit created by Google to build natively compiled apps for mobile, web, and desktop from a single codebase." },
+        { term: "Dart", def: "Google's object-oriented programming language used primarily for Flutter; compiles to native code & JS." },
+        { term: "Hot Reload", def: "Updates the UI very fast while keeping the application's current state intact." },
+        { term: "Hot Restart", def: "Updates the app but completely clears the application's current state (slower than hot reload)." },
+        { term: "Framework (Dart)", def: "The top architecture layer you interact with directly containing widgets, rendering, and animation." },
+        { term: "Engine (C++)", def: "The core layer that uses the Skia renderer to draw pixels, layout text, and communicate with the GPU." },
+        { term: "Embedder", def: "The platform integration layer that makes Flutter run natively on Android, iOS, web, or desktop." },
+        { term: "Widgets (Rendering)", def: "Elements that describe the UI." },
+        { term: "Elements", def: "The components that connect widgets to the rendering system." },
+        { term: "Render Objects", def: "The objects that actually decide the layout and painting on the screen." },
+        { term: "Pub.Dev", def: "The official Package Manager for Flutter." },
+        { term: "Widget", def: "A basic building block of the user interface (UI) representing anything you can see or interact with." },
+        { term: "Stateless Widget", def: "A widget that does NOT change after it is built (e.g., static text, icons)." },
+        { term: "Stateful Widget", def: "A widget that CAN change its state during runtime based on user interaction or data loading." },
+        { term: "Material Widgets", def: "Pre-built UI components that follow Google's Material Design guidelines." },
+        { term: "MaterialApp", def: "The root widget for Material Design applications." },
+        { term: "Scaffold", def: "Provides the basic screen layout structure, including an AppBar and a body." },
+        { term: "Center", def: "A layout widget that positions its child exactly in the middle." },
+        { term: "Container", def: "A basic box widget that can have a defined height, width, and color." },
+        { term: "Padding", def: "Used to add space around its contents." },
+        { term: "SizedBox", def: "Used for adding specific spacing or forcing dimensions (e.g., height: 80)." },
+        { term: "Column", def: "Arranges its multiple children widgets vertically." },
+        { term: "Row", def: "Arranges its multiple children widgets horizontally." },
+        { term: "Stack", def: "Allows you to place children widgets on top of each other (layered)." },
+        { term: "ListView", def: "A layout widget used for scrollable lists of children." },
+        { term: "SingleChildScrollView", def: "A widget that allows the screen to be scrollable when content exceeds the screen height." },
+        { term: "Text", def: "A display widget that shows words on the screen, stylable with TextStyle." },
+        { term: "Image", def: "A display widget used to show graphics." },
+        { term: "CircleAvatar", def: "Displays an image inside a circle, often using the backgroundImage property." },
+        { term: "Icon", def: "A stateless widget used to display standard pre-built UI symbols." },
+        { term: "TextField", def: "An input field for users to type into, styled using InputDecoration." },
+        { term: "ElevatedButton", def: "A clickable Material design button requiring an onPressed function." },
+        { term: "Switch", def: "An input widget used to toggle a setting on or off." },
+        { term: "AppBar", def: "The top navigation bar of the application." },
+        { term: "Drawer", def: "A slide-out side navigation menu." },
+        { term: "Navigator.push()", def: "A method used to go to a new screen (page) in Flutter." },
+        { term: "Navigator.pop(context)", def: "A method used to close the current screen and go back." },
+        { term: "ScaffoldMessenger", def: "Used to display temporary pop-up notifications." },
+        { term: "SnackBar", def: "The actual pop-up notification element triggered by the ScaffoldMessenger." },
+        { term: "lib/", def: "The folder containing your main application code." },
+        { term: "main.dart", def: "The primary entry file where you write your Flutter application code." },
+        { term: "pubspec.yaml", def: "The configuration file where you add external packages, images, fonts, and app settings." },
+        { term: "AndroidManifest.xml", def: "The file where you must declare internet permissions so the app can reach external services." },
+        { term: "import 'package:flutter/material.dart';", def: "The code that imports Flutter's Material Design library so you can use basic UI elements." },
+        { term: "main()", def: "The entry point function of the Flutter app." },
+        { term: "runApp()", def: "The function that actually starts the Flutter app and loads the root widget." },
+        { term: "@override", def: "An annotation telling the Dart compiler you are replacing a parent class method." },
+        { term: "home", def: "A property of MaterialApp that defines the first screen of your app." },
+        { term: "body", def: "A property of Scaffold that holds the main content area of the screen." },
+        { term: "child", def: "A property used when a layout takes exactly ONE widget." },
+        { term: "children", def: "A property used when a layout takes MANY widgets." },
+        { term: "debugShowCheckedModeBanner", def: "A MaterialApp property that controls the top-right DEBUG banner visibility." },
+        { term: "WidgetsFlutterBinding.ensureInitialized();", def: "Command executed before initializing external backend services in the main execution block." },
+        { term: "double.infinity", def: "Applied to a width property to force an element to expand to the maximum available screen space." },
+        { term: "flutter doctor", def: "CLI command that checks your Flutter setup for missing dependencies or problems." },
+        { term: "flutter create", def: "CLI command that makes a brand new Flutter project." },
+        { term: "flutter run", def: "CLI command that runs the app on a connected device or emulator." },
+        { term: "flutter build", def: "CLI command that creates a compiled release build (APK, iOS, web)." },
+        { term: "flutter pub add", def: "CLI command used to install a new package to your project." },
+        { term: "flutter pub get", def: "CLI command that downloads all packages listed in your pubspec.yaml file." },
+        { term: "Supabase", def: "A backend-as-a-service (BaaS) platform offering database, auth, and APIs as an open-source Firebase alternative." },
+        { term: "PostgreSQL", def: "The specific type of relational database that Supabase uses under the hood." },
+        { term: "supabase_flutter", def: "The exact package dependency required to connect a Flutter app to the Supabase backend." },
+        { term: "Project URL", def: "The address of your Supabase project on the internet, representing where your database lives online." },
+        { term: "anonkey (Publishable Key)", def: "A public password your frontend app uses to access the database safely." },
+        { term: "Secret Keys", def: "Supabase keys that must strictly only be used on backend servers, never frontend apps." },
+        { term: "Row Level Security (RLS)", def: "Database policies in Supabase that control who can insert or read data from specific tables." },
+        { term: ".insert()", def: "The Supabase method used inside your Flutter app to add or register a new user/record to the database." },
+        { term: ".select()", def: "The Supabase method used to read data, such as performing a login check." },
+        { term: ".eq()", def: "Chained in database queries to verify if a database column exactly matches a provided text input." },
+        { term: ".maybeSingle()", def: "Appended to queries to guarantee that no more than one matching record is returned." },
+        { term: "React Native", def: "A cross-platform framework that uses JavaScript and has a large community, competing with Flutter." },
+        { term: "Swift", def: "The native programming language for Apple platforms offering the best iOS performance." },
+        { term: "Kotlin", def: "The official native programming language for Android." },
+        { term: "user.text.isEmpty || pass.text.isEmpty", def: "An early return condition used in login screens to prevent empty form submissions." }
+    ];
+
+    const GROUP_SIZE = 15;
+    let currentQuestions = [];
+    let userAnswers = {};
+
+    function init() {
+        const groupCount = Math.ceil(definitions.length / GROUP_SIZE);
+        const container = document.getElementById('group-container');
+        container.innerHTML = '';
+        
+        for(let i=0; i<groupCount; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'btn-group';
+            btn.innerText = `Study Group ${i + 1}`;
+            const start = i * GROUP_SIZE;
+            const end = Math.min(start + GROUP_SIZE, definitions.length);
+            btn.onclick = () => loadQuiz(start, end, i + 1);
+            container.appendChild(btn);
+        }
+    }
+
+    function loadQuiz(start, end, groupNum) {
+        document.getElementById('view-groups').classList.remove('active');
+        document.getElementById('view-quiz').classList.add('active');
+        document.getElementById('quiz-title').innerText = `Group ${groupNum} Quiz (${start+1} - ${end})`;
+        
+        currentQuestions = definitions.slice(start, end);
+        userAnswers = {};
+        
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+
+        currentQuestions.forEach((q, index) => {
+            // Generate distractors
+            let options = [q.def];
+            while(options.length < 4) {
+                let randomDef = definitions[Math.floor(Math.random() * definitions.length)].def;
+                if(!options.includes(randomDef)) {
+                    options.push(randomDef);
+                }
+            }
+            
+            // Shuffle options
+            options.sort(() => Math.random() - 0.5);
+
+            const qBox = document.createElement('div');
+            qBox.className = 'question-box';
+            
+            const termEl = document.createElement('div');
+            termEl.className = 'term';
+            termEl.innerText = `${index + 1}. What is the definition of "${q.term}"?`;
+            qBox.appendChild(termEl);
+
+            const listEl = document.createElement('ul');
+            listEl.className = 'options-list';
+            
+            options.forEach(opt => {
+                const li = document.createElement('li');
+                li.className = 'option-item';
+                li.innerText = opt;
+                li.onclick = () => selectOption(index, li, opt, listEl);
+                listEl.appendChild(li);
+            });
+
+            qBox.appendChild(listEl);
+            container.appendChild(qBox);
+        });
+
+        document.getElementById('submit-btn').style.display = 'block';
+    }
+
+    function selectOption(qIndex, liElement, selectedText, listElement) {
+        // Prevent changing answers after grading
+        if(listElement.classList.contains('graded')) return;
+
+        // Remove selected class from siblings
+        Array.from(listElement.children).forEach(child => child.classList.remove('selected'));
+        // Add selected to clicked
+        liElement.classList.add('selected');
+        
+        userAnswers[qIndex] = selectedText;
+    }
+
+    function gradeQuiz() {
+        let score = 0;
+        const total = currentQuestions.length;
+        
+        const lists = document.querySelectorAll('.options-list');
+        lists.forEach((list, index) => {
+            list.classList.add('graded'); // Lock interactions
+            const correctDef = currentQuestions[index].def;
+            
+            Array.from(list.children).forEach(li => {
+                if(li.innerText === correctDef) {
+                    li.classList.add('correct');
+                }
+                if(li.classList.contains('selected')) {
+                    if(li.innerText === correctDef) {
+                        score++;
+                    } else {
+                        li.classList.add('wrong');
+                    }
+                }
+            });
+        });
+
+        document.getElementById('submit-btn').style.display = 'none';
+        
+        // Show results screen at top after slight delay
+        setTimeout(() => {
+            document.getElementById('view-quiz').classList.remove('active');
+            document.getElementById('view-results').classList.add('active');
+            
+            document.getElementById('score-display').innerText = `${score} / ${total}`;
+            const msg = document.getElementById('feedback-msg');
+            if(score === total) msg.innerText = "Perfect! You're ready for the exam! 🎓";
+            else if(score >= total * 0.7) msg.innerText = "Great job! Just a few to review! 📚";
+            else msg.innerText = "Keep studying! You'll get it next time! ✍️";
+            
+            window.scrollTo(0, 0);
+        }, 800);
+    }
+
+    function showGroups() {
+        document.getElementById('view-results').classList.remove('active');
+        document.getElementById('view-quiz').classList.remove('active');
+        document.getElementById('view-groups').classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    // Initialize on load
+    init();
+</script>
+
+</body>
+</html>

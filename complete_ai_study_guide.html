@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI & Intelligent Agents Study Hub</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Kalam:wght@300;400;700&display=swap');
+
+        :root {
+            --line-height: 36px;
+            --paper: #fcfbf7;
+            --line: #cdd9e8;
+            --margin: #f48282;
+            --ink: #1e293b;
+            --ink-blue: #1d4ed8;
+            --ink-red: #be123c;
+            --ink-green: #15803d;
+            --hl-yellow: rgba(253, 224, 71, 0.5);
+            --hl-pink: rgba(244, 114, 182, 0.4);
+            --hl-green: rgba(134, 239, 172, 0.5);
+        }
+
+        body {
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            background-image: radial-gradient(#334155 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .notebook {
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--paper);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7), inset 4px 0 15px rgba(0,0,0,0.05);
+            border-radius: 5px 15px 15px 5px;
+            background-image:
+                linear-gradient(var(--line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--margin) 2px, transparent 2px);
+            background-size: 100% var(--line-height), 100% 100%;
+            background-position: 0 35px, 80px 0;
+            padding: 36px 40px 72px 100px;
+            font-family: 'Kalam', cursive;
+            font-size: 22px;
+            line-height: var(--line-height);
+            color: var(--ink);
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1, h2, h3, p, ul, ol {
+            margin-top: 0;
+            margin-bottom: var(--line-height);
+        }
+
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 52px;
+            color: var(--ink-blue);
+            text-align: center;
+            transform: rotate(-1deg);
+            text-decoration: underline;
+            text-underline-offset: 8px;
+            padding-top: 10px;
+        }
+
+        h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 40px;
+            color: var(--ink-red);
+            padding-top: 10px;
+            border-bottom: 2px dashed var(--ink-red);
+            display: inline-block;
+        }
+
+        h3 {
+            font-family: 'Caveat', cursive;
+            font-size: 32px;
+            color: var(--ink-green);
+            margin-bottom: 0;
+            text-decoration: underline;
+        }
+
+        ul {
+            padding-left: 25px;
+            list-style-type: none;
+        }
+
+        li {
+            margin-bottom: 0;
+            position: relative;
+        }
+
+        li::before {
+            content: "•";
+            color: var(--ink-blue);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            position: absolute;
+            left: -1em;
+        }
+
+        .bold { font-weight: 700; }
+        .blue { color: var(--ink-blue); }
+        .red { color: var(--ink-red); }
+        .green { color: var(--ink-green); }
+
+        .hl-yellow {
+            background-color: var(--hl-yellow);
+            padding: 2px 6px;
+            border-radius: 4px 10px 4px 10px;
+            box-decoration-break: clone;
+        }
+        
+        .hl-pink {
+            background-color: var(--hl-pink);
+            padding: 2px 6px;
+            border-radius: 10px 4px 10px 4px;
+            box-decoration-break: clone;
+        }
+
+        .hl-green {
+            background-color: var(--hl-green);
+            padding: 2px 6px;
+            border-radius: 8px 12px 8px 12px;
+            box-decoration-break: clone;
+        }
+
+        .doodle {
+            font-family: 'Caveat', cursive;
+            color: var(--ink-blue);
+            font-size: 28px;
+            position: absolute;
+            right: 30px;
+            top: 20px;
+            transform: rotate(15deg);
+            border: 2px solid var(--ink-blue);
+            padding: 5px 15px;
+            border-radius: 50% 40% 50% 40% / 40% 50% 40% 50%;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="notebook">
+        <div class="doodle">AI Master Guide! 🤖</div>
+        <h1>🧠 Artificial Intelligence & Intelligent Agents</h1>
+        
+        <h2>1. Fundamentals of Agents</h2>
+        <ul>
+            <li><span class="bold blue">Agent:</span> Anything that perceives its environment through sensors and acts upon it through actuators.</li>
+            <li><span class="bold">Human Agent:</span> Eyes/ears = sensors; hands/legs/vocal tract = actuators.</li>
+            <li><span class="bold">Robotic Agent:</span> Cameras/infrared = sensors; motors = actuators.</li>
+            <li><span class="bold">Software Agent:</span> Keystrokes/files = sensors; display output = actuators.</li>
+            <li><span class="bold hl-yellow">Perception:</span> Passive interaction gaining info via sensors without changing the environment.</li>
+            <li><span class="bold hl-pink">Action:</span> Active interaction changing the environment via an "Effector".</li>
+        </ul>
+
+        <h2>2. Agent Behavior & Rationality</h2>
+        <ul>
+            <li><span class="bold blue">Intelligent Agent:</span> Autonomous entity acting on an environment to achieve goals (e.g., Thermostat).</li>
+            <li><span class="bold">Rational Agent:</span> Has clear preferences, models uncertainty, and maximizes performance measure.</li>
+            <li><span class="bold">Rationality vs Omniscience:</span> Omniscient agents know actual outcomes (impossible in reality); rational agents maximize expected outcomes based on percept sequence.</li>
+            <li><span class="bold hl-green">Autonomy:</span> System is autonomous if it acts according to its own experience rather than just built-in knowledge.</li>
+        </ul>
+
+        <h2>3. Nature of Environments</h2>
+        <ul>
+            <li><span class="bold">Fully vs Partially Observable:</span> Can the sensor access the complete state at all times? (Unobservable = no sensors).</li>
+            <li><span class="bold">Deterministic vs Stochastic:</span> Deterministic = current state + action completely determine next state. Stochastic = random nature.</li>
+            <li><span class="bold">Episodic vs Sequential:</span> Episodic = one-shot actions. Sequential = requires memory of past actions.</li>
+            <li><span class="bold">Single-agent vs Multi-agent:</span> Self-explanatory.</li>
+            <li><span class="bold">Discrete vs Continuous:</span> Discrete = finite states/actions (Chess). Continuous = infinite (Self-driving car).</li>
+            <li><span class="bold">Static vs Dynamic:</span> Dynamic = environment changes while agent is deliberating.</li>
+        </ul>
+
+        <h2>4. Agent Structure & Types</h2>
+        <p><span class="bold blue hl-yellow">Agent = Architecture + Agent Program</span></p>
+        <ul>
+            <li><span class="bold">Table Driven Agent:</span> Looks up a pre-defined table. <span class="red">Drawback:</span> Too big to store (Chess = 10^120 states), no non-perceptual knowledge, not adaptive.</li>
+            <li><span class="bold">Simple Reflex Agent:</span> Decisions based ONLY on current percept (e.g., Vacuum: "If dirty then suck"). Fails in partially observable environments.</li>
+            <li><span class="bold">Model-based Reflex Agent:</span> Maintains internal state based on percept history. Uses a "Model" of how the world works.</li>
+            <li><span class="bold">Goal-based Agent:</span> Expands model-based by adding "goal" info. Uses Search and Planning.</li>
+            <li><span class="bold">Utility-based Agent:</span> Adds utility measurement to choose the <span class="hl-green">best</span> way to achieve a goal among multiple alternatives.</li>
+            <li><span class="bold">Learning Agent:</span> Adapts via experience. <span class="bold">Components:</span> Learning element, Critic, Performance element, Problem generator.</li>
+        </ul>
+
+        <h2>5. Defining Artificial Intelligence</h2>
+        <ul>
+            <li><span class="bold">AI:</span> A branch of computer science enabling machines to simulate human cognitive functions (learning, reasoning).</li>
+            <li><span class="bold blue">Four Views of AI:</span></li>
+            <li>1. <span class="bold">Acting Humanly:</span> Turing Test (requires NLP, Knowledge Rep, Reasoning, ML).</li>
+            <li>2. <span class="bold">Thinking Humanly:</span> Cognitive science model (getting inside the human mind).</li>
+            <li>3. <span class="bold">Thinking Rationally:</span> Laws of Thought / Logicist approach (Aristotle's syllogisms).</li>
+            <li>4. <span class="bold">Acting Rationally:</span> The Rational Agent approach (achieving goals given beliefs).</li>
+        </ul>
+
+        <h2>6. Core Areas of AI</h2>
+        <ul>
+            <li><span class="bold">Machine Learning (ML):</span> Learning from data to predict without direct programming.</li>
+            <li><span class="bold">Deep Learning (DL):</span> Subfield of ML using artificial neural networks with many layers.</li>
+            <li><span class="bold">Natural Language Processing (NLP):</span> Understanding and generating human language (Siri, chatbots).</li>
+            <li><span class="bold">Computer Vision:</span> Interpreting visual info (facial recognition, self-driving cars).</li>
+        </ul>
+
+        <h2>7. Types of AI (By Capability & Function)</h2>
+        <h3>By Capability</h3>
+        <ul>
+            <li><span class="bold hl-yellow">Artificial Narrow Intelligence (ANI):</span> Only form currently existing. Specific tasks (voice assistants, LLMs like Gemini).</li>
+            <li><span class="bold hl-pink">Artificial General Intelligence (AGI):</span> Theoretical. Broad tasks, human-like reasoning and adaptability.</li>
+            <li><span class="bold red">Artificial Superintelligence (ASI):</span> Theoretical. Self-aware, far surpassing human intelligence. Potential existential threat.</li>
+        </ul>
+        <h3>By Functionality</h3>
+        <ul>
+            <li><span class="bold">Reactive Machines:</span> No memory, preprogrammed rules (IBM Deep Blue).</li>
+            <li><span class="bold">Limited Memory:</span> Short-term memory for training (Self-driving cars, Chatbots).</li>
+            <li><span class="bold">Theory of Mind:</span> Does not exist yet. Emulates human mind/emotions.</li>
+        </ul>
+
+        <h2>8. History & Milestones</h2>
+        <ul>
+            <li><span class="bold">1943:</span> McCulloch & Pitts propose artificial neurons.</li>
+            <li><span class="bold">1950:</span> Alan Turing publishes Turing Test.</li>
+            <li><span class="bold">1956:</span> John McCarthy coins "Artificial Intelligence" at Dartmouth Conference.</li>
+            <li><span class="bold">1966:</span> ELIZA (first chatbot).</li>
+            <li><span class="bold">1974-1980 & 1987-1993:</span> <span class="hl-pink">AI Winters</span> (funding shortages).</li>
+            <li><span class="bold">1980:</span> Rise of Expert Systems.</li>
+            <li><span class="bold">1997:</span> IBM Deep Blue beats Gary Kasparov.</li>
+            <li><span class="bold">2011:</span> IBM Watson wins Jeopardy.</li>
+            <li><span class="bold">2014:</span> Chatbot "Eugene Goostman" passes Turing Test.</li>
+        </ul>
+
+    </div>
+</body>
+</html>

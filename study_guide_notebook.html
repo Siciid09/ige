@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flutter & Supabase Study Guide</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Kalam:wght@300;400;700&display=swap');
+
+        :root {
+            --line-height: 36px;
+            --paper: #fcfbf7;
+            --line: #cdd9e8;
+            --margin: #f48282;
+            --ink: #1e293b;
+            --ink-blue: #1d4ed8;
+            --ink-red: #be123c;
+            --ink-green: #15803d;
+            --hl-yellow: rgba(253, 224, 71, 0.6);
+            --hl-pink: rgba(244, 114, 182, 0.4);
+        }
+
+        body {
+            background-color: #0f172a;
+            display: flex;
+            justify-content: center;
+            padding: 50px 20px;
+            margin: 0;
+            background-image: radial-gradient(#334155 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .notebook {
+            width: 100%;
+            max-width: 850px;
+            background-color: var(--paper);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7), inset 4px 0 15px rgba(0,0,0,0.05);
+            border-radius: 5px 15px 15px 5px;
+            padding: 40px 40px 60px 100px;
+            background-image:
+                linear-gradient(var(--line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--margin) 2px, transparent 2px);
+            background-size: 100% var(--line-height), 100% 100%;
+            background-position: 0 10px, 80px 0;
+            font-family: 'Kalam', cursive;
+            font-size: 22px;
+            line-height: var(--line-height);
+            color: var(--ink);
+            position: relative;
+        }
+
+        /* Typography */
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 52px;
+            color: var(--ink-blue);
+            text-align: center;
+            margin: 0 0 var(--line-height) 0;
+            transform: rotate(-2deg);
+            text-decoration: underline;
+            text-underline-offset: 8px;
+        }
+
+        h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 38px;
+            color: var(--ink-red);
+            margin: var(--line-height) 0 0 0;
+            transform: rotate(1deg);
+        }
+
+        p, ul {
+            margin: 0 0 var(--line-height) 0;
+        }
+
+        ul {
+            padding-left: 20px;
+            list-style-type: none;
+        }
+
+        li {
+            margin-bottom: 0px;
+        }
+
+        li::before {
+            content: "•";
+            color: var(--ink-blue);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        .bold { font-weight: 700; }
+        .blue { color: var(--ink-blue); }
+        .red { color: var(--ink-red); }
+        .green { color: var(--ink-green); }
+
+        .hl-yellow {
+            background-color: var(--hl-yellow);
+            padding: 2px 6px;
+            border-radius: 4px 10px 4px 10px;
+            box-decoration-break: clone;
+        }
+        
+        .hl-pink {
+            background-color: var(--hl-pink);
+            padding: 2px 6px;
+            border-radius: 10px 4px 10px 4px;
+            box-decoration-break: clone;
+        }
+
+        .code {
+            font-family: monospace;
+            background-color: rgba(0,0,0,0.05);
+            padding: 0 6px;
+            border: 1px dotted var(--ink-blue);
+            color: var(--ink-green);
+            font-size: 18px;
+            border-radius: 4px;
+        }
+
+        .doodle {
+            font-family: 'Caveat', cursive;
+            color: var(--ink-blue);
+            font-size: 28px;
+            position: absolute;
+            right: 30px;
+            top: 20px;
+            transform: rotate(15deg);
+            border: 2px solid var(--ink-blue);
+            padding: 5px 15px;
+            border-radius: 50% 40% 50% 40% / 40% 50% 40% 50%;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="notebook">
+        <div class="doodle">A+ Ready! 💯</div>
+        <h1>📱 Mobile App II: Final Master Notes</h1>
+        
+        <h2>📌 1. Flutter & Dart Basics</h2>
+        <ul>
+            <li><span class="bold">Flutter:</span> Google's UI toolkit for natively compiled cross-platform apps.</li>
+            <li><span class="bold">Dart:</span> The object-oriented language behind Flutter. Compiles to native code & JS.</li>
+            <li><span class="bold blue">Hot Reload:</span> Updates UI fast, <span class="hl-yellow">keeps app state.</span></li>
+            <li><span class="bold red">Hot Restart:</span> Slower, completely <span class="hl-pink">clears the app state.</span></li>
+        </ul>
+
+        <h2>🏗️ 2. Architecture & Ecosystem</h2>
+        <ul>
+            <li><span class="bold">Framework:</span> The Dart layer (Widgets, animation).</li>
+            <li><span class="bold">Engine:</span> The C++ core using the <span class="hl-yellow">Skia renderer</span> to draw pixels.</li>
+            <li><span class="bold">Embedder:</span> Platform integration (Android, iOS).</li>
+            <li><span class="bold">Competitors:</span> React Native (JS), Swift (Apple), Kotlin (Android).</li>
+        </ul>
+
+        <h2>🧩 3. The Ultimate Widget List</h2>
+        <ul>
+            <li><span class="bold blue">Stateless Widgets:</span> Never change after building (e.g., <span class="code">Text</span>, <span class="code">Icon</span>).</li>
+            <li><span class="bold red">Stateful Widgets:</span> Change during runtime (e.g., forms, buttons).</li>
+            <li><span class="code">MaterialApp</span>: Root widget. Use <span class="code">debugShowCheckedModeBanner: false</span> to hide the banner.</li>
+            <li><span class="code">Scaffold</span>: Provides <span class="code">appBar</span> and <span class="code">body</span>.</li>
+            <li><span class="bold">Layouts (Single Child):</span> <span class="code">Center</span>, <span class="code">Container</span>, <span class="code">SizedBox</span>, <span class="code">Padding</span>.</li>
+            <li><span class="bold">Layouts (Multi Child):</span> <span class="code">Column</span>, <span class="code">Row</span>, <span class="code">Stack</span>, <span class="code">ListView</span>.</li>
+            <li><span class="code">SingleChildScrollView</span>: Makes screen scrollable (crucial for login pages).</li>
+            <li><span class="code">TextField</span>: Uses <span class="code">InputDecoration</span> for styling and <span class="code">OutlineInputBorder</span>.</li>
+            <li><span class="bold">Navigation:</span> <span class="code">Navigator.push()</span> goes to new screen. <span class="code">Navigator.pop(context)</span> goes back.</li>
+        </ul>
+
+        <h2>📂 4. Project Structure & Setup</h2>
+        <ul>
+            <li><span class="code">lib/main.dart</span>: Main code file. Entry point is <span class="code">void main()</span>.</li>
+            <li><span class="code">pubspec.yaml</span>: File for packages (<span class="hl-yellow">supabase_flutter</span>), fonts, and images.</li>
+            <li><span class="code">AndroidManifest.xml</span>: <span class="hl-pink">MUST</span> declare <span class="code">android.permission.INTERNET</span> here!</li>
+            <li><span class="bold">CLI Commands:</span> <span class="code">flutter doctor</span> (checks setup), <span class="code">flutter pub get</span> (downloads packages).</li>
+        </ul>
+
+        <h2>🗄️ 5. Supabase (The Backend)</h2>
+        <ul>
+            <li><span class="bold">Supabase:</span> Open-source Firebase alternative using <span class="hl-yellow">PostgreSQL</span>.</li>
+            <li><span class="bold blue">Anon Key:</span> Public key safe for the frontend app.</li>
+            <li><span class="bold red">Secret Key:</span> MUST ONLY be used on the backend!</li>
+            <li><span class="bold">RLS (Row Level Security):</span> Policies that control who can read/write data.</li>
+            <li><span class="bold">Auth Logic:</span> Use <span class="code">.insert()</span> to register users. Use <span class="code">.select().eq().maybeSingle()</span> to login.</li>
+        </ul>
+    </div>
+</body>
+</html>

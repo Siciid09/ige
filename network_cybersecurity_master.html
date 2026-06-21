@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cybersecurity & Network Master Guide</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Kalam:wght@300;400;700&display=swap');
+
+        :root {
+            --line-height: 36px;
+            --paper: #fcfbf7;
+            --line: #cdd9e8;
+            --margin: #f48282;
+            --ink: #1e293b;
+            --ink-blue: #1d4ed8;
+            --ink-red: #be123c;
+            --ink-green: #15803d;
+            --hl-yellow: rgba(253, 224, 71, 0.5);
+            --hl-pink: rgba(244, 114, 182, 0.4);
+            --hl-green: rgba(134, 239, 172, 0.5);
+        }
+
+        body {
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            background-image: radial-gradient(#334155 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .notebook {
+            width: 100%;
+            max-width: 950px;
+            background-color: var(--paper);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7), inset 4px 0 15px rgba(0,0,0,0.05);
+            border-radius: 5px 15px 15px 5px;
+            background-image:
+                linear-gradient(var(--line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--margin) 2px, transparent 2px);
+            background-size: 100% var(--line-height), 100% 100%;
+            background-position: 0 35px, 80px 0;
+            padding: 36px 40px 72px 100px;
+            font-family: 'Kalam', cursive;
+            font-size: 22px;
+            line-height: var(--line-height);
+            color: var(--ink);
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1, h2, h3, h4, p, ul, ol, pre {
+            margin-top: 0;
+            margin-bottom: var(--line-height);
+        }
+
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 52px;
+            color: var(--ink-blue);
+            text-align: center;
+            transform: rotate(-1deg);
+            text-decoration: underline;
+            text-underline-offset: 8px;
+            padding-top: 10px;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 42px;
+            color: var(--ink-red);
+            padding-top: 10px;
+            border-bottom: 2px dashed var(--ink-red);
+            display: inline-block;
+            line-height: 1.2;
+        }
+
+        h3 {
+            font-family: 'Caveat', cursive;
+            font-size: 34px;
+            color: var(--ink-green);
+            margin-bottom: 0;
+            line-height: 1.2;
+            text-decoration: underline;
+        }
+
+        ul {
+            padding-left: 25px;
+            list-style-type: none;
+        }
+
+        li {
+            margin-bottom: 0;
+            position: relative;
+        }
+
+        li::before {
+            content: "•";
+            color: var(--ink-blue);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            position: absolute;
+            left: -1em;
+        }
+
+        .bold { font-weight: 700; }
+        .blue { color: var(--ink-blue); }
+        .red { color: var(--ink-red); }
+        .green { color: var(--ink-green); }
+
+        .hl-yellow {
+            background-color: var(--hl-yellow);
+            padding: 2px 6px;
+            border-radius: 4px 10px 4px 10px;
+            box-decoration-break: clone;
+        }
+        
+        .hl-pink {
+            background-color: var(--hl-pink);
+            padding: 2px 6px;
+            border-radius: 10px 4px 10px 4px;
+            box-decoration-break: clone;
+        }
+
+        .box {
+            border: 2px solid var(--ink-blue);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: var(--line-height);
+            transform: rotate(0.5deg);
+            background-color: rgba(255,255,255,0.5);
+            line-height: 1.4;
+        }
+
+        .code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: rgba(0,0,0,0.04);
+            padding: 15px;
+            border: 1px dotted var(--ink-blue);
+            color: var(--ink-green);
+            font-size: 16px;
+            border-radius: 4px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            margin-bottom: var(--line-height);
+        }
+
+        .doodle {
+            font-family: 'Caveat', cursive;
+            color: var(--ink-blue);
+            font-size: 28px;
+            position: absolute;
+            right: 30px;
+            top: 20px;
+            transform: rotate(15deg);
+            border: 2px solid var(--ink-blue);
+            padding: 5px 15px;
+            border-radius: 50% 40% 50% 40% / 40% 50% 40% 50%;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="notebook">
+        <div class="doodle">Hacker Mode! 🕵️</div>
+        <h1>🛡️ Cybersecurity & Network Master Guide<br>100% Complete Notes</h1>
+        
+        <!-- SECTION 1: NETWORK SECURITY (OFFENSIVE VS DEFENSIVE) -->
+        <h2>Part 1: Network Security Strategies</h2>
+        
+        <h3>1.1 The Two Sides of Cybersecurity</h3>
+        <p>Cybersecurity is divided into two main factions: <span class="bold red">Offensive</span> and <span class="bold blue">Defensive</span> security.</p>
+        <ul>
+            <li><span class="bold red">Offensive Security (Red Team):</span> The Invading Army. Goal: Find a weak spot in the wall, sneak through the sewer grate, or bribe a guard before the King’s feast is stolen.</li>
+            <li><span class="bold blue">Defensive Security (Blue Team):</span> The Castle Guards. Goal: Build higher walls, dig moats, train sentries to spot spies, and have a plan to lock down the throne room if an intruder is detected.</li>
+        </ul>
+
+        <h3>1.2 Offensive Security (OffSec)</h3>
+        <p><span class="bold">Definition:</span> Proactive security measures designed to identify vulnerabilities by simulating real-world attacks before malicious hackers do.</p>
+        <p><span class="bold">Key Objectives:</span></p>
+        <ul>
+            <li>Find weaknesses (technical, human, physical).</li>
+            <li>Measure risk (how deep can an attacker go?).</li>
+            <li>Test incident response capabilities.</li>
+            <li>Avoid compliance fines and data breaches.</li>
+        </ul>
+        <p><span class="bold">Offensive Security Disciplines:</span></p>
+        <ul>
+            <li><span class="bold">Penetration Testing (Pentesting):</span> Authorized simulated attack on systems (Scope defined, time-boxed).</li>
+            <li><span class="bold">Red Teaming:</span> Goal-based, no-holds-barred simulation. Tests people, processes, and physical security (e.g., “Steal the R&D data”). Often uses stealth.</li>
+            <li><span class="bold">Vulnerability Assessment:</span> Automated scanning to identify known CVEs (Common Vulnerabilities and Exposures).</li>
+            <li><span class="bold">Social Engineering:</span> Exploiting human psychology (Phishing emails, vishing calls, tailgating into buildings).</li>
+            <li><span class="bold">Bug Bounty:</span> Crowdsourced hacking; ethical hackers are paid per vulnerability found.</li>
+        </ul>
+
+        <h3>1.3 Defensive Security</h3>
+        <p><span class="bold">Defensive Security Disciplines:</span></p>
+        <ul>
+            <li><span class="bold">Security Operations Center (SOC):</span> The “nerve center.” Analysts monitor logs and alerts 24/7.</li>
+            <li><span class="bold">Incident Response (IR):</span> The “fire department.” Steps taken to contain, eradicate, and recover from a breach.</li>
+            <li><span class="bold">Threat Hunting:</span> Proactively searching networks for threats that evaded automated detection.</li>
+            <li><span class="bold">Digital Forensics:</span> Investigating the “crime scene” to find out how the breach happened and who did it.</li>
+            <li><span class="bold">Compliance & Governance:</span> Ensuring the organization meets standards (ISO 27001, GDPR, HIPAA) to avoid legal liability.</li>
+        </ul>
+
+        <div class="box">
+            <span class="bold green">Why Organizations Need Both:</span><br>
+            <span class="bold red">Only Offensive (Red):</span> You know where you are weak, but you have no way to stop the attack or monitor if someone is inside.<br>
+            <span class="bold blue">Only Defensive (Blue):</span> You have alarms and barriers, but you don’t know if the barriers are actually strong enough to stop a determined attacker.<br>
+            <span class="bold hl-yellow">Purple Teaming:</span> Bridges the gap, turning findings into actionable defense improvements. You must be able to both fight and fortify!
+        </div>
+
+        <!-- SECTION 2: CRYPTOGRAPHY -->
+        <h2>Part 2: Cryptography Basics</h2>
+        <p><span class="bold">Definition:</span> Cryptography protects data by converting it into secure formats. It is the practice and study of techniques for secure communication in the presence of adversaries (eavesdroppers). It constructs protocols that prevent public reading of private messages. <br>
+        <span class="hl-pink">Etymology: Greek Krypto's (hidden, secret) + graphene (to write) = "hidden writing."</span></p>
+        
+        <h3>2.1 The Four Goals of Cryptography</h3>
+        <ul>
+            <li><span class="bold">Confidentiality (Privacy):</span> Keeping information secret from unauthorized parties (Encryption).</li>
+            <li><span class="bold">Integrity:</span> Ensuring that information has not been tampered with or altered during transmission or storage.</li>
+            <li><span class="bold">Authentication:</span> Verifying the identity of the sender/receiver (who created/accessed the data).</li>
+            <li><span class="bold">Non-Repudiation:</span> Preventing a party from denying a previous action or communication (e.g., "I didn't send that email").</li>
+        </ul>
+
+        <h3>2.2 Types of Cryptography</h3>
+        <ul>
+            <li><span class="bold blue">1. Symmetric-Key Cryptography (Secret-Key):</span> One shared secret key is used for BOTH encryption and decryption. Like a locked mailbox where both sender and receiver have the same key. <br>
+            <span class="bold">Pros:</span> Very fast, efficient for bulk data. <br>
+            <span class="bold">Note:</span> Modes of Operation (for block ciphers like AES - 128 bits) define how to handle longer data.</li>
+            
+            <li><span class="bold blue">2. Asymmetric-Key Cryptography (Public-Key):</span> Uses a key pair: a public key (shared with everyone) and a private key (kept secret). Data encrypted with the public key can ONLY be decrypted with the private key. <br>
+            <span class="bold">Pros:</span> Solves key distribution problem. Enables digital signatures. <br>
+            <span class="bold red">Cons:</span> Very slow (100-1000x slower than symmetric).</li>
+
+            <li><span class="bold blue">3. Cryptographic Hash Functions:</span> Takes any input and produces a fixed-size string of bytes (the hash/digest). It is strictly one-way (cannot reverse). <br>
+            <span class="bold">Properties:</span> Deterministic (same input = same hash), Fast to compute, Pre-image resistant (impossible to find input given the hash).</li>
+        </ul>
+        <p><span class="bold">Applications:</span> Banking, Communication, Cybersecurity. <br>
+        <span class="bold hl-yellow">Final Golden Rule (Schneier's Law):</span> "Anyone can invent a security system that he himself cannot break."</p>
+
+
+        <!-- SECTION 3: KEY DISTRIBUTION & AUTHENTICATION -->
+        <h2>Part 3: Key Distribution & Authentication</h2>
+        
+        <h3>3.1 Key Distribution</h3>
+        <p>The process of securely sharing cryptographic keys. Essential for encrypted communication.</p>
+        <ul>
+            <li><span class="bold">Symmetric Challenge:</span> The secure delivery of the shared key is the main vulnerability.</li>
+            <li><span class="bold">Asymmetric Solution:</span> Supports secure key exchange since public keys can be shared openly.</li>
+            <li><span class="bold hl-yellow">Key Distribution Center (KDC):</span> Trusted third party for distributing keys. Used in Kerberos. Reduces need for multiple shared keys.</li>
+            <li><span class="bold hl-yellow">Diffie-Hellman Key Exchange:</span> Allows two parties to establish a shared secret over insecure channels. Foundation for many secure protocols.</li>
+        </ul>
+
+        <h3>3.2 User Authentication</h3>
+        <p>Verifies the identity of users or systems and protects resources from unauthorized access.</p>
+        <p><span class="bold">Authentication Factors:</span></p>
+        <ul>
+            <li>Something you <span class="bold green">know</span> (password)</li>
+            <li>Something you <span class="bold green">have</span> (smart card/token)</li>
+            <li>Something you <span class="bold green">are</span> (biometrics)</li>
+        </ul>
+        <p><span class="bold">Authentication Protocols:</span> Kerberos, RADIUS, TACACS+, Multi-factor Authentication (MFA).</p>
+        
+        <div class="box">
+            <span class="bold red">Common Security Threats:</span><br>
+            Man-in-the-middle attacks, Replay attacks, Phishing and credential theft, Weak password vulnerabilities.<br><br>
+            <span class="bold blue">Best Practices:</span><br>
+            Use strong encryption algorithms, Implement MFA, Regularly rotate cryptographic keys, Monitor and audit authentication logs.
+        </div>
+
+
+        <!-- SECTION 4: WIRELESS NETWORK SECURITY -->
+        <h2>Part 4: Wireless Network Security</h2>
+        
+        <h3>4.1 IEEE 802.11 WLAN Overview</h3>
+        <p>WLAN standard family mapping MAC and PHY layers. Channel access uses CSMA/CA. Common standards: 802.11a/b/g/n/ac/ax.</p>
+        <p><span class="bold">Architecture Components:</span></p>
+        <ul>
+            <li><span class="bold">STA:</span> Station (The client device)</li>
+            <li><span class="bold">AP:</span> Access Point</li>
+            <li><span class="bold">BSS:</span> Basic Service Set</li>
+            <li><span class="bold">ESS:</span> Extended Service Set</li>
+            <li><span class="bold">DS:</span> Distribution System</li>
+        </ul>
+
+        <h3>4.2 IEEE 802.11i Wireless LAN Security</h3>
+        <p>Enhances WLAN security and introduced the Robust Security Network (RSN). This forms the basis for WPA2, providing major authentication and encryption improvements.</p>
+        <p><span class="bold">802.11i Security Features:</span></p>
+        <ul>
+            <li>802.1X authentication</li>
+            <li>EAP framework</li>
+            <li>AES-CCMP encryption</li>
+            <li>Key management</li>
+            <li>Protection against WEP weaknesses</li>
+        </ul>
+        
+        <p><span class="bold">Protocol Evolution:</span></p>
+        <ul>
+            <li><span class="bold red">WEP:</span> Weak security.</li>
+            <li><span class="bold hl-yellow">WPA:</span> Transitional improvement.</li>
+            <li><span class="bold green">WPA2 (802.11i):</span> Strong security.</li>
+            <li><span class="bold green">WPA3:</span> Latest enhancements.</li>
+        </ul>
+
+        <h3>4.3 WAP (Wireless Application Protocol) Overview</h3>
+        <p>Standard for mobile web access. Optimized for wireless devices to support communication between mobile devices and web services.</p>
+        <ul>
+            <li><span class="bold">Architecture:</span> Mobile Device -> WAP Gateway/Proxy -> Web Server -> Wireless communication network.</li>
+            <li><span class="bold">WAP Protocol Stack:</span></li>
+            <li><span class="bold">WAE:</span> Application Environment</li>
+            <li><span class="bold">WSP:</span> Session Protocol</li>
+            <li><span class="bold">WTP:</span> Transaction Protocol</li>
+            <li><span class="bold">WTLS:</span> Security</li>
+            <li><span class="bold">WDP:</span> Datagram Protocol</li>
+        </ul>
+
+
+        <!-- SECTION 5: PRACTICAL LABS & COMMANDS -->
+        <h2>Part 5: Practical Labs & Terminal Commands</h2>
+
+        <h3>5.1 Password Cracking: Hydra (Kali Linux)</h3>
+        <p>Hydra is a parallelized login cracker which supports numerous protocols to attack.</p>
+        <div class="code">
+# Worst Password saved online (hackers trac)
+head -n 500-worst-passwords.txt
+
+# Installing Hydra on Kali Linux
+sudo apt-get update
+sudo apt-get install hydra -y
+        </div>
+
+        <h3>5.2 Network Scanning & Recon: NMAP</h3>
+        <div class="code">
+# Part A: Scanning via NMAP 
+# -A: Enable OS detection, version detection, script scanning, and traceroute
+# -O: Enable OS detection
+# -vvv: Very verbose mode
+nmap -A -O -vvv 142.251.142.78  
+
+# Exam / Lab Questions associated with this command:
+1) Mention the number of ports open?
+2) Highlight the certificate or Public key and its valid duration?
+3) Mention the cloud system hosted by the site? 
+
+# Scanning when you don't need to be tracked by the ISP 
+traceroute -d 8.8.8.8
+        </div>
+
+        <h3>5.3 IT Service Management: Creating a Request</h3>
+        <p>Standard operating procedure (SOP) steps for creating an IT support ticket/incident.</p>
+        <div class="code">
+Steps to Create A Request:
+1) Click on request 
+2) Click New incident 
+3) Type incident , high 
+4) Type the requester name 
+5) Requester issue 
+6) Assign the technician
+7) Close 
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyOS: The Ultimate Exam Hub</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.5);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 25%);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            flex-direction: row;
+        }
+
+        /* Mobile Header (Hidden on Desktop) */
+        .mobile-header {
+            display: none;
+            padding: 15px 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border);
+            align-items: center;
+            justify-content: space-between;
+            z-index: 20;
+            width: 100%;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Sidebar Glassmorphism */
+        .sidebar {
+            width: 290px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-right: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            z-index: 30;
+            box-shadow: 5px 0 25px rgba(0,0,0,0.2);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+        }
+
+        /* Custom Scrollbar for Sidebar */
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding-left: 10px;
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            padding-left: 10px;
+            font-weight: 600;
+        }
+
+        nav {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* 3D Button Hover Effects */
+        .nav-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .nav-btn.active {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .nav-btn.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 60%;
+            width: 4px;
+            background-color: #60a5fa;
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 0 10px #60a5fa;
+        }
+
+        .icon {
+            font-size: 18px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            height: 100vh;
+            background-color: var(--bg-color);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        iframe {
+            width: 100%;
+            flex-grow: 1;
+            border: none;
+            display: block;
+            background-color: white; /* to ensure the notebook displays correctly */
+        }
+
+        /* Subtle loading skeleton background behind iframe */
+        .iframe-loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--text-muted);
+            z-index: -1;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Overlay for mobile */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 25;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .mobile-header {
+                display: flex;
+            }
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                transform: translateX(-100%);
+                width: 280px;
+                padding-top: 20px;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .overlay.open {
+                display: block;
+                opacity: 1;
+            }
+            .main-content {
+                height: calc(100vh - 65px);
+            }
+            .logo {
+                margin-bottom: 20px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Overlay for mobile click-to-close -->
+    <div class="overlay" onclick="toggleMenu()"></div>
+
+    <!-- Mobile Top Navigation -->
+    <header class="mobile-header">
+        <div class="logo" style="margin: 0; padding: 0;">
+            <span style="-webkit-text-fill-color: white;">🎓</span> StudyOS
+        </div>
+        <button class="menu-btn" onclick="toggleMenu()">
+            ☰
+        </button>
+    </header>
+
+    <aside class="sidebar">
+        <div class="logo">
+            <span style="-webkit-text-fill-color: white;">🎓</span> StudyOS Hub
+        </div>
+        
+        <nav>
+            <div class="nav-label">Mobile App Dev</div>
+            <button onclick="loadContent('complete_study_guide.html', this)" class="nav-btn active">
+                <span class="icon">📱</span> Flutter Master Guide
+            </button>
+            <button onclick="loadContent('quiz_notebook.html', this)" class="nav-btn">
+                <span class="icon">🎯</span> Interactive Quiz
+            </button>
+              <button onclick="loadContent('study_guide_notebook.html', this)" class="nav-btn">
+                <span class="icon">🎯</span> Study Guide
+            </button>
+
+
+            <div class="nav-label" style="margin-top: 20px;">Cybersecurity & Web</div>
+            <button onclick="loadContent('network_cybersecurity_master.html', this)" class="nav-btn">
+                <span class="icon">🛡️</span> Cyber & Networks
+            </button>
+            <button onclick="loadContent('security_notebook.html', this)" class="nav-btn">
+                <span class="icon">🔐</span> Web Sec Upgrade
+            </button>
+
+            <div class="nav-label" style="margin-top: 20px;">Advanced Tech</div>
+            <button onclick="loadContent('complete_ai_study_guide.html', this)" class="nav-btn">
+                <span class="icon">🧠</span> AI Master Guide
+            </button>
+            <button onclick="loadContent('dsp_master_notebook.html', this)" class="nav-btn">
+                <span class="icon">📡</span> DSP Master Guide
+            </button>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <div class="iframe-loader">Loading Environment...</div>
+        <!-- Defaults to the Flutter complete guide -->
+        <iframe id="viewer" src="complete_study_guide.html" title="Document Viewer"></iframe>
+    </main>
+
+    <script>
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.overlay');
+
+        function toggleMenu() {
+            sidebar.classList.toggle('open');
+            if (sidebar.classList.contains('open')) {
+                overlay.classList.add('open');
+            } else {
+                overlay.classList.remove('open');
+            }
+        }
+
+        function loadContent(file, btnElement) {
+            // Update iframe source
+            document.getElementById('viewer').src = file;
+            
+            // Remove active state from all buttons
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active state to clicked button
+            btnElement.classList.add('active');
+
+            // On mobile, auto-close the menu after making a selection
+            if (window.innerWidth <= 768) {
+                toggleMenu();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Security Study Notes</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Kalam:wght@300;400;700&display=swap');
+
+        :root {
+            --line-height: 36px;
+            --paper: #fcfbf7;
+            --line: #cdd9e8;
+            --margin: #f48282;
+            --ink: #1e293b;
+            --ink-blue: #1d4ed8;
+            --ink-red: #be123c;
+            --ink-green: #15803d;
+            --hl-yellow: rgba(253, 224, 71, 0.5);
+            --hl-pink: rgba(244, 114, 182, 0.4);
+            --hl-green: rgba(134, 239, 172, 0.5);
+        }
+
+        body {
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            background-image: radial-gradient(#334155 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .notebook {
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--paper);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7), inset 4px 0 15px rgba(0,0,0,0.05);
+            border-radius: 5px 15px 15px 5px;
+            background-image:
+                linear-gradient(var(--line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--margin) 2px, transparent 2px);
+            background-size: 100% var(--line-height), 100% 100%;
+            background-position: 0 35px, 80px 0;
+            padding: 36px 40px 72px 100px;
+            font-family: 'Kalam', cursive;
+            font-size: 22px;
+            line-height: var(--line-height);
+            color: var(--ink);
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1, h2, h3, p, ul, ol {
+            margin-top: 0;
+            margin-bottom: var(--line-height);
+        }
+
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 52px;
+            color: var(--ink-blue);
+            text-align: center;
+            transform: rotate(-1deg);
+            text-decoration: underline;
+            text-underline-offset: 8px;
+            padding-top: 10px;
+        }
+
+        h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 36px;
+            color: var(--ink-red);
+            padding-top: 10px;
+            border-bottom: 2px dashed var(--ink-red);
+            display: inline-block;
+        }
+
+        ol {
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: var(--line-height);
+            position: relative;
+        }
+
+        li::marker {
+            color: var(--ink-red);
+            font-weight: bold;
+            font-family: 'Caveat', cursive;
+            font-size: 28px;
+        }
+
+        .question {
+            font-weight: 700;
+            color: var(--ink-blue);
+            display: block;
+            line-height: 1.2;
+            margin-bottom: 5px;
+            font-family: 'Caveat', cursive;
+            font-size: 32px;
+        }
+
+        .answer {
+            display: block;
+            color: var(--ink);
+        }
+
+        .bold { font-weight: 700; }
+        .hl-yellow {
+            background-color: var(--hl-yellow);
+            padding: 2px 6px;
+            border-radius: 4px 10px 4px 10px;
+            box-decoration-break: clone;
+        }
+
+        .doodle {
+            font-family: 'Caveat', cursive;
+            color: var(--ink-green);
+            font-size: 28px;
+            position: absolute;
+            right: 30px;
+            top: 20px;
+            transform: rotate(15deg);
+            border: 2px solid var(--ink-green);
+            padding: 5px 15px;
+            border-radius: 50% 40% 50% 40% / 40% 50% 40% 50%;
+            opacity: 0.8;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="notebook">
+        <div class="doodle">Security Exam! 🔐</div>
+        <h1>🛡️ Web Security: 25 Question Master Key</h1>
+        
+        <h2>Exam Questions & Definitions</h2>
+        
+        <ol>
+            <li>
+                <span class="question">Define Web Application Security?</span>
+                <span class="answer">The process of protecting websites and online services against different security threats that exploit vulnerabilities in an application's code.</span>
+            </li>
+            <li>
+                <span class="question">Explain SOP (Same-Origin Policy)?</span>
+                <span class="answer">A critical web security concept that restricts how a document or script loaded from one origin can interact with a resource from another origin, preventing malicious scripts on one page from obtaining access to sensitive data on another.</span>
+            </li>
+            <li>
+                <span class="question">What is The Defense-in-Depth Approach?</span>
+                <span class="answer">An information security approach where <span class="hl-yellow">multiple layers of security controls</span> are placed throughout an IT system. If one layer fails, another layer catches the threat.</span>
+            </li>
+            <li>
+                <span class="question">Write down the difference between HTTP and HTTPS?</span>
+                <span class="answer">HTTP transmits data in plain, readable text. HTTPS uses SSL/TLS encryption to secure the communication, preventing attackers from reading intercepted data.</span>
+            </li>
+            <li>
+                <span class="question">Explain NEVER TRUST THE USER?</span>
+                <span class="answer">A fundamental security principle stating that all input received from a user (or outside the system's control) must be considered dangerous and strictly validated or sanitized before processing.</span>
+            </li>
+            <li>
+                <span class="question">What is Security Misconfiguration?</span>
+                <span class="answer">Occurs when security settings are poorly configured, left at default, or incomplete, allowing attackers unauthorized access to system data or functionality.</span>
+            </li>
+            <li>
+                <span class="question">Explain what is Access Control?</span>
+                <span class="answer">The security mechanism that dictates who (or what) can view or use resources in a computing environment, ensuring only authorized users access specific data.</span>
+            </li>
+            <li>
+                <span class="question">Explain Broken Authentication and Session Management?</span>
+                <span class="answer">A vulnerability where an application improperly implements authentication and session management, allowing attackers to compromise passwords, keys, or hijack session tokens.</span>
+            </li>
+            <li>
+                <span class="question">Explain Insecure Cryptographic Storage?</span>
+                <span class="answer">A flaw where sensitive data (like passwords or credit card numbers) is not properly encrypted at rest, making it easily readable to attackers who breach the database.</span>
+            </li>
+            <li>
+                <span class="question">Explain Whitelist Validation?</span>
+                <span class="answer">A strict security practice where only data that matches a known-good, predefined set of allowed characters or values is accepted, immediately rejecting everything else.</span>
+            </li>
+            <li>
+                <span class="question">Explain Built-In HTTP Authentication?</span>
+                <span class="answer">Mechanisms provided by the HTTP protocol itself (like Basic or Digest authentication) to challenge and verify user credentials directly via the browser and server response headers.</span>
+            </li>
+            <li>
+                <span class="question">Explain two Common Types of Brute-Force Attacks?</span>
+                <span class="answer">1) <span class="bold">Dictionary Attack:</span> Using a pre-compiled list of common words. 2) <span class="bold">Credential Stuffing:</span> Automating the injection of breached username/password pairs.</span>
+            </li>
+            <li>
+                <span class="question">Explain Application Security?</span>
+                <span class="answer">The broad practice of adding features or functionality to software to prevent cyber threats, encompassing the entire software development lifecycle.</span>
+            </li>
+            <li>
+                <span class="question">Explain Rubber-Hose Attack?</span>
+                <span class="answer">A cryptographic attack where the attacker extracts secrets (like cryptographic keys or passwords) from a person through physical coercion, torture, or extortion rather than technical hacking.</span>
+            </li>
+            <li>
+                <span class="question">Explain Require Minimum Password Length?</span>
+                <span class="answer">A policy ensuring passwords contain a minimum number of characters to mathematically increase the time and computing power needed for an attacker to crack them.</span>
+            </li>
+            <li>
+                <span class="question">Explain Brute Force Attack?</span>
+                <span class="answer">A trial-and-error method used by attackers to guess credentials or encryption keys by systematically submitting thousands of passwords until the correct one is found.</span>
+            </li>
+            <li>
+                <span class="question">Write any OWASP Top Three?</span>
+                <span class="answer">Historically: 1. Injection (e.g., SQLi), 2. Broken Authentication, 3. Sensitive Data Exposure.</span>
+            </li>
+            <li>
+                <span class="question">Explain Authentication Fundamentals?</span>
+                <span class="answer">The core principles of verifying a user's identity, typically relying on something you know (password), something you have (token), or something you are (biometrics).</span>
+            </li>
+            <li>
+                <span class="question">Explain Network Security?</span>
+                <span class="answer">The practice of preventing and protecting against unauthorized intrusion into corporate networks, protecting the usability and integrity of network infrastructure.</span>
+            </li>
+            <li>
+                <span class="question">Explain CSS?</span>
+                <span class="answer">While typically standing for Cascading Style Sheets (design), in older security contexts, it sometimes referred to Cross-Site Scripting (now universally known as XSS), where attackers inject malicious scripts into trusted websites.</span>
+            </li>
+            <li>
+                <span class="question">What are Cookies?</span>
+                <span class="answer">Small pieces of data stored on the user's computer by the web browser, critical for tracking active sessions and maintaining user state (login status).</span>
+            </li>
+            <li>
+                <span class="question">Why the Strategy is Evolving?</span>
+                <span class="answer">Security strategies must continuously adapt because threat actors constantly develop new attack vectors, technologies change rapidly, and network systems become increasingly complex.</span>
+            </li>
+            <li>
+                <span class="question">Explain Rotate Passwords?</span>
+                <span class="answer">A security policy requiring users to change their passwords periodically to limit the lifespan and usefulness of potentially compromised credentials.</span>
+            </li>
+            <li>
+                <span class="question">Explain Password Cannot Equal Username?</span>
+                <span class="answer">A basic input validation rule to prevent trivial brute-force attacks where an attacker assumes the user was lazy and used their login name as their password.</span>
+            </li>
+            <li>
+                <span class="question">Explain Common Reasons for a Disabled Account?</span>
+                <span class="answer">Accounts are typically disabled automatically due to multiple failed login attempts (lockout mechanism), prolonged inactivity, or manual administrative suspension for policy violations.</span>
+            </li>
+        </ol>
+
+    </div>
+</body>
+</html>

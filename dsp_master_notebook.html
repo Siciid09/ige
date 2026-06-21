@@ -1,0 +1,3227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSP Complete Master Notebook – Gollis University</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Kalam:wght@300;400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root{
+  --lh:38px;
+  --paper:#fdfcf8;
+  --line:#ccd8eb;
+  --margin:#f47f7f;
+  --ink:#1a2035;
+  --blue:#1d4ed8;
+  --red:#be123c;
+  --green:#15803d;
+  --purple:#7c3aed;
+  --orange:#c2410c;
+  --hl-yellow:rgba(253,224,71,0.55);
+  --hl-pink:rgba(244,114,182,0.4);
+  --hl-green:rgba(134,239,172,0.5);
+  --hl-blue:rgba(147,197,253,0.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:#0d1425;
+  padding:30px 16px 60px;
+  min-height:100vh;
+  background-image:radial-gradient(#1e2d4a 1px,transparent 1px);
+  background-size:22px 22px;
+  font-family:'Kalam',cursive;
+}
+
+/* ── TABLE OF CONTENTS (sticky nav) ─────────────────────── */
+#toc{
+  position:sticky;top:10px;
+  max-width:220px;
+  float:left;
+  margin-right:20px;
+  background:#fff8e8;
+  border:2px solid var(--blue);
+  border-radius:10px;
+  padding:12px 16px;
+  font-family:'Kalam',cursive;
+  font-size:13px;
+  line-height:1.7;
+  box-shadow:3px 3px 0 var(--blue);
+  z-index:100;
+}
+#toc h4{
+  font-family:'Caveat',cursive;
+  font-size:18px;
+  color:var(--red);
+  text-decoration:underline;
+  margin-bottom:6px;
+}
+#toc a{color:var(--blue);text-decoration:none;display:block;}
+#toc a:hover{text-decoration:underline;}
+#toc .toc-ch{font-weight:700;color:var(--ink);margin-top:6px;}
+
+/* ── NOTEBOOK ───────────────────────────────────────────── */
+.notebook{
+  max-width:960px;
+  margin:0 auto;
+  background:var(--paper);
+  border-radius:5px 14px 14px 5px;
+  box-shadow:0 30px 60px -10px rgba(0,0,0,.75),inset 5px 0 18px rgba(0,0,0,.06);
+  background-image:
+    linear-gradient(var(--line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--margin) 2px,transparent 2px);
+  background-size:100% var(--lh),100% 100%;
+  background-position:0 40px,82px 0;
+  padding:40px 44px 80px 108px;
+  color:var(--ink);
+  line-height:var(--lh);
+  position:relative;
+  overflow:hidden;
+}
+
+/* binding holes */
+.notebook::before{
+  content:'';
+  position:absolute;
+  left:30px;top:0;bottom:0;width:6px;
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent 0,transparent 60px,
+    #d1d5db 60px,#d1d5db 66px,
+    transparent 66px,transparent 120px,
+    #e5e7eb 120px,#e5e7eb 140px,
+    transparent 140px,transparent 200px
+  );
+}
+
+/* ── HEADINGS ───────────────────────────────────────────── */
+h1{
+  font-family:'Caveat',cursive;
+  font-size:56px;
+  color:var(--blue);
+  text-align:center;
+  transform:rotate(-1deg);
+  text-decoration:underline;
+  text-underline-offset:10px;
+  padding-top:14px;
+  line-height:1.2;
+  margin-bottom:var(--lh);
+}
+.subtitle{
+  text-align:center;
+  font-family:'Caveat',cursive;
+  font-size:28px;
+  color:var(--purple);
+  transform:rotate(.5deg);
+  margin-bottom:calc(var(--lh)*1.5);
+}
+h2{
+  font-family:'Caveat',cursive;
+  font-size:46px;
+  color:var(--red);
+  border-bottom:2.5px dashed var(--red);
+  display:inline-block;
+  line-height:1.2;
+  padding-top:12px;
+  margin-top:calc(var(--lh)*0.5);
+  margin-bottom:var(--lh);
+}
+h3{
+  font-family:'Caveat',cursive;
+  font-size:36px;
+  color:var(--green);
+  margin-bottom:4px;
+  margin-top:10px;
+  line-height:1.2;
+}
+h4{
+  font-family:'Caveat',cursive;
+  font-size:28px;
+  color:var(--blue);
+  text-decoration:underline;
+  margin-bottom:4px;
+  margin-top:8px;
+}
+h5{
+  font-family:'Caveat',cursive;
+  font-size:24px;
+  color:var(--orange);
+  margin-bottom:2px;
+}
+p{margin-bottom:var(--lh);}
+p+p{margin-top:0;}
+
+/* ── LISTS ──────────────────────────────────────────────── */
+ul,ol{
+  padding-left:28px;
+  margin-bottom:var(--lh);
+}
+ul{list-style:none;}
+ul li{position:relative;margin-bottom:2px;}
+ul li::before{
+  content:"•";
+  color:var(--blue);
+  font-weight:700;
+  position:absolute;
+  left:-18px;
+}
+ol{list-style:decimal;}
+ol li{margin-bottom:4px;}
+
+/* ── INLINE STYLES ──────────────────────────────────────── */
+.b{font-weight:700;}
+.blue{color:var(--blue);}
+.red{color:var(--red);}
+.green{color:var(--green);}
+.purple{color:var(--purple);}
+.orange{color:var(--orange);}
+.hl-y{background:var(--hl-yellow);padding:1px 5px;border-radius:4px 10px 4px 10px;}
+.hl-p{background:var(--hl-pink);padding:1px 5px;border-radius:10px 4px 10px 4px;}
+.hl-g{background:var(--hl-green);padding:1px 5px;border-radius:4px 10px 4px 10px;}
+.hl-b{background:var(--hl-blue);padding:1px 5px;border-radius:10px 4px 10px 4px;}
+
+/* ── BOXES ──────────────────────────────────────────────── */
+.box{
+  border:2.5px solid var(--blue);
+  padding:14px 20px;
+  border-radius:9px;
+  margin-bottom:var(--lh);
+  transform:rotate(.4deg);
+  background:rgba(255,255,255,.55);
+  line-height:1.55;
+}
+.box-red{border-color:var(--red);transform:rotate(-.3deg);}
+.box-green{border-color:var(--green);transform:rotate(.2deg);}
+.box-purple{border-color:var(--purple);transform:rotate(-.4deg);}
+.box-orange{border-color:var(--orange);}
+
+.math-box{
+  border:2.5px dashed var(--red);
+  padding:12px 22px;
+  border-radius:9px;
+  margin-bottom:var(--lh);
+  background:rgba(253,224,71,.08);
+  font-family:'Caveat',cursive;
+  font-size:30px;
+  text-align:center;
+  color:var(--red);
+  line-height:1.6;
+}
+.math-box .math-line{display:block;margin:4px 0;}
+
+.definition-box{
+  border-left:5px solid var(--blue);
+  background:rgba(29,78,216,.06);
+  padding:12px 18px;
+  margin-bottom:var(--lh);
+  border-radius:0 8px 8px 0;
+  line-height:1.55;
+}
+.definition-box .def-term{
+  font-family:'Caveat',cursive;
+  font-size:26px;
+  color:var(--blue);
+  display:block;
+  margin-bottom:4px;
+}
+
+.solution-box{
+  border:2px solid var(--green);
+  background:rgba(21,128,61,.06);
+  padding:14px 20px;
+  border-radius:8px;
+  margin:8px 0 var(--lh);
+  line-height:1.6;
+}
+.solution-box .sol-head{
+  font-family:'Caveat',cursive;
+  font-size:26px;
+  color:var(--green);
+  display:block;
+  margin-bottom:6px;
+}
+.problem-box{
+  border:2px solid var(--red);
+  background:rgba(190,18,60,.05);
+  padding:14px 20px;
+  border-radius:8px;
+  margin-bottom:8px;
+  line-height:1.6;
+}
+.problem-box .prob-head{
+  font-family:'Caveat',cursive;
+  font-size:26px;
+  color:var(--red);
+  display:block;
+  margin-bottom:6px;
+}
+
+/* ── CODE ───────────────────────────────────────────────── */
+.code{
+  font-family:'Courier New',monospace;
+  background:rgba(0,0,0,.05);
+  padding:14px 18px;
+  border:1.5px dotted var(--blue);
+  color:#065f46;
+  font-size:14.5px;
+  border-radius:5px;
+  line-height:1.55;
+  white-space:pre;
+  overflow-x:auto;
+  margin-bottom:var(--lh);
+}
+.code-label{
+  font-family:'Caveat',cursive;
+  font-size:20px;
+  color:var(--blue);
+  display:block;
+  margin-bottom:2px;
+}
+.code-output{
+  font-family:'Courier New',monospace;
+  background:rgba(21,128,61,.07);
+  padding:10px 16px;
+  border:1.5px dashed var(--green);
+  color:var(--green);
+  font-size:14px;
+  border-radius:5px;
+  line-height:1.5;
+  white-space:pre;
+  overflow-x:auto;
+  margin-bottom:var(--lh);
+}
+
+/* ── DIVIDER ────────────────────────────────────────────── */
+.divider{
+  text-align:center;
+  font-size:28px;
+  margin:12px 0 var(--lh);
+  color:var(--line);
+}
+.chapter-break{
+  border:none;
+  border-top:3px double var(--margin);
+  margin:calc(var(--lh)*1.5) 0;
+}
+
+/* ── DOODLES ────────────────────────────────────────────── */
+.doodle{
+  font-family:'Caveat',cursive;
+  color:var(--blue);
+  font-size:26px;
+  position:absolute;
+  right:24px;
+  top:22px;
+  transform:rotate(14deg);
+  border:2px solid var(--blue);
+  padding:5px 14px;
+  border-radius:50% 40% 50% 40%/40% 50% 40% 50%;
+  opacity:.85;
+}
+
+/* ── TABLE ──────────────────────────────────────────────── */
+table{
+  border-collapse:collapse;
+  margin-bottom:var(--lh);
+  font-size:17px;
+  width:100%;
+  overflow-x:auto;
+  display:block;
+}
+th{
+  background:rgba(29,78,216,.1);
+  color:var(--blue);
+  padding:6px 12px;
+  border:1.5px solid #93c5fd;
+  font-family:'Kalam',cursive;
+  font-size:18px;
+}
+td{
+  padding:5px 12px;
+  border:1px solid #c7d2fe;
+  vertical-align:top;
+  line-height:1.5;
+}
+tr:nth-child(even) td{background:rgba(199,210,254,.15);}
+
+/* ── PIPELINE DIAGRAM ───────────────────────────────────── */
+.pipeline{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:4px;
+  margin-bottom:var(--lh);
+  font-size:15px;
+}
+.pipe-block{
+  background:rgba(29,78,216,.1);
+  border:1.5px solid var(--blue);
+  border-radius:6px;
+  padding:4px 12px;
+  color:var(--blue);
+  font-weight:700;
+  white-space:nowrap;
+}
+.pipe-arrow{color:var(--red);font-size:20px;font-weight:700;}
+
+/* ── COMPARISON TABLE ───────────────────────────────────── */
+.compare{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-bottom:var(--lh);
+}
+.compare-col{
+  border:2px solid var(--line);
+  border-radius:8px;
+  padding:12px 16px;
+}
+.compare-col h5{margin-bottom:8px;}
+
+/* ── SIGNAL TABLE ───────────────────────────────────────── */
+.sig-table{
+  border:2px solid var(--purple);
+  border-radius:8px;
+  padding:14px 18px;
+  margin-bottom:var(--lh);
+  background:rgba(124,58,237,.04);
+}
+.sig-table h5{color:var(--purple);margin-bottom:8px;}
+
+/* ── ANCHOR OFFSET FIX ─────────────────────────────────── */
+.anchor{
+  position:absolute;
+  margin-top:-80px;
+}
+
+/* ── PRINT ─────────────────────────────────────────────── */
+@media print{
+  body{background:#fff;padding:0;}
+  .notebook{box-shadow:none;padding:20px 60px 40px 80px;}
+  #toc{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="notebook">
+<div class="doodle">A+ Ready! 💯</div>
+
+<!-- ═══════════════════════════════════════════════════ COVER -->
+<h1>📡 Digital Signal Processing (DSP)<br>Complete Master Notebook</h1>
+<p class="subtitle">Gollis University · Faculty of Electrical Engineering<br>Prepared by: Bewnet Getachew</p>
+
+<div class="box" style="text-align:center;transform:rotate(-.5deg);">
+  <span class="b blue" style="font-size:20px;">⚠️ This notebook contains EVERYTHING:</span><br>
+  Chapter 1 (Theory &amp; Applications) · Chapter 2 (Discrete-Time Math) ·
+  Chapter 3 (Z-Transform &amp; Fourier) · Chapter 4 (System Implementation) ·
+  All MATLAB Programs · All Lab Experiments · All Worked Examples &amp; Solutions
+</div>
+
+<hr class="chapter-break">
+
+<!-- ═══════════════════════════════════════════════ CHAPTER 1 -->
+<span class="anchor" id="ch1"></span>
+<h2>Chapter 1 — Introduction to Digital Signal Processing</h2>
+
+<p>In this modern world we are surrounded by all kinds of signals in various forms. Some are natural, but most are manmade. Some signals are necessary (like speech), while many are unwanted or unnecessary in a given situation. In an engineering context, <span class="hl-y">signals are carriers of information</span>, both useful and unwanted. Therefore extracting or enhancing the useful information from a mix of conflicting information is the simplest form of signal processing.</p>
+
+<div class="definition-box">
+  <span class="def-term">Signal Processing (General Definition)</span>
+  Signal processing is an operation designed for <span class="b blue">extracting</span>, <span class="b blue">enhancing</span>, <span class="b blue">storing</span>, and <span class="b blue">transmitting</span> useful information.
+</div>
+
+<!-- 1.1 -->
+<span class="anchor" id="ch1-1"></span>
+<h3>1.1 How Are Signals Processed?</h3>
+
+<p>The signals we encounter in practice are mostly <span class="b">analog signals</span> — they vary continuously in time and amplitude. There are two approaches to processing them:</p>
+
+<div class="compare">
+  <div class="compare-col">
+    <h5 class="blue">Analog Signal Processing (ASP)</h5>
+    <ul>
+      <li>Uses electrical networks containing <span class="hl-y">active and passive circuit elements</span> (resistors, capacitors, op-amps)</li>
+      <li>Processes signals in continuous time</li>
+      <li>Example: Radio and TV receivers</li>
+      <li>Prone to temperature, aging, and noise effects</li>
+      <li>Reconfiguration requires rewiring hardware</li>
+    </ul>
+  </div>
+  <div class="compare-col">
+    <h5 class="red">Digital Signal Processing (DSP)</h5>
+    <ul>
+      <li>Uses <span class="hl-p">digital hardware</span>: adders, multipliers, logic elements, or special-purpose microprocessors</li>
+      <li>Analog signals must first be converted to digital (binary numbers / bits)</li>
+      <li>Processing is done on discrete sequences</li>
+      <li>Stable, repeatable, temperature-independent</li>
+      <li>Easily modified via software</li>
+    </ul>
+  </div>
+</div>
+
+<h4>The DSP System Pipeline</h4>
+<div class="pipeline">
+  <div class="pipe-block">Analog Input x_a(t)</div><span class="pipe-arrow">→</span>
+  <div class="pipe-block">Pre-Filter (PrF)<br><small>Anti-aliasing</small></div><span class="pipe-arrow">→</span>
+  <div class="pipe-block">ADC<br><small>A→D Converter</small></div><span class="pipe-arrow">→</span>
+  <div class="pipe-block">DSP Processor<br><small>Heart of system</small></div><span class="pipe-arrow">→</span>
+  <div class="pipe-block">DAC<br><small>D→A Converter</small></div><span class="pipe-arrow">→</span>
+  <div class="pipe-block">Post-Filter (PoF)<br><small>Smoothing</small></div><span class="pipe-arrow">→</span>
+  <div class="pipe-block">Analog Output</div>
+</div>
+
+<div class="box">
+  <span class="b green">What each block does:</span><br>
+  <span class="b blue">PrF (Pre-Filter / Anti-Aliasing Filter):</span> Conditions the analog signal before sampling to prevent aliasing — i.e., it removes frequency components above half the sampling rate (Nyquist frequency) so the digital representation is accurate.<br><br>
+  <span class="b blue">ADC (Analog-to-Digital Converter):</span> Converts the continuous analog waveform into a stream of binary numbers (samples) at regular intervals. This is where the analog signal becomes digital.<br><br>
+  <span class="b blue">DSP Processor:</span> The heart of the system. Can be a general-purpose computer, a special-purpose processor, or dedicated digital hardware. Performs computations (additions, multiplications) on the digital samples.<br><br>
+  <span class="b blue">DAC (Digital-to-Analog Converter):</span> Inverse of the ADC. Converts the sequence of binary numbers back into a continuous (staircase) waveform — the first step toward reproducing an analog signal.<br><br>
+  <span class="b blue">PoF (Post-Filter):</span> Smooths out the staircase waveform produced by the DAC into the desired smooth analog output signal.
+</div>
+
+<p><span class="b">The DSP system performs these four key operations:</span></p>
+<ol>
+  <li>Accepts an analog signal as input</li>
+  <li>Converts this analog signal to numbers (via ADC)</li>
+  <li>Performs mathematical computations on the numbers</li>
+  <li>Converts the results back into an analog signal (via DAC)</li>
+</ol>
+
+<!-- 1.2 -->
+<span class="anchor" id="ch1-2"></span>
+<h3>1.2 Advantages of DSP over ASP</h3>
+
+<p>A major drawback of ASP is lack of flexibility in processing and complexity in system designs, generally leading to expensive products. Using a DSP approach, it is possible to convert an inexpensive personal computer into a powerful signal processor.</p>
+
+<ul>
+  <li><span class="hl-y b">Flexibility / Reconfigurability:</span> DSP systems can be developed using software on general-purpose computers. Easy to modify in real-time — often just by changing program coefficients or reloading registers — rather than rewiring hardware. Analog filter reconfiguration is very complex; digital filters just need a program update.</li>
+  <li><span class="hl-y b">Accuracy &amp; Stability:</span> DSP operations are based solely on additions and multiplications, leading to extremely stable processing. Performance is independent of temperature, component ageing, and power variations. Analog circuits are prone to these external effects.</li>
+  <li><span class="hl-y b">Cost:</span> Lower cost due to VLSI technology, which reduces costs of memories, gates, and microprocessors.</li>
+  <li><span class="hl-y b">Storage:</span> Digital signals can be easily stored on magnetic media (hard drives), optical media (CDs, DVDs), or semiconductor chips, without degradation.</li>
+  <li><span class="hl-y b">Multiplexing:</span> Provides the foundation for ISDN (Integrated Services Digital Network) — digitized signals can be multiplexed with other digital data and transmitted through the same channel.</li>
+  <li><span class="hl-y b">Immunity to Noise:</span> Digital filters are highly immune to noise and relatively stable; analog circuits pick up external interference.</li>
+  <li><span class="hl-y b">Easy Operation:</span> Even complex mathematical operations can be performed easily using computers; not possible with analog processing.</li>
+  <li><span class="hl-y b">Multiple Filtering:</span> Multiple filtering is possible only with digital filters (processing one signal through several filters simultaneously).</li>
+  <li><span class="hl-y b">Wide Variety of Response Shapes:</span> Digital filters can achieve amplitude and phase responses that are extremely difficult or impossible to realize with analog components.</li>
+  <li><span class="hl-y b">Impedance Matching:</span> Impedance matching problems are minimum in digital systems.</li>
+  <li><span class="hl-y b">Portability:</span> The software implementing a DSP system is portable between different hardware platforms.</li>
+</ul>
+
+<!-- 1.3 DSP Tasks -->
+<h3>1.3 DSP Task Categories</h3>
+
+<div class="compare">
+  <div class="compare-col">
+    <h5 class="blue">Signal Analysis</h5>
+    <p>Deals with the measurement of signal properties. Generally a <span class="hl-b">frequency-domain operation</span>.</p>
+    <ul>
+      <li>Spectrum (frequency and/or phase) analysis</li>
+      <li>Speech recognition</li>
+      <li>Speaker verification</li>
+      <li>Target detection in radar/sonar</li>
+    </ul>
+  </div>
+  <div class="compare-col">
+    <h5 class="red">Signal Filtering</h5>
+    <p>Characterized by "signal in – signal out" situation. Usually a <span class="hl-p">time-domain operation</span>.</p>
+    <ul>
+      <li>Removal of unwanted background noise</li>
+      <li>Removal of interference</li>
+      <li>Separation of frequency bands</li>
+      <li>Shaping of the signal spectrum</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 1.3 Filters -->
+<span class="anchor" id="ch1-3"></span>
+<h3>1.3 Filters</h3>
+
+<p>Looking at the DSP block diagram, the <span class="b">filter is the main component</span> of any DSP system. Filters have two primary uses:</p>
+
+<div class="definition-box">
+  <span class="def-term">1. Signal Separation</span>
+  Needed when a signal has been contaminated with interference, noise, or other signals. The filter separates the desired signal from the unwanted content. <br>
+  <em>Example:</em> A radio receiver selecting one station while rejecting all others.
+</div>
+<div class="definition-box">
+  <span class="def-term">2. Signal Restoration</span>
+  Used when a signal has been distorted in some way. The filter attempts to restore the signal to its original form.<br>
+  <em>Example:</em> An audio recording made with poor equipment filtered to recover original sound quality; deblurring of an image from an improperly focused lens.
+</div>
+
+<h4>1.3.1 Analog Filters</h4>
+<ul>
+  <li>Take analog signal as input and produce analog output</li>
+  <li>Constructed using <span class="hl-y">resistors, capacitors, inductors, and active components (op-amps)</span></li>
+  <li>Described mathematically by <span class="b">differential equations</span></li>
+  <li>Analyzed using <span class="b">Laplace Transform</span></li>
+  <li>Frequency response modified by <span class="b">changing component values</span></li>
+  <li><span class="green b">Advantages:</span> Cheap, large dynamic range in both amplitude and frequency</li>
+  <li><span class="red b">Disadvantages:</span> Performance inferior to digital filters; affected by temperature, ageing; hard to reconfigure</li>
+</ul>
+
+<h4>1.3.2 Digital Filters</h4>
+<ul>
+  <li>Process and generate <span class="hl-g">digital data</span></li>
+  <li>Constitute elements: <span class="b">adder, multiplier, and delay units</span></li>
+  <li>Described mathematically by <span class="b">difference equations</span></li>
+  <li>Analyzed using <span class="b">Z-Transform</span></li>
+  <li>Frequency response changed by <span class="b">changing filter coefficients</span></li>
+  <li>Performance vastly superior to analog filters</li>
+</ul>
+
+<div class="box box-green">
+  <span class="b green">Advantages of Digital Filters:</span>
+  <ul>
+    <li>Performance NOT influenced by component ageing, temperature, or power variations</li>
+    <li>Highly immune to noise and relatively stable</li>
+    <li>Wide variety of shapes for amplitude and phase responses</li>
+    <li>Impedance matching problems are minimum</li>
+    <li>Transportation and reconfiguration is very easy</li>
+    <li>Multiple filtering is possible</li>
+    <li>Computational problems are minimum</li>
+  </ul>
+</div>
+
+<h4>Comparison: Analog vs Digital Filters</h4>
+<table>
+  <tr><th>Feature</th><th>Analog Filter</th><th>Digital Filter</th></tr>
+  <tr><td>Hardware</td><td>Resistors, capacitors, op-amps</td><td>Adders, multipliers, delay elements</td></tr>
+  <tr><td>Mathematical model</td><td>Differential equation</td><td>Difference equation</td></tr>
+  <tr><td>Analysis tool</td><td>Laplace Transform</td><td>Z-Transform</td></tr>
+  <tr><td>Frequency response change</td><td>Change component values</td><td>Change filter coefficients</td></tr>
+  <tr><td>Temperature effect</td><td>Significantly affected</td><td>Not affected</td></tr>
+  <tr><td>Reconfiguration</td><td>Very complex (rewiring)</td><td>Easy (software change)</td></tr>
+  <tr><td>Multiple filtering</td><td>Not practical</td><td>Possible</td></tr>
+  <tr><td>Noise immunity</td><td>Low</td><td>High</td></tr>
+</table>
+
+<!-- 1.4 Applications -->
+<span class="anchor" id="ch1-4"></span>
+<h3>1.4 Applications of DSP</h3>
+
+<p>DSP is one of the most powerful technologies shaping science and engineering. Revolutionary changes have been made in: communications, medical imaging, radar &amp; sonar, high-fidelity music reproduction, oil prospecting, and many more fields.</p>
+
+<ul>
+  <li><span class="b blue">Digital Filtering</span> — core DSP operation</li>
+  <li><span class="b blue">Telecommunications</span> — multiplexing, compression, echo control</li>
+  <li><span class="b blue">Spectral Analysis</span> — frequency content measurement</li>
+  <li><span class="b blue">Speech Processing</span> — recognition, synthesis, compression</li>
+  <li><span class="b blue">Image Processing</span> — enhancement, compression, recognition</li>
+  <li><span class="b blue">Radar and Sonar Processing</span> — target detection, ranging</li>
+  <li><span class="b blue">Disk and Robot Control</span> — servo systems</li>
+  <li><span class="b blue">Consumer Electronics</span> — audio, video, mobile devices</li>
+  <li><span class="b blue">Biomedical Engineering</span> — ECG, EEG processing, medical imaging</li>
+  <li><span class="b blue">Military Applications</span> — guidance systems, communications</li>
+</ul>
+
+<!-- 1.4.1 Telecommunications -->
+<h4>1.4.1 Telecommunications — Detailed Study</h4>
+
+<p>Telecommunications is about transferring information from one location to another — telephone conversations, television signals, computer files, and other data. The financial principle is simple: the more information that can pass through a single channel, the more money a company makes. DSP has revolutionized telecommunications in several key areas:</p>
+
+<h5>A. Multiplexing</h5>
+<div class="box">
+  <span class="b blue">The Problem:</span> There are approximately one billion telephones in the world. Until the 1960s, a connection between two telephones required passing analog voice signals through mechanical switches. One connection required one pair of wires — enormously expensive at scale.<br><br>
+  <span class="b green">The DSP Solution:</span> DSP converts audio signals into a stream of serial digital data. Since bits can be easily interleaved and later separated, <span class="hl-y">many telephone conversations can be transmitted on a single channel</span>.<br><br>
+  <span class="b red">The T-Carrier System (Key Example):</span><br>
+  • Simultaneously transmits <span class="b">24 voice signals</span> on a single channel<br>
+  • Each voice signal sampled at <span class="b">8,000 samples/second</span><br>
+  • Each sample encoded with <span class="b">8 bits</span> (companded / logarithmically compressed)<br>
+  • Each channel data rate: 8,000 × 8 = <span class="b hl-y">64,000 bits/second = 64 kbps</span><br>
+  • Total for all 24 channels: 24 × 64,000 = <span class="b hl-y">1.544 Megabits/second (Mbps)</span><br>
+  • Can be transmitted ~6,000 feet using ordinary 22-gauge copper telephone wire<br>
+  • Financial advantage: Wire and analog switches are expensive; digital logic gates are cheap.
+</div>
+
+<h5>B. Compression</h5>
+<div class="box">
+  <span class="b blue">The Problem:</span> When a voice signal is digitized at 8,000 samples/sec, most of the digital information is <span class="hl-p">redundant</span> — the information in any one sample is largely duplicated by neighboring samples.<br><br>
+  <span class="b green">DSP Compression Algorithms</span> convert digitized voice into data streams requiring fewer bits/sec:<br>
+  • <span class="b">64 kbps → 32 kbps:</span> No loss of sound quality (2:1 compression)<br>
+  • <span class="b">64 kbps → 8 kbps:</span> Noticeably affected but still usable for long distance (8:1 compression)<br>
+  • <span class="b">64 kbps → 2 kbps:</span> Highest achievable compression; highly distorted but usable for military and undersea communications (32:1 compression)<br><br>
+  Matching decompression algorithms are used to restore the signal to its original form.
+</div>
+
+<h5>C. Echo Control</h5>
+<div class="box">
+  <span class="b blue">The Problem:</span> In long-distance telephone connections, when you speak into a telephone, a portion of your signal returns as an echo. For short distances, the delay is only a few milliseconds — the ear is accustomed to this. As distance increases, the delay can reach <span class="hl-p">several hundred milliseconds</span> for intercontinental communications — extremely objectionable.<br><br>
+  <span class="b green">The DSP Solution:</span> DSP attacks this by <span class="hl-y">measuring the returned signal and generating an appropriate <em>antisignal</em></span> to cancel the offending echo.<br><br>
+  The same technique:
+  <ul>
+    <li>Allows speakerphone users to hear and speak simultaneously without audio feedback (squealing)</li>
+    <li>Can reduce environmental noise by canceling it with digitally generated <em>antinoise</em></li>
+  </ul>
+</div>
+
+<!-- 1.4.2 Audio/Music -->
+<h4>1.4.2 Audio and Music Processing</h4>
+
+<p>In all musical recordings, sounds from instruments are recorded in a studio. Special audio effects are then added by manipulating the recorded sounds using various DSP techniques. The sound reaching listeners in a concert hall consists of <em>direct sound</em>, <em>early reflections</em>, and <em>reverberations (echoes)</em> — but studio recordings lack this natural quality. DSP recreates these effects.</p>
+
+<div class="box box-purple">
+  <span class="b purple">Echo Generation (FIR Filter):</span><br>
+  Simple single echo — direct sound + one echo K samples later:<br>
+  <span class="b" style="font-family:'Courier New'">H(z) = 1 + αz⁻ᴷ</span> (FIR filter with delay)<br><br>
+  Multiple echoes separated K sampling periods: use FIR filter with multiple delay taps<br><br>
+  Infinite echoes, exponentially decaying, spaced K periods apart:<br>
+  <span class="b" style="font-family:'Courier New'">H(z) = 1 / (1 - αz⁻ᴷ)</span> (IIR filter — recursive, infinite echo generator)
+</div>
+
+<div class="box box-orange">
+  <span class="b orange">Flanging Effect:</span><br>
+  Created by feeding the same musical note to two tape recorders and combining their delayed outputs.<br>
+  Simulated using an FIR filter by <span class="hl-y">periodically varying the delay K(n) between 0 and K</span>.<br><br>
+  <span class="b orange">Chorus Effect:</span><br>
+  Achieved when several musicians play the same note simultaneously with small changes in amplitudes and small timing differences.<br>
+  Simulated by generating multiple slightly-delayed copies of the signal with slightly different amplitudes.
+</div>
+
+<!-- 1.5 DSP Processor Architecture -->
+<span class="anchor" id="ch1-5"></span>
+<h3>1.5 Simple Architecture of a DSP Processor</h3>
+
+<p>A typical DSP processor has a highly optimized architecture for multiply-accumulate (MAC) operations:</p>
+<ul>
+  <li><span class="b blue">MAC Unit:</span> Performs multiplication and accumulation in a single clock cycle — critical for convolution and filtering</li>
+  <li><span class="b blue">Program Memory:</span> Stores instructions (coefficients)</li>
+  <li><span class="b blue">Data Memory:</span> Stores signal samples</li>
+  <li><span class="b blue">Address Generation Unit:</span> Generates memory addresses using modulo arithmetic (circular buffers)</li>
+  <li><span class="b blue">I/O Ports:</span> Interface with ADC and DAC</li>
+</ul>
+
+<div class="box">
+  <span class="b green">Evolution of DSP Processors:</span><br>
+  <span class="b">General Purpose Processors</span> → <span class="b">Early DSP Processors</span> → <span class="b">More Optimized DSP Processors</span><br><br>
+  <span class="b red">Texas Instruments DSP Processors (TMS320 family):</span><br>
+  <span class="b">16-bit Fixed-Point Arithmetic:</span>
+  <ul>
+    <li>TMS320C1X — first generation</li>
+    <li>TMS320C2X — second generation</li>
+    <li>TMS320C5X — low power, highly integrated</li>
+    <li>TMS320C8X — multiprocessor</li>
+  </ul>
+  <span class="b">32-bit Floating-Point Arithmetic:</span>
+  <ul>
+    <li>TMS320C3X — high-performance floating point</li>
+    <li>TMS320C4X — parallel processing</li>
+  </ul>
+</div>
+
+<!-- 1.6 MATLAB Intro -->
+<h3>1.6 Introduction to MATLAB</h3>
+
+<p>MATLAB (MATrix LABoratory) is an interactive, matrix-based system for scientific and engineering numeric computation and visualization.</p>
+
+<div class="box">
+  <span class="b blue">MATLAB is used for three purposes:</span>
+  <ol>
+    <li>Mathematical computation</li>
+    <li>Engineering systems analysis</li>
+    <li>Simulation</li>
+  </ol>
+  <br>
+  <span class="b blue">MATLAB has three windows:</span>
+  <ol>
+    <li>Command Window — type and run commands interactively</li>
+    <li>Editor Window — write and save M-files (scripts/functions)</li>
+    <li>Figure Window — displays graphical output (plots, stem graphs)</li>
+  </ol>
+</div>
+
+<p>MATLAB has a very large number of built-in functions which makes programming easier. Its matrix-based nature makes it extremely efficient for DSP operations. By using its programming capability, MATLAB can be easily extended to create new commands and functions.</p>
+
+<hr class="chapter-break">
+
+<!-- ═══════════════════════════════════════════════ CHAPTER 2 -->
+<span class="anchor" id="ch2"></span>
+<h2>Chapter 2 — Discrete-Time Signals and Systems</h2>
+
+<div class="definition-box">
+  <span class="def-term">Signal (Definition)</span>
+  A measurable physical quantity which is a function of one or more independent variables.<br>
+  <span class="b">Example 1:</span> Speech signal — sound intensity as a function of time (single independent variable)<br>
+  <span class="b">Example 2:</span> Video signal — light intensity as a function of two independent variables: time and space
+</div>
+
+<p>Signals are classified into two broad categories:</p>
+<ul>
+  <li><span class="b blue">Continuous-Time Signals:</span> Defined for every instant of time — denoted x_a(t)</li>
+  <li><span class="b red">Discrete-Time Signals:</span> Defined only at specific time instances — denoted x(n)</li>
+</ul>
+
+<!-- 2.1 DT Signals -->
+<span class="anchor" id="ch2-1"></span>
+<h3>2.1 Discrete-Time Signals</h3>
+
+<p>A discrete signal is denoted by <span class="b hl-y">x(n)</span>, where the variable <span class="b">n is integer-valued</span> and represents discrete instances in time. It is also called a discrete-time signal, which is essentially a <em>number sequence</em>.</p>
+
+<p>Note: Digital processors only take discrete-time signals. Therefore, continuous-time signals must first be converted to discrete-time using an ADC circuit.</p>
+
+<h4>Representations of a Discrete-Time Signal</h4>
+
+<p>Consider the sequence: x(n) = {2, 1, −1, 0, 1, 4, 3, 7} where ↑ indicates the sample at n = 0 (so x(0) = 0, x(−3) = 2):</p>
+
+<h5>1. Sequence Notation</h5>
+<div class="math-box">
+  x(n) = {2, 1, −1, <span class="hl-y">↑</span>0, 1, 4, 3, 7}
+  <span class="math-line" style="font-size:18px;">↑ indicates n = 0</span>
+</div>
+
+<h5>2. Tabular Representation</h5>
+<table>
+  <tr><th>n</th><td>−3</td><td>−2</td><td>−1</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+  <tr><th>x(n)</th><td>2</td><td>1</td><td>−1</td><td>0</td><td>1</td><td>4</td><td>3</td><td>7</td></tr>
+</table>
+
+<h5>3. Graphical Representation (Stem Plot)</h5>
+<p>Discrete-time signals are plotted as <span class="b">stem plots</span> — vertical lines (stems) from the n-axis to each sample value x(n), with dots at the top. This makes it visually clear that values exist only at integer n.</p>
+
+<h5>4. MATLAB Representation</h5>
+<div class="code">n = [-3:4];
+x = [2, 1, -1, 0, 1, 4, 3, 7];
+stem(n, x);
+xlabel('n'); ylabel('x(n)');
+axis([-5, 5, -10, 10]);
+grid;</div>
+
+<!-- 2.2 Elementary Sequences -->
+<span class="anchor" id="ch2-2"></span>
+<h3>2.2 Basic Elementary Discrete-Time Sequences</h3>
+
+<p>We use several elementary sequences in DSP for two major purposes:</p>
+<ol>
+  <li>As <span class="hl-y">test signals</span> to test the characteristics of a system</li>
+  <li>Complex signals can be <span class="hl-y">expressed in terms of these basic signals</span> for analysis</li>
+</ol>
+
+<!-- 2.2.1 Unit Impulse -->
+<h4>2.2.1 Unit Sample (Impulse) Sequence — δ(n)</h4>
+
+<div class="math-box">
+  δ(n) = { 1 , &nbsp;if n = 0<br>
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ 0 , &nbsp;if n ≠ 0
+</div>
+
+<div class="box">
+  <span class="b blue">Key Properties of δ(n):</span>
+  <ul>
+    <li><span class="b">Sifting Property:</span> x(n)·δ(n − k) = x(k)·δ(n − k) — "sifts out" the value x(k)</li>
+    <li><span class="b">Unit Sample Synthesis:</span> Any signal x(n) can be written as a weighted sum of shifted impulses:<br>
+      x(n) = Σ x(k)·δ(n − k) for k = −∞ to +∞</li>
+    <li>Has unit energy: E = 1</li>
+    <li>ROC of Z{δ(n)} = 1 is the entire Z-plane</li>
+  </ul>
+</div>
+
+<span class="code-label">📐 MATLAB: Generate Unit Sample Sequence</span>
+<div class="code">n = [-4:4];
+x = [0, 0, 0, 0, 1, 0, 0, 0, 0];
+stem(n, x);
+xlabel('n'); ylabel('\delta(n)');
+axis([-5, 5, -3, 3]);
+grid;</div>
+
+<p><span class="b">Shifted impulse:</span> δ(n − k) = 1 at n = k, 0 otherwise. The delay element z⁻¹ in system diagrams represents a one-sample delay, equivalent to shifting by δ(n − 1).</p>
+
+<!-- 2.2.2 Unit Step -->
+<h4>2.2.2 Unit Step Sequence — u(n)</h4>
+
+<div class="math-box">
+  u(n) = { 1 , &nbsp;if n ≥ 0<br>
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ 0 , &nbsp;if n &lt; 0
+</div>
+
+<div class="box">
+  <span class="b blue">Relationship to Impulse:</span>
+  <ul>
+    <li>u(n) = Σ δ(n − k) for k = 0 to ∞ &nbsp;&nbsp; (step = sum of delayed impulses)</li>
+    <li>δ(n) = u(n) − u(n − 1) &nbsp;&nbsp; (impulse = first difference of step)</li>
+  </ul>
+</div>
+
+<span class="code-label">📐 MATLAB: Generate Unit Step Sequence</span>
+<div class="code">n = [-6:6];
+x = [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1];
+stem(n, x);
+xlabel('n'); ylabel('u(n)');
+axis([-5, 5, -3, 3]);
+grid;</div>
+
+<!-- 2.2.3 Exponential -->
+<h4>2.2.3 Real-Valued Exponential Sequence — x(n) = aⁿ</h4>
+
+<div class="math-box">
+  x(n) = aⁿ &nbsp; for −∞ &lt; n &lt; ∞
+</div>
+
+<div class="box">
+  <span class="b blue">Four Cases Based on Value of a:</span>
+  <table>
+    <tr><th>Value of a</th><th>Behavior</th><th>Example</th></tr>
+    <tr><td>0 &lt; a &lt; 1</td><td>Decaying exponential (positive values)</td><td>a = 0.9: x(n) = (0.9)ⁿ</td></tr>
+    <tr><td>−1 &lt; a &lt; 0</td><td>Alternating sign, decaying amplitude</td><td>a = −0.9</td></tr>
+    <tr><td>a &gt; 1</td><td>Growing exponential</td><td>a = 2: x(n) = 2ⁿ</td></tr>
+    <tr><td>a &lt; −1</td><td>Alternating sign, growing amplitude</td><td>a = −2</td></tr>
+  </table>
+</div>
+
+<span class="code-label">📐 MATLAB: Decaying Exponential (Case i: 0 &lt; a &lt; 1)</span>
+<div class="code">n = [-5:10];
+x = (0.9).^n;
+stem(n, x);
+xlabel('n'); ylabel('x(n)');
+axis([-10, 15, -3, 3]);
+grid;
+title('Decaying Exponential: a = 0.9');</div>
+
+<span class="code-label">📐 MATLAB: Growing Exponential (Case ii: a &gt; 1)</span>
+<div class="code">% x(n) = 2^n for -5 ≤ n ≤ 3
+n = [-5:3];
+x = (2).^n;
+stem(n, x);
+xlabel('n'); ylabel('x(n)');
+axis([-5, 5, -3, 10]);
+grid;
+title('Growing Exponential: a = 2');</div>
+
+<span class="code-label">📐 MATLAB: Complex Exponential (General Case)</span>
+<div class="code">% x(n) = exp(α·n) where α is complex
+n = [-10:10];
+alpha = -0.1 + 0.3j;          % complex exponent: decaying & oscillating
+x = exp(alpha * n);
+
+subplot(2, 2, 1); stem(n, real(x)); title('Real Part');     xlabel('n');
+subplot(2, 2, 2); stem(n, imag(x)); title('Imaginary Part'); xlabel('n');
+subplot(2, 2, 3); stem(n, abs(x));  title('Magnitude');      xlabel('n');
+subplot(2, 2, 4); stem(n, (180/pi)*angle(x)); title('Phase (degrees)'); xlabel('n');</div>
+
+<!-- 2.2.4 Sinusoidal -->
+<h4>2.2.4 Sinusoidal Sequence — x(n) = A·cos(ω₀n + θ)</h4>
+
+<div class="math-box">
+  x(n) = A · cos(ω₀n + θ)
+  <span class="math-line">where A = amplitude, ω₀ = digital frequency (rad/sample), θ = phase</span>
+</div>
+
+<div class="box box-red">
+  <span class="b red">CRITICAL NOTE — Periodicity of Discrete Sinusoids:</span><br>
+  A discrete sinusoidal signal <span class="b">x(n) = A·cos(ω₀n + θ) is periodic with period N</span> if and only if:<br>
+  <span class="b hl-y">ω₀ = 2πk/N for some integers k and N</span><br><br>
+  In other words, ω₀/(2π) must be a <span class="b">rational number</span> (ratio of two integers).<br><br>
+  <span class="b green">Example 1 — PERIODIC:</span> x(n) = 2cos(0.1πn + π/3)<br>
+  ω₀ = 0.1π = π/10, so ω₀/(2π) = 1/20 = rational → Period N = 20 ✓<br><br>
+  <span class="b red">Example 2 — NOT PERIODIC:</span> x(n) = 2cos(2n)<br>
+  ω₀ = 2 rad/sample, so ω₀/(2π) = 1/π = irrational → Non-periodic ✗<br><br>
+  <span class="hl-p">Important: All continuous-time sinusoidal signals are periodic, but discrete-time sinusoidal signals can be either periodic or non-periodic!</span>
+</div>
+
+<span class="code-label">📐 MATLAB: Periodic Sinusoidal Sequence</span>
+<div class="code">% x(n) = 2cos(0.1*pi*n + pi/3) — periodic with N=20
+n = [-10:10];
+x = 2 * cos(0.1*pi*n + pi/3);
+stem(n, x);
+xlabel('n'); ylabel('x(n)');
+axis([-10, 10, -3, 3]);
+grid;
+title('Periodic Sinusoidal Sequence (N=20)');</div>
+
+<span class="code-label">📐 MATLAB: Non-Periodic Sinusoidal Sequence</span>
+<div class="code">% x(n) = 2cos(2n) — NOT periodic
+n = [-10:10];
+x = 2 * cos(2*n);
+stem(n, x);
+xlabel('n'); ylabel('x(n)');
+axis([-10, 10, -3, 3]);
+grid;
+title('Non-Periodic Sinusoidal Sequence');</div>
+
+<!-- 2.3 Operations -->
+<span class="anchor" id="ch2-3"></span>
+<h3>2.3 Operations on Sequences</h3>
+
+<!-- 2.3.1 Addition -->
+<h4>2.3.1 Signal Addition</h4>
+
+<div class="math-box">
+  y(n) = x₁(n) + x₂(n)
+  <span class="math-line" style="font-size:18px;">Sample-by-sample addition (sequences must overlap at same n values)</span>
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Example 1 — Add Two Sequences</span>
+  x₁(n) = {2, −1, 0, 4, −0.5} &nbsp;&nbsp; and &nbsp;&nbsp; x₂(n) = {−1, 0, 3, 1.5, 2} &nbsp;&nbsp; (both start at same n)
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution: Sample-by-Sample</span>
+  y(n) = x₁(n) + x₂(n) = {2+(−1), (−1)+0, 0+3, 4+1.5, (−0.5)+2}<br>
+  <span class="b hl-y">y(n) = {1, −1, 3, 5.5, 1.5}</span>
+</div>
+
+<span class="code-label">📐 MATLAB: Signal Addition (Example 1)</span>
+<div class="code">n = [-3:1];
+x1 = [2, -1, 0, 4, -0.5];
+x2 = [-1, 0, 3, 1.5, 2];
+x3 = x1 + x2;                    % element-wise addition
+subplot(3,1,1), stem(n,x1), xlabel('n'); ylabel('x1(n)'), grid, axis([-5,5,-3,5]);
+subplot(3,1,2), stem(n,x2), xlabel('n'); ylabel('x2(n)'), grid, axis([-5,5,-3,5]);
+subplot(3,1,3), stem(n,x3), xlabel('n'); ylabel('x1(n)+x2(n)'), grid, axis([-5,5,-3,7]);</div>
+
+<div class="problem-box">
+  <span class="prob-head">Example 2 — Add Sinusoidal Sequences</span>
+  x₁(n) = 2cos(0.1πn) &nbsp;&nbsp; and &nbsp;&nbsp; x₂(n) = sin(0.5πn)
+</div>
+<span class="code-label">📐 MATLAB: Signal Addition (Example 2)</span>
+<div class="code">n = [-10:10];
+x1 = 2 * cos(0.1*pi*n);
+x2 = sin(0.5*pi*n);
+x3 = x1 + x2;
+subplot(3,1,1), stem(n,x1), xlabel('n'); ylabel('x1(n)'), grid, axis([-10,10,-3,5]);
+subplot(3,1,2), stem(n,x2), xlabel('n'); ylabel('x2(n)'), grid, axis([-10,10,-3,5]);
+subplot(3,1,3), stem(n,x3), xlabel('n'); ylabel('x1+x2'), grid, axis([-10,10,-3,7]);</div>
+
+<!-- 2.3.2 Multiplication -->
+<h4>2.3.2 Signal Multiplication</h4>
+
+<div class="math-box">
+  y(n) = x₁(n) · x₂(n)
+  <span class="math-line" style="font-size:18px;">Sample-by-sample multiplication (MATLAB: .* operator)</span>
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Example — Multiply Two Sequences</span>
+  x₁(n) = {2, −1, 0, 4, −0.5} &nbsp;&nbsp; and &nbsp;&nbsp; x₂(n) = {−1, 0, 3, 1.5, 2}
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  y(n) = {2×(−1), (−1)×0, 0×3, 4×1.5, (−0.5)×2}<br>
+  <span class="b hl-y">y(n) = {−2, 0, 0, 6, −1}</span>
+</div>
+
+<span class="code-label">📐 MATLAB: Signal Multiplication</span>
+<div class="code">n = [-3:1];
+x1 = [2, -1, 0, 4, -0.5];
+x2 = [-1, 0, 3, 1.5, 2];
+x3 = x1 .* x2;                   % element-wise multiplication (.* not *)
+subplot(3,1,1), stem(n,x1), xlabel('n'); ylabel('x1(n)'), grid, axis([-5,5,-3,5]);
+subplot(3,1,2), stem(n,x2), xlabel('n'); ylabel('x2(n)'), grid, axis([-5,5,-3,5]);
+subplot(3,1,3), stem(n,x3), xlabel('n'); ylabel('x1(n).*x2(n)'), grid, axis([-5,5,-3,7]);</div>
+
+<!-- 2.3.3 Scaling -->
+<h4>2.3.3 Scaling (Amplitude Scaling)</h4>
+
+<div class="math-box">
+  y(n) = a · x(n)
+  <span class="math-line" style="font-size:18px;">Each sample is multiplied by the scalar constant a</span>
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Example — Scale a Sequence by a = 2</span>
+  x₁(n) = {2, −1, 0, 4, −0.5, 1, 3, −2, 1.5, −0.25}
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  y(n) = 2·x₁(n) = {4, −2, 0, 8, −1, 2, 6, −4, 3, −0.5}
+</div>
+
+<span class="code-label">📐 MATLAB: Signal Scaling</span>
+<div class="code">n = [-3:6];
+x1 = [2, -1, 0, 4, -0.5, 1, 3, -2, 1.5, -0.25];
+a = 2;
+x2 = a * x1;                     % scalar multiplication
+subplot(2,1,1), stem(n,x1), xlabel('n'); ylabel('x1(n)'), grid, axis([-5,5,-5,10]);
+subplot(2,1,2), stem(n,x2), xlabel('n'); ylabel('x2(n) = 2·x1(n)'), grid, axis([-5,5,-5,10]);</div>
+
+<!-- 2.3.4 Shifting -->
+<h4>2.3.4 Time Shifting (Delay and Advance)</h4>
+
+<div class="math-box">
+  y(n) = x(n − k) &nbsp;&nbsp; Time Delay (shift RIGHT by k samples)
+  <span class="math-line">y(n) = x(n + k) &nbsp;&nbsp; Time Advance (shift LEFT by k samples)</span>
+</div>
+
+<div class="box">
+  <span class="b blue">Intuition:</span><br>
+  <span class="b">x(n − k):</span> The signal is delayed — what was at time 0 is now at time k. Graph shifts RIGHT by k.<br>
+  <span class="b">x(n + k):</span> The signal is advanced — what was at time 0 is now at time −k. Graph shifts LEFT by k.
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Example 1 — Time Delay: y(n) = x(n − 2)</span>
+  x(n) = {2, −1, 0, 4, −0.5, 1, 3} starting at n = −3
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution — Method</span>
+  The sample originally at n = −3 moves to n = −3 + 2 = −1.<br>
+  The sample originally at n = 0 moves to n = 0 + 2 = 2.<br>
+  In MATLAB: create a new time axis m = n + 2, plot x vs m (the values stay the same, the axis shifts).
+</div>
+
+<span class="code-label">📐 MATLAB: Time Delay y(n) = x(n−2)</span>
+<div class="code">n = [-3:3];
+x = [2, -1, 0, 4, -0.5, 1, 3];
+m = n + 2;                        % new time axis: shift right by 2
+
+subplot(2,1,1), stem(n, x), xlabel('n'); ylabel('x(n)'), grid, axis([-10,10,-5,8]);
+title('Original x(n)');
+subplot(2,1,2), stem(m, x), xlabel('n'); ylabel('y(n) = x(n-2)'), grid, axis([-10,10,-5,8]);
+title('Delayed y(n) = x(n-2)');</div>
+
+<div class="problem-box">
+  <span class="prob-head">Example 2 — Time Advance: y(n) = x(n + 2)</span>
+  x(n) = {2, −1, 0, 4, −0.5, 1, 3} starting at n = −3
+</div>
+<span class="code-label">📐 MATLAB: Time Advance y(n) = x(n+2)</span>
+<div class="code">n = [-3:3];
+x = [2, -1, 0, 4, -0.5, 1, 3];
+m = n - 2;                        % new time axis: shift left by 2
+
+subplot(2,1,1), stem(n, x), xlabel('n'); ylabel('x(n)'), grid, axis([-5,5,-5,8]);
+title('Original x(n)');
+subplot(2,1,2), stem(m, x), xlabel('n'); ylabel('y(n) = x(n+2)'), grid, axis([-5,5,-5,8]);
+title('Advanced y(n) = x(n+2)');</div>
+
+<div class="box box-red">
+  <span class="b red">Exercise:</span> Given x[n] = {0.5, 2, −1.5, 2.5, 4, 3, −2, 3.5, 2, 0.5} starting at n = 0.<br>
+  Write a MATLAB program to generate and sketch on the same figure:
+  <ol>
+    <li>x[n]</li>
+    <li>x[n−3] &nbsp;&nbsp; (delay by 3)</li>
+    <li>x[n+3] &nbsp;&nbsp; (advance by 3)</li>
+  </ol>
+</div>
+
+<!-- 2.3.5 Folding -->
+<h4>2.3.5 Folding (Time Reversal)</h4>
+
+<div class="math-box">
+  y(n) = x(−n)
+  <span class="math-line" style="font-size:18px;">Each sample is flipped around n = 0</span>
+</div>
+
+<div class="box">
+  <span class="b blue">Explanation:</span> The sample at position n = 2 moves to n = −2, the sample at n = −3 moves to n = 3, etc. The signal is mirrored about the vertical axis at n = 0. In MATLAB: create m = −n, plot x vs m.
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Example — Fold a Sequence: y(n) = x(−n)</span>
+  x(n) = {2, −1, 0, 4, −0.5, 1, 3} starting at n = −3
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  x(−3)=2, x(−2)=−1, x(−1)=0, x(0)=4, x(1)=−0.5, x(2)=1, x(3)=3<br>
+  y(n)=x(−n): y(3)=x(−3)=2, y(2)=x(−2)=−1, y(1)=x(−1)=0, y(0)=x(0)=4, y(−1)=x(1)=−0.5, y(−2)=x(2)=1, y(−3)=x(3)=3<br>
+  <span class="b hl-y">y(n) = {3, 1, −0.5, 4, 0, −1, 2}</span> starting at n = −3
+</div>
+
+<span class="code-label">📐 MATLAB: Time Reversal (Folding)</span>
+<div class="code">n = [-3:3];
+x = [2, -1, 0, 4, -0.5, 1, 3];
+m = -n;                           % fold: reverse the time axis
+
+subplot(2,1,1), stem(n, x), xlabel('n'); ylabel('x(n)'), grid, axis([-5,5,-5,8]);
+title('Original x(n)');
+subplot(2,1,2), stem(m, x), xlabel('n'); ylabel('y(n) = x(-n)'), grid, axis([-5,5,-5,8]);
+title('Time-Reversed y(n) = x(-n)');</div>
+
+<div class="box box-red">
+  <span class="b red">Exercise:</span> Given x[n] = {0.5, 2, −1.5, 2.5, 4, 3, −2, 3.5, 2, 0.5}<br>
+  Write a MATLAB program to generate and sketch on the same figure:<br>
+  a) x[n] &nbsp;&nbsp; b) x[−n] &nbsp;&nbsp; c) Determine whether the signal is even or not
+</div>
+
+<!-- 2.4 Even/Odd + Energy/Power -->
+<span class="anchor" id="ch2-4"></span>
+<h3>2.4 Even/Odd Synthesis and Energy/Power</h3>
+
+<h4>Important Theorems in Discrete-Time Signal Theory</h4>
+
+<h5>1. Unit Sample Synthesis</h5>
+<div class="math-box">
+  x(n) = Σ x(k) · δ(n − k) &nbsp;&nbsp; (sum over all k)
+  <span class="math-line" style="font-size:18px;">Any arbitrary sequence x(n) can be synthesized as a weighted sum of delayed and scaled unit sample sequences</span>
+</div>
+
+<div class="solution-box">
+  <span class="sol-head">Why This Matters</span>
+  This is the fundamental basis for the <span class="b">convolution sum</span>. If we know how a linear system responds to each individual impulse δ(n − k), we can determine how it responds to any arbitrary input by summing weighted, shifted impulse responses.
+</div>
+
+<h5>2. Even and Odd Synthesis</h5>
+
+<div class="definition-box">
+  <span class="def-term">Even (Symmetric) Sequence</span>
+  A real-valued sequence x_e(n) is called <span class="b">even</span> if: <span class="b">x_e(−n) = x_e(n)</span><br>
+  The even component of any signal is: <span class="b hl-y">x_e(n) = ½[x(n) + x(−n)]</span>
+</div>
+<div class="definition-box">
+  <span class="def-term">Odd (Antisymmetric) Sequence</span>
+  A real-valued sequence x_o(n) is called <span class="b">odd</span> if: <span class="b">x_o(−n) = −x_o(n)</span><br>
+  The odd component of any signal is: <span class="b hl-y">x_o(n) = ½[x(n) − x(−n)]</span>
+</div>
+
+<div class="math-box">
+  Any real-valued sequence: &nbsp; x(n) = x_e(n) + x_o(n)
+  <span class="math-line">Even Part: x_e(n) = ½ [x(n) + x(−n)]</span>
+  <span class="math-line">Odd Part: x_o(n) = ½ [x(n) − x(−n)]</span>
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Example 1 — Even/Odd Decomposition</span>
+  Let x(n) = u(n) − u(n − 10). Decompose into even and odd components.
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution — Step by Step</span>
+  <span class="b">Step 1: Identify x(n)</span><br>
+  x(n) = u(n) − u(n−10) is a rectangular pulse: x(n) = 1 for 0 ≤ n ≤ 9, and 0 elsewhere.<br><br>
+  <span class="b">Step 2: Find x(−n)</span><br>
+  x(−n): time-reversed pulse = 1 for −9 ≤ n ≤ 0, and 0 elsewhere.<br><br>
+  <span class="b">Step 3: Compute x_e(n) = ½[x(n) + x(−n)]</span><br>
+  • For n = 0: x_e(0) = ½[1 + 1] = 1<br>
+  • For 1 ≤ n ≤ 9: x_e(n) = ½[1 + 0] = 0.5<br>
+  • For −9 ≤ n ≤ −1: x_e(n) = ½[0 + 1] = 0.5<br>
+  • Otherwise: x_e(n) = 0<br>
+  → x_e(n) is symmetric about n = 0, as expected.<br><br>
+  <span class="b">Step 4: Compute x_o(n) = ½[x(n) − x(−n)]</span><br>
+  • For n = 0: x_o(0) = ½[1 − 1] = 0<br>
+  • For 1 ≤ n ≤ 9: x_o(n) = ½[1 − 0] = 0.5<br>
+  • For −9 ≤ n ≤ −1: x_o(n) = ½[0 − 1] = −0.5<br>
+  • Otherwise: x_o(n) = 0<br>
+  → x_o(n) is antisymmetric, as expected.<br><br>
+  <span class="hl-y b">Verification: x_e(n) + x_o(n) = x(n) ✓</span>
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Example 2 — Find Even/Odd Parts</span>
+  Find even and odd parts of: (a) x(n) = u(n) &nbsp;&nbsp; (b) x(n) = aⁿu(n)
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution (a): x(n) = u(n)</span>
+  x(n) = u(n) = 1 for n ≥ 0, 0 for n &lt; 0<br>
+  x(−n) = u(−n) = 1 for n ≤ 0, 0 for n &gt; 0<br><br>
+  <span class="b">Even part:</span><br>
+  • n &gt; 0: x_e(n) = ½[1 + 0] = 0.5<br>
+  • n = 0: x_e(0) = ½[1 + 1] = 1<br>
+  • n &lt; 0: x_e(n) = ½[0 + 1] = 0.5<br>
+  So <span class="b hl-y">x_e(n) = ½ for n ≠ 0, x_e(0) = 1</span><br><br>
+  <span class="b">Odd part:</span><br>
+  • n &gt; 0: x_o(n) = ½[1 − 0] = 0.5<br>
+  • n = 0: x_o(0) = 0<br>
+  • n &lt; 0: x_o(n) = ½[0 − 1] = −0.5<br>
+  So <span class="b hl-y">x_o(n) = ½·sgn(n)</span> where sgn(n) = 1 for n&gt;0, 0 for n=0, −1 for n&lt;0
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution (b): x(n) = aⁿu(n)</span>
+  x(n) = aⁿu(n): x(n) = aⁿ for n ≥ 0, 0 for n &lt; 0<br>
+  x(−n) = a⁻ⁿu(−n): x(−n) = a⁻ⁿ for n ≤ 0, 0 for n &gt; 0<br><br>
+  <span class="b">Even part:</span><br>
+  • n &gt; 0: x_e(n) = ½[aⁿ + 0] = ½aⁿ<br>
+  • n = 0: x_e(0) = ½[1 + 1] = 1<br>
+  • n &lt; 0: x_e(n) = ½[0 + a⁻ⁿ] = ½a|n|<br>
+  So <span class="b hl-y">x_e(n) = ½a|n| for all n</span><br><br>
+  <span class="b">Odd part:</span><br>
+  • n &gt; 0: x_o(n) = ½aⁿ<br>
+  • n = 0: x_o(0) = 0<br>
+  • n &lt; 0: x_o(n) = −½a|n|<br>
+  So <span class="b hl-y">x_o(n) = ½·sgn(n)·a|n|</span>
+</div>
+
+<h5>3. Signal Energy</h5>
+
+<div class="math-box">
+  E = Σ |x(n)|² &nbsp;&nbsp; (sum over all n = −∞ to +∞)
+  <span class="math-line">If E &lt; ∞ → x(n) is an ENERGY SIGNAL (also called a finite-energy signal)</span>
+  <span class="math-line">If E = ∞ → x(n) is NOT an energy signal</span>
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Example 1 — Calculate Energy</span>
+  Calculate the energy of x[n] = {−1, 0, 2, 3, 1} (finite duration)
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  E = |−1|² + |0|² + |2|² + |3|² + |1|²<br>
+  E = 1 + 0 + 4 + 9 + 1<br>
+  <span class="b hl-y">E = 15 (Energy Signal, E is finite)</span>
+</div>
+
+<h5>4. Signal Power</h5>
+
+<div class="math-box">
+  P = lim[N→∞] { 1/(2N+1) · Σ |x(n)|² } &nbsp; (sum from n = −N to N)
+  <span class="math-line">If P &lt; ∞ and P ≠ 0 → x(n) is a POWER SIGNAL</span>
+</div>
+
+<p><span class="b">For a periodic sequence with fundamental period N:</span></p>
+<div class="math-box">
+  P = (1/N) · Σ |x(n)|² &nbsp;&nbsp; (sum over one complete period N)
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Example 2 — Calculate Average Power of Periodic Signal</span>
+  x[n] = {…, −1, 0, 2, 4, −1, 0, 2, 4, −1, 0, 2, 4, …} (periodic with N = 4)
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  Period N = 4. One period: {−1, 0, 2, 4}<br>
+  P = (1/N) · Σ |x(n)|² over one period<br>
+  P = (1/4) · [|−1|² + |0|² + |2|² + |4|²]<br>
+  P = (1/4) · [1 + 0 + 4 + 16]<br>
+  P = (1/4) · 21<br>
+  <span class="b hl-y">P = 5.25 (Power Signal)</span><br><br>
+  Note: Since the signal is periodic and infinite in duration, its total energy E = ∞ (not an energy signal), but its average power P = 5.25 (finite → it IS a power signal).
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Example 3 — Classify x(n) = (3/2)ⁿ u(−n)</span>
+  Find the power of x(n) = (3/2)ⁿ u(−n). Is it an energy signal or power signal?
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution — Careful Analysis</span>
+  u(−n) = 1 for n ≤ 0, 0 for n &gt; 0. So x(n) = (3/2)ⁿ for n ≤ 0, else 0.<br><br>
+  Let's analyze for n ≤ 0. Let m = −n where m ≥ 0:<br>
+  x(−m) = (3/2)⁻ᵐ = (2/3)ᵐ<br><br>
+  So the signal values for n = 0, −1, −2, −3, … are:<br>
+  x(0) = (3/2)⁰ = 1<br>
+  x(−1) = (3/2)⁻¹ = 2/3 ≈ 0.667<br>
+  x(−2) = (3/2)⁻² = (2/3)² ≈ 0.444<br>
+  x(−3) = (3/2)⁻³ = (2/3)³ ≈ 0.296 …<br><br>
+  The signal <span class="b">decays as n → −∞</span> (since |2/3| &lt; 1).<br><br>
+  <span class="b">Energy calculation:</span><br>
+  E = Σ_{n=−∞}^{0} |(3/2)ⁿ|² = Σ_{m=0}^{∞} (2/3)^{2m} = Σ_{m=0}^{∞} (4/9)^m<br>
+  This is a geometric series with ratio r = 4/9 &lt; 1:<br>
+  E = 1/(1 − 4/9) = 1/(5/9) = 9/5<br>
+  <span class="b hl-y">E = 1.8 (finite) → Energy Signal → Power P = 0</span>
+</div>
+
+<!-- 2.5 Properties -->
+<span class="anchor" id="ch2-5"></span>
+<h3>2.5 Discrete-Time Systems — Properties</h3>
+
+<div class="definition-box">
+  <span class="def-term">Discrete-Time System (Definition)</span>
+  A discrete-time system is described as an operator T[·] that takes a sequence x(n) (called the <span class="b">excitation</span> or input) and transforms it into another sequence y(n) (called the <span class="b">response</span> or output):<br>
+  <span class="b hl-y">y(n) = T[x(n)]</span>
+</div>
+
+<!-- Property 1: Linearity -->
+<h4>Property 1 — Linearity (Superposition)</h4>
+
+<div class="math-box">
+  A system is LINEAR if and only if:
+  <span class="math-line">T[a·x₁(n) + b·x₂(n)] = a·T[x₁(n)] + b·T[x₂(n)]</span>
+  <span class="math-line">= a·y₁(n) + b·y₂(n)</span>
+</div>
+
+<div class="box">
+  <span class="b blue">How to Test Linearity — Two Sub-Properties:</span><br>
+  <span class="b">1. Additivity:</span> T[x₁(n) + x₂(n)] = T[x₁(n)] + T[x₂(n)]<br>
+  <span class="b">2. Homogeneity (Scaling):</span> T[a·x(n)] = a·T[x(n)]<br><br>
+  If BOTH are satisfied → Linear. If EITHER fails → Nonlinear.<br><br>
+  <span class="b red">Testing Procedure:</span>
+  <ol>
+    <li>Apply input x₁(n) → get output y₁(n) = T[x₁(n)]</li>
+    <li>Apply input x₂(n) → get output y₂(n) = T[x₂(n)]</li>
+    <li>Apply input x₃(n) = a·x₁(n) + b·x₂(n) → get output y₃(n)</li>
+    <li>Check: if y₃(n) = a·y₁(n) + b·y₂(n) → LINEAR; else → NONLINEAR</li>
+  </ol>
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Worked Example — Test y(n) = x²(n) for Linearity</span>
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  y₁(n) = T[x₁(n)] = x₁²(n)<br>
+  y₂(n) = T[x₂(n)] = x₂²(n)<br>
+  y₃(n) = T[x₁(n) + x₂(n)] = [x₁(n) + x₂(n)]² = x₁²(n) + 2x₁(n)x₂(n) + x₂²(n)<br><br>
+  Expected (if linear): y₁(n) + y₂(n) = x₁²(n) + x₂²(n)<br><br>
+  Actual: y₃(n) = x₁²(n) + x₂²(n) + 2x₁(n)x₂(n) ≠ y₁(n) + y₂(n) (in general)<br>
+  <span class="b hl-p">→ NONLINEAR (the cross term 2x₁x₂ violates superposition)</span>
+</div>
+
+<!-- Property 2: Time-Invariance -->
+<h4>Property 2 — Time Invariance (Shift Invariance)</h4>
+
+<div class="math-box">
+  A system is TIME-INVARIANT if:
+  <span class="math-line">If y(n) = T[x(n)], then T[x(n − k)] = y(n − k) for any integer k</span>
+  <span class="math-line">"A shift in the input causes an identical shift in the output"</span>
+</div>
+
+<div class="box">
+  <span class="b blue">Testing Procedure:</span>
+  <ol>
+    <li>Apply x(n) → get y₁(n) = T[x(n)]; then delay it to get y₁(n − k)</li>
+    <li>Apply delayed input x(n − k) → get output y₂(n) = T[x(n − k)]</li>
+    <li>Compare: if y₂(n) = y₁(n − k) → TIME INVARIANT; else → TIME VARIANT</li>
+  </ol>
+  <span class="b">Note:</span> Time invariant systems are also called <span class="hl-y">shift-invariant systems</span>. A key indicator of time variance is when n appears <span class="b">explicitly as a coefficient</span> in the system equation (e.g., n², 2ⁿ).
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Worked Example — Test y(n) = n·x(n) for Time Invariance</span>
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  <span class="b">Path 1:</span> y₁(n) = T[x(n)] = n·x(n); then shift: y₁(n − k) = (n − k)·x(n − k)<br>
+  <span class="b">Path 2:</span> Shift input first: x(n − k); apply system: y₂(n) = T[x(n − k)] = n·x(n − k)<br><br>
+  Compare: y₂(n) = n·x(n − k) ≠ (n − k)·x(n − k) = y₁(n − k)<br>
+  <span class="b hl-p">→ TIME VARIANT (the explicit 'n' coefficient causes the mismatch)</span>
+</div>
+
+<!-- Property 3: LTI -->
+<h4>LTI — Linear Time-Invariant Systems</h4>
+
+<div class="definition-box">
+  <span class="def-term">Linear Time-Invariant (LTI) System</span>
+  A linear system in which an input-output pair x(n) and y(n) is invariant to a shift in time. Both linearity AND time-invariance must hold.<br>
+  LTI systems are completely characterized in the time domain by their <span class="b hl-y">impulse response h(n)</span>.
+</div>
+
+<!-- Property 4: Stability -->
+<h4>Property 3 — BIBO Stability</h4>
+
+<div class="math-box">
+  A system is BIBO STABLE if:
+  <span class="math-line">|x(n)| ≤ Mx &lt; ∞ (bounded input) implies |y(n)| ≤ My &lt; ∞ (bounded output)</span>
+</div>
+
+<div class="box">
+  <span class="b blue">BIBO Stability Condition for LTI Systems:</span><br>
+  An LTI system is BIBO stable if and only if its impulse response is <span class="b hl-y">absolutely summable</span>:<br>
+  <span class="b">S = Σ |h(n)| &lt; ∞ &nbsp;&nbsp; (sum over all n)</span><br><br>
+  <span class="b green">If S &lt; ∞ → Stable</span><br>
+  <span class="b red">If S = ∞ → Unstable</span><br><br>
+  <span class="b orange">Why this matters:</span> An unstable system can cause burnout, saturation, or runaway oscillations in hardware — potentially dangerous and destructive!
+</div>
+
+<!-- Property 5: Causality -->
+<h4>Property 4 — Causality</h4>
+
+<div class="math-box">
+  A system is CAUSAL if:
+  <span class="math-line">The output at time n₀ depends only on inputs at times n ≤ n₀</span>
+  <span class="math-line">(Output does NOT depend on future inputs)</span>
+</div>
+
+<div class="box">
+  <span class="b blue">Causality Condition for LTI Systems:</span><br>
+  An LTI system is causal if and only if:<br>
+  <span class="b hl-y">h(n) = 0 &nbsp; for all n &lt; 0</span><br>
+  Such an impulse response is called a <span class="b">causal sequence</span>.<br><br>
+  <span class="b green">Why it matters:</span> Causal systems can actually be built — they don't need future samples which haven't arrived yet. Unless otherwise stated in DSP, we always assume causal systems.
+</div>
+
+<!-- Classification Problem -->
+<div class="problem-box">
+  <span class="prob-head">Classification Problem — Classify y(n) = n²·e^{x(n)}</span>
+  Classify the system y(n) = n²·e^{x(n)} as: Linear/Nonlinear, Time-Invariant/Time-Variant, Causal/Non-Causal
+</div>
+<div class="solution-box">
+  <span class="sol-head">Complete Solution</span>
+  <span class="b blue">Linearity Test:</span><br>
+  T[a·x₁(n) + b·x₂(n)] = n²·e^{a·x₁(n) + b·x₂(n)} = n²·e^{a·x₁(n)}·e^{b·x₂(n)}<br>
+  a·T[x₁(n)] + b·T[x₂(n)] = a·n²·e^{x₁(n)} + b·n²·e^{x₂(n)}<br>
+  These are NOT equal → <span class="b hl-p">NONLINEAR</span> (the exponential violates superposition)<br><br>
+  <span class="b blue">Time Invariance Test:</span><br>
+  Path 1: y₁(n) = n²·e^{x(n)} → delay → y₁(n−k) = (n−k)²·e^{x(n−k)}<br>
+  Path 2: y₂(n) = T[x(n−k)] = n²·e^{x(n−k)}<br>
+  y₂(n) = n²·e^{x(n−k)} ≠ (n−k)²·e^{x(n−k)} = y₁(n−k)<br>
+  → <span class="b hl-p">TIME VARIANT</span> (the n² coefficient shifts differently)<br><br>
+  <span class="b blue">Causality Test:</span><br>
+  y(n) = n²·e^{x(n)}: the output at time n depends only on the input at the SAME time n — no future inputs.<br>
+  → <span class="b hl-g">CAUSAL</span>
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Classify: y(n) = ax(n−1) + x(−n)</span>
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  <span class="b">Linearity:</span> Both ax(n−1) and x(−n) are linear operations. T[αx₁ + βx₂] = αT[x₁] + βT[x₂] ✓ → <span class="b hl-g">LINEAR</span><br><br>
+  <span class="b">Time Invariance:</span><br>
+  Path 1: y₁(n) = ax(n−1) + x(−n) → y₁(n−k) = ax(n−k−1) + x(−n+k)<br>
+  Path 2: y₂(n) = T[x(n−k)] = a·x(n−k−1) + x(−(n)−k) = ax(n−k−1) + x(−n−k)<br>
+  Compare: y₁(n−k) has x(−n+k), but y₂(n) has x(−n−k) — these differ! → <span class="b hl-p">TIME VARIANT</span><br><br>
+  <span class="b">Causality:</span> The term x(−n) for n &lt; 0 involves x(|n|) which are future values → <span class="b hl-p">NON-CAUSAL</span>
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Classify: y(n) = x(n²)</span>
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  <span class="b">Linearity:</span> T[αx₁+βx₂] = αx₁(n²)+βx₂(n²) = αT[x₁]+βT[x₂] → <span class="b hl-g">LINEAR</span><br><br>
+  <span class="b">Time Invariance:</span><br>
+  Path 1: y₁(n) = x(n²) → y₁(n−k) = x((n−k)²)<br>
+  Path 2: y₂(n) = T[x(n−k)] = x((n²)−k) [substituting n by n² then shifting]<br>
+  (n−k)² = n²−2nk+k² ≠ n²−k → <span class="b hl-p">TIME VARIANT</span><br><br>
+  <span class="b">Causality:</span> y(n) = x(n²). For n = 2: y(2) = x(4). We need x(4) to compute y(2) — but n=4 is in the future relative to n=2. → <span class="b hl-p">NON-CAUSAL</span>
+</div>
+
+<!-- 2.6 Convolution -->
+<span class="anchor" id="ch2-6"></span>
+<h3>2.6 Linear Convolution</h3>
+
+<p>LTI systems are completely characterized in the time domain by their <span class="b hl-y">impulse response h(n)</span>. The output y(n) for any arbitrary input x(n) is found using the <span class="b">convolution sum</span>.</p>
+
+<div class="box">
+  <span class="b blue">Derivation from First Principles:</span><br>
+  1. Unit impulse response: δ(n) → [LTI System] → h(n)<br>
+  2. By time invariance: δ(n−k) → [LTI] → h(n−k)<br>
+  3. By homogeneity: x(k)·δ(n−k) → [LTI] → x(k)·h(n−k)<br>
+  4. By additivity (superposition): Σ x(k)·δ(n−k) → [LTI] → Σ x(k)·h(n−k)<br>
+  5. Since x(n) = Σ x(k)·δ(n−k), it follows that y(n) = Σ x(k)·h(n−k)
+</div>
+
+<div class="math-box">
+  y(n) = x(n) * h(n) = Σ x(k) · h(n − k)
+  <span class="math-line">(sum from k = −∞ to +∞)</span>
+  <span class="math-line">Also written as: y(n) = Σ h(k) · x(n − k)</span>
+</div>
+
+<div class="box box-green">
+  <span class="b green">Properties of Convolution:</span>
+  <ul>
+    <li><span class="b">Commutative:</span> x(n) * h(n) = h(n) * x(n)</li>
+    <li><span class="b">Associative:</span> [x(n) * h₁(n)] * h₂(n) = x(n) * [h₁(n) * h₂(n)]</li>
+    <li><span class="b">Distributive:</span> x(n) * [h₁(n) + h₂(n)] = x(n)*h₁(n) + x(n)*h₂(n)</li>
+    <li><span class="b">Identity:</span> x(n) * δ(n) = x(n)</li>
+    <li><span class="b">Length:</span> If x(n) has length M and h(n) has length N, then y(n) = x(n)*h(n) has length <span class="hl-y">L = M + N − 1</span></li>
+  </ul>
+</div>
+
+<h4>Convolution — Manual Computation Methods</h4>
+
+<div class="box">
+  <span class="b blue">Method 1 — The Tabular (Matrix) Method:</span><br>
+  Write x(n) horizontally and h(n) vertically. Multiply each x(k) by every h(n−k), then sum along diagonals.<br><br>
+  <span class="b blue">Method 2 — The Sliding Window Method:</span><br>
+  Fold h(k) → h(−k), then slide it across x(k). At each position n, compute the dot product Σ x(k)·h(n−k).<br><br>
+  <span class="b blue">Method 3 — Polynomial Multiplication:</span><br>
+  Treat x(n) and h(n) as polynomial coefficients. The product of the two polynomials gives y(n).
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Worked Example 1 — Convolution of Two Finite Sequences</span>
+  Find y(n) = x(n) * h(n) where:<br>
+  x(n) = {3, 11, 7, 0, −1, 4, 2} (starts at n = 0)<br>
+  h(n) = {2, 3, 0, −5, 2, 1} (starts at n = 0)
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution — Using MATLAB conv() Result</span>
+  Length of x = 7, Length of h = 6, Length of y = 7 + 6 − 1 = 12<br><br>
+  <span class="b">Calculating y(0) to y(2) manually:</span><br>
+  y(0) = x(0)·h(0) = 3·2 = <span class="b">6</span><br>
+  y(1) = x(0)·h(1) + x(1)·h(0) = 3·3 + 11·2 = 9 + 22 = <span class="b">31</span><br>
+  y(2) = x(0)·h(2) + x(1)·h(1) + x(2)·h(0) = 3·0 + 11·3 + 7·2 = 0 + 33 + 14 = <span class="b">47</span><br><br>
+  <span class="b hl-y">y(n) = {6, 31, 47, 6, −51, −5, 41, 18, −22, −3, 8, 2}</span>
+</div>
+<span class="code-label">📐 MATLAB: Linear Convolution</span>
+<div class="code">x = [3, 11, 7, 0, -1, 4, 2];
+h = [2, 3, 0, -5, 2, 1];
+y = conv(x, h);
+disp('Convolution result:');
+disp(y);
+% y = [6, 31, 47, 6, -51, -5, 41, 18, -22, -3, 8, 2]
+
+% Plot
+n = 0:length(y)-1;
+stem(n, y);
+xlabel('n'); ylabel('y(n)');
+title('Linear Convolution y(n) = x(n)*h(n)');
+grid;</div>
+
+<div class="problem-box">
+  <span class="prob-head">Worked Example 2 — Convolution with Finite and Infinite Sequences</span>
+  Find y(n) = x(n) * h(n) where:<br>
+  x(n) = (1/2)ⁿ · u(n) &nbsp;&nbsp; and &nbsp;&nbsp; h(n) = u(n)
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution — Using Convolution Sum</span>
+  y(n) = Σ x(k)·h(n−k) = Σ (1/2)ᵏ·u(k)·u(n−k)<br><br>
+  u(k) = 1 for k ≥ 0; u(n−k) = 1 for k ≤ n.<br>
+  For n ≥ 0: both conditions give 0 ≤ k ≤ n<br>
+  y(n) = Σ_{k=0}^{n} (1/2)ᵏ = [1 − (1/2)^{n+1}] / [1 − 1/2] = 2·[1 − (1/2)^{n+1}]<br><br>
+  <span class="b hl-y">y(n) = 2·[1 − (1/2)^{n+1}] · u(n) = [2 − (1/2)ⁿ⁻¹⁺¹] · u(n)</span><br>
+  Or more cleanly: y(n) = 2[1 − (0.5)^{n+1}] u(n)
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Worked Example 3 — Complete Linear Convolution by Sum</span>
+  x[n] = {0, 2, 0, −0.5} (n = 0,1,2,3) and h[n] = {2, 1, 0, −3} (n = 0,1,2,3).<br>
+  Determine y[n] = x[n] * h[n] by the linear convolution sum.
+</div>
+<div class="solution-box">
+  <span class="sol-head">Complete Step-by-Step Solution (Tabular Method)</span>
+  <br>Length = 4 + 4 − 1 = 7 points.<br><br>
+  Setting up: x = [x₀, x₁, x₂, x₃] = [0, 2, 0, −0.5] and h = [h₀, h₁, h₂, h₃] = [2, 1, 0, −3]<br><br>
+  y(n) = Σ x(k)·h(n−k)<br><br>
+  y(0) = x(0)·h(0) = 0·2 = <span class="b">0</span><br>
+  y(1) = x(0)·h(1) + x(1)·h(0) = 0·1 + 2·2 = <span class="b">4</span><br>
+  y(2) = x(0)·h(2) + x(1)·h(1) + x(2)·h(0) = 0·0 + 2·1 + 0·2 = <span class="b">2</span><br>
+  y(3) = x(0)·h(3) + x(1)·h(2) + x(2)·h(1) + x(3)·h(0) = 0·(−3)+2·0+0·1+(−0.5)·2 = <span class="b">−1</span><br>
+  y(4) = x(1)·h(3) + x(2)·h(2) + x(3)·h(1) = 2·(−3)+0·0+(−0.5)·1 = −6−0.5 = <span class="b">−6.5</span><br>
+  y(5) = x(2)·h(3) + x(3)·h(2) = 0·(−3)+(−0.5)·0 = <span class="b">0</span><br>
+  y(6) = x(3)·h(3) = (−0.5)·(−3) = <span class="b">1.5</span><br><br>
+  <span class="b hl-y">y[n] = {0, 4, 2, −1, −6.5, 0, 1.5}</span>
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Worked Example 4 — Sketch Discrete Signals</span>
+  Sketch: (a) x(n) = 2δ[n+1] + δ[n] − 3δ[n−1] + 2δ[n−3]<br>
+  (b) x(n−2)·δ(n−3)
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution (a)</span>
+  Using the sifting property — read off each impulse:<br>
+  2δ[n+1]: value 2 at n = −1<br>
+  δ[n]: value 1 at n = 0<br>
+  −3δ[n−1]: value −3 at n = 1<br>
+  2δ[n−3]: value 2 at n = 3<br>
+  All other n: value 0<br>
+  <span class="b hl-y">x(n) = {…0, 2, 1, −3, 0, 2, 0…}</span> with ↑ at n = −1 (so: n=−1→2, n=0→1, n=1→−3, n=2→0, n=3→2)<br><br>
+  <span class="sol-head">Solution (b): x(n−2)·δ(n−3)</span>
+  By the sifting property: f(n)·δ(n−k) = f(k)·δ(n−k)<br>
+  x(n−2)·δ(n−3) = x(3−2)·δ(n−3) = x(1)·δ(n−3)<br>
+  This is a scaled impulse at n = 3 with value x(1).<br>
+  <span class="b hl-y">Result: x(1)·δ(n−3) — a single spike at n = 3 with amplitude x(1)</span>
+</div>
+
+<!-- 2.7 Difference Equations -->
+<span class="anchor" id="ch2-7"></span>
+<h3>2.7 Difference Equations</h3>
+
+<p>An LTI discrete system can be described by a <span class="b hl-y">linear constant-coefficient difference equation</span>:</p>
+
+<div class="math-box">
+  Σ_{k=0}^{N} aₖ · y(n − k) = Σ_{k=0}^{M} bₖ · x(n − k)
+  <span class="math-line">Or equivalently: y(n) = Σ_{k=0}^{M} bₖ·x(n−k) − Σ_{k=1}^{N} aₖ·y(n−k)</span>
+</div>
+
+<div class="box">
+  <span class="b blue">Structure:</span><br>
+  • The <span class="b">bₖ terms</span> involve delayed versions of the input x(n) → these form the <span class="hl-y">FIR (Moving Average) part</span><br>
+  • The <span class="b">aₖ terms</span> (for k ≥ 1) involve delayed versions of the output y(n) → these form the <span class="hl-y">IIR (Recursive) part</span><br>
+  • If only bₖ terms exist → FIR filter; if aₖ terms exist → IIR filter
+</div>
+
+<span class="code-label">📐 MATLAB: Solving Difference Equations with filter()</span>
+<div class="code">% General syntax: y = filter(b, a, x)
+% b = [b0, b1, ..., bM]  (numerator coefficients of H(z))
+% a = [a0, a1, ..., aN]  (denominator coefficients; a0 = 1)
+% x = input sequence
+
+% Example: y[n] - y[n-1] + 0.9*y[n-2] = x[n]
+% Rearranged: y[n] = x[n] + y[n-1] - 0.9*y[n-2]
+b = [1];              % numerator
+a = [1, -1, 0.9];    % denominator: 1 - z^-1 + 0.9*z^-2</div>
+
+<div class="problem-box">
+  <span class="prob-head">Worked Example — Impulse &amp; Step Response</span>
+  Consider y[n] − y[n−1] + 0.9y[n−2] = x[n]<br>
+  (a) Find the impulse response using MATLAB<br>
+  (b) Find the step response using MATLAB<br>
+  (c) Determine stability
+</div>
+<div class="solution-box">
+  <span class="sol-head">System Transfer Function</span>
+  Y(z) − z⁻¹Y(z) + 0.9z⁻²Y(z) = X(z)<br>
+  Y(z)[1 − z⁻¹ + 0.9z⁻²] = X(z)<br>
+  <span class="b hl-y">H(z) = 1 / (1 − z⁻¹ + 0.9z⁻²)</span><br>
+  Poles: z = [1 ± √(1 − 3.6)] / 2 = [1 ± √(−2.6)] / 2 — complex poles!<br>
+  |z|² = 0.9 &lt; 1 → poles inside unit circle → STABLE
+</div>
+
+<span class="code-label">📐 MATLAB: Impulse Response</span>
+<div class="code">b = [1];
+a = [1, -1, 0.9];
+n = [-20:120];
+
+% Create unit impulse input
+n1 = [-20:-1]; n2 = [0]; n3 = [1:120];
+x1 = zeros(1, length(n1));
+x2 = ones(1, length(n2));      % impulse at n=0
+x3 = zeros(1, length(n3));
+x = [x1, x2, x3];
+
+h = filter(b, a, x);           % compute impulse response
+stem(n, h);
+title('Impulse Response h(n)');
+xlabel('n'); ylabel('h(n)');</div>
+
+<span class="code-label">📐 MATLAB: Step Response</span>
+<div class="code">b = [1];
+a = [1, -1, 0.9];
+n = [-10:200];
+
+% Create unit step input
+n1 = [-10:-1]; n2 = [0:200];
+x1 = zeros(1, length(n1));
+x2 = ones(1, length(n2));      % step function from n=0
+x = [x1, x2];
+
+s = filter(b, a, x);           % compute step response
+stem(n, s);
+title('Step Response s(n)');
+xlabel('n'); ylabel('s(n)');</div>
+
+<span class="code-label">📐 MATLAB: Stability Check via Impulse Response Sum</span>
+<div class="code">% After computing impulse response h:
+stability = sum(abs(h));
+fprintf('Sum of |h(n)| = %.4f\n', stability);
+% If sum is finite, system is BIBO stable
+% ans = 14.8785 → STABLE
+
+% Alternative check using another example:
+b = [0.5];
+a = [1, -0.5];
+n = [-20:20];
+n1 = [-20:-1]; n2 = [0]; n3 = [1:20];
+x1 = zeros(1,length(n1));
+x2 = ones(1,length(n2));
+x3 = zeros(1,length(n3));
+x = [x1, x2, x3];
+h = filter(b, a, x);
+s = sum(abs(h));
+stem(n, h);</div>
+
+<hr class="chapter-break">
+
+<!-- ═══════════════════════════════════════════════ CHAPTER 3 -->
+<span class="anchor" id="ch3"></span>
+<h2>Chapter 3 — Transform-Domain Analysis: Z-Transform &amp; Fourier</h2>
+
+<!-- 3.1 Z-Transform -->
+<span class="anchor" id="ch3-1"></span>
+<h3>3.1 The Z-Transform</h3>
+
+<p>The Fourier Transform of a discrete-time sequence may not converge for all sequences (particularly non-absolutely-summable ones). The Z-Transform is a more general representation that overcomes this limitation and is critical for analyzing discrete-time systems.</p>
+
+<div class="math-box">
+  Z-Transform (Bilateral/Two-Sided):
+  <span class="math-line">X(z) = Σ x(n) · z⁻ⁿ &nbsp;&nbsp; (sum from n = −∞ to +∞)</span>
+  <span class="math-line">where z is a complex variable: z = |z| · e^{jω}</span>
+</div>
+
+<div class="math-box">
+  Inverse Z-Transform:
+  <span class="math-line">x(n) = (1/2πj) ∮ X(z) · zⁿ⁻¹ dz &nbsp;&nbsp; (contour integral)</span>
+</div>
+
+<h4>Key Comments on the Z-Transform</h4>
+<div class="box">
+  <ul>
+    <li>The complex variable z is called the <span class="b">complex frequency</span>: z = |z|·e^{jω}, where |z| is the attenuation and ω is the real frequency.</li>
+    <li>The function |z| = 1, equivalently z = e^{jω}, is a circle of unit radius in the z-plane — called the <span class="b hl-y">unit circle</span>.</li>
+    <li>If the ROC contains the unit circle, X(z) evaluated on the unit circle gives the <span class="b">Discrete-Time Fourier Transform (DTFT)</span>: X(e^{jω}) = X(z)|_{z=e^{jω}}</li>
+    <li>Therefore, the <span class="b hl-p">DTFT is a special case of the Z-transform</span> evaluated on the unit circle.</li>
+    <li>The <span class="b">ROC (Region of Convergence)</span> is crucial — it defines for which values of z the sum converges, and it determines the unique inverse transform.</li>
+  </ul>
+</div>
+
+<!-- ROC Types -->
+<h4>Region of Convergence (ROC) — Types and Rules</h4>
+
+<table>
+  <tr><th>Sequence Type</th><th>ROC Shape</th><th>Example</th></tr>
+  <tr><td>Right-sided (causal)</td><td>Exterior of circle: |z| &gt; |a|</td><td>aⁿu(n)</td></tr>
+  <tr><td>Left-sided (anti-causal)</td><td>Interior of circle: |z| &lt; |b|</td><td>−bⁿu(−n−1)</td></tr>
+  <tr><td>Two-sided</td><td>Open ring (annulus): |a| &lt; |z| &lt; |b|</td><td>aⁿu(n) − bⁿu(−n−1)</td></tr>
+  <tr><td>Finite duration (right-sided)</td><td>Entire Z-plane except z = ∞</td><td>Finite causal sequence</td></tr>
+  <tr><td>Finite duration (left-sided)</td><td>Entire Z-plane except z = 0</td><td>Finite anti-causal sequence</td></tr>
+  <tr><td>Finite duration (two-sided)</td><td>Entire Z-plane except z = 0 and z = ∞</td><td>Finite two-sided sequence</td></tr>
+</table>
+
+<!-- Example 1 -->
+<div class="problem-box">
+  <span class="prob-head">Example 1 — Right-Sided (Positive-Time) Sequence</span>
+  Let x₁(n) = aⁿu(n), where 0 &lt; |a| &lt; ∞. Find the Z-Transform and ROC.
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution — Detailed Derivation</span>
+  X₁(z) = Σ_{n=−∞}^{∞} aⁿu(n)·z⁻ⁿ = Σ_{n=0}^{∞} aⁿ·z⁻ⁿ &nbsp;&nbsp; [u(n) selects n ≥ 0]<br>
+  = Σ_{n=0}^{∞} (a/z)ⁿ = Σ_{n=0}^{∞} (az⁻¹)ⁿ<br><br>
+  This is a <span class="b">geometric series</span> Σ rⁿ = 1/(1−r), which converges when |r| &lt; 1.<br>
+  Condition: |az⁻¹| = |a|/|z| &lt; 1 → <span class="b hl-y">|z| &gt; |a|</span><br><br>
+  Therefore:<br>
+  <span class="b hl-y">X₁(z) = 1/(1 − az⁻¹) = z/(z − a) &nbsp;&nbsp; for |z| &gt; |a|</span><br><br>
+  ROC: The exterior of a circle of radius |a| in the z-plane (all z outside the circle).
+</div>
+
+<!-- Example 2 -->
+<div class="problem-box">
+  <span class="prob-head">Example 2 — Left-Sided (Negative-Time) Sequence</span>
+  Let x₂(n) = −bⁿu(−n−1), where 0 &lt; |b| &lt; ∞. Find Z-Transform and ROC.
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  X₂(z) = Σ_{n=−∞}^{∞} [−bⁿu(−n−1)]·z⁻ⁿ = −Σ_{n=−∞}^{−1} bⁿ·z⁻ⁿ<br>
+  Let m = −n (so when n goes −1 to −∞, m goes 1 to ∞):<br>
+  = −Σ_{m=1}^{∞} b⁻ᵐ·zᵐ = −Σ_{m=1}^{∞} (z/b)ᵐ<br><br>
+  = −[(z/b)/(1 − z/b)] for |z/b| &lt; 1, i.e., |z| &lt; |b|<br>
+  = −z/b · b/(b − z) = −z/(b − z) = z/(z − b)<br><br>
+  Wait — simplifying: −[(z/b)/(1 − z/b)] = −z/(b−z) = z/(z−b) = 1/(1−bz⁻¹)<br>
+  <span class="b hl-y">X₂(z) = 1/(1 − bz⁻¹) = z/(z − b) &nbsp;&nbsp; for |z| &lt; |b|</span><br><br>
+  <span class="b red">CRITICAL NOTE:</span> If b = a, then X₂(z) = X₁(z) algebraically, but their ROCs are DIFFERENT! ROC₁: |z| &gt; |a| vs ROC₂: |z| &lt; |a|. This proves that the ROC is a DISTINGUISHING feature — the Z-transform pair is NOT unique without specifying the ROC!
+</div>
+
+<!-- Example 3 -->
+<div class="problem-box">
+  <span class="prob-head">Example 3 — Two-Sided Sequence</span>
+  Let x₃(n) = aⁿu(n) − bⁿu(−n−1). Find Z-Transform and ROC.
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  Using linearity and Examples 1 &amp; 2:<br>
+  X₃(z) = X₁(z) + X₂(z) = 1/(1−az⁻¹) + 1/(1−bz⁻¹)<br><br>
+  But the ROCs must overlap:<br>
+  ROC₁: |z| &gt; |a| and ROC₂: |z| &lt; |b|<br>
+  ROC₃ = ROC₁ ∩ ROC₂ = {|a| &lt; |z| &lt; |b|}<br><br>
+  <span class="b">Case 1: If |b| &lt; |a|</span> → ROC₃ is empty → X₃(z) does NOT exist!<br>
+  <span class="b">Case 2: If |a| &lt; |b|</span> → <span class="b hl-y">ROC₃: |a| &lt; |z| &lt; |b| (a ring/annulus)</span><br>
+  and X₃(z) = 1/(1−az⁻¹) + 1/(1−bz⁻¹) for this ROC.
+</div>
+
+<!-- Example 4, 5, 6 Finite Duration -->
+<div class="problem-box">
+  <span class="prob-head">Example 4 — Finite Right-Sided Sequence</span>
+  x₁(n) = {2, 3, 4} for n = 0, 1, 2 (zero elsewhere). Find Z-Transform and ROC.
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  X₁(z) = Σ x(n)·z⁻ⁿ = x(0)·z⁰ + x(1)·z⁻¹ + x(2)·z⁻²<br>
+  = 2·1 + 3·z⁻¹ + 4·z⁻²<br>
+  <span class="b hl-y">X₁(z) = 2 + 3z⁻¹ + 4z⁻² &nbsp;&nbsp; ROC: Entire Z-plane except z = ∞</span><br>
+  (The z⁻ⁿ terms blow up as z → 0 only for negative n; here n ≥ 0, so z = 0 is fine, but z = ∞ makes z⁻¹ = 0, which is fine here actually — ROC is entire plane except possibly z = ∞ due to z⁻¹ terms going to 0 there, so ROC = all z except z = ∞)
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Example 5 — Finite Left-Sided Sequence</span>
+  x₂(n) = {2, −1, 3, 0} for n = −3, −2, −1, 0. Find Z-Transform and ROC.
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  X₂(z) = x(−3)·z³ + x(−2)·z² + x(−1)·z¹ + x(0)·z⁰<br>
+  = 2z³ + (−1)z² + 3z + 0<br>
+  <span class="b hl-y">X₂(z) = 2z³ − z² + 3z &nbsp;&nbsp; ROC: Entire Z-plane except z = 0</span><br>
+  (The positive powers of z blow up as z → ∞, but that's avoided — the ROC excludes z = 0 due to zⁿ terms for n &lt; 0 becoming z^{negative} = 1/z^{|n|} which blow up at z = 0)
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Example 6 — Finite Two-Sided Sequence</span>
+  x₃(n) = {2, −1, 3, 2, 3, 4} for n = −3, −2, −1, 0, 1, 2. Find Z-Transform and ROC.
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  X₃(z) = 2z³ + (−1)z² + 3z¹ + 2z⁰ + 3z⁻¹ + 4z⁻²<br>
+  = 2z³ − z² + 3z + 2 + 3z⁻¹ + 4z⁻²<br>
+  <span class="b hl-y">ROC: Entire Z-plane except z = 0 and z = ∞</span><br>
+  (Positive powers blow up at z = ∞; negative powers blow up at z = 0)
+</div>
+
+<!-- Example 7 Standard Pairs -->
+<div class="problem-box">
+  <span class="prob-head">Example 7 — Standard Z-Transform Pairs</span>
+  Find Z-transform and ROC of: (a) δ(n)  (b) u(n)  (c) δ(n−1)  (d) δ(n+1)
+</div>
+<div class="solution-box">
+  <span class="sol-head">(a) Unit Impulse δ(n)</span>
+  X(z) = Σ δ(n)·z⁻ⁿ = δ(0)·z⁰ = 1·1 = 1<br>
+  <span class="b hl-y">Z{δ(n)} = 1 &nbsp;&nbsp; ROC: Entire Z-plane</span>
+</div>
+<div class="solution-box">
+  <span class="sol-head">(b) Unit Step u(n)</span>
+  X(z) = Σ_{n=0}^{∞} z⁻ⁿ = Σ (z⁻¹)ⁿ = 1/(1 − z⁻¹) for |z| &gt; 1<br>
+  <span class="b hl-y">Z{u(n)} = 1/(1 − z⁻¹) = z/(z−1) &nbsp;&nbsp; ROC: |z| &gt; 1</span>
+</div>
+<div class="solution-box">
+  <span class="sol-head">(c) Delayed Impulse δ(n−1)</span>
+  X(z) = Σ δ(n−1)·z⁻ⁿ = z⁻¹ [only non-zero at n=1]<br>
+  <span class="b hl-y">Z{δ(n−1)} = z⁻¹ &nbsp;&nbsp; ROC: Entire Z-plane except z = 0</span>
+</div>
+<div class="solution-box">
+  <span class="sol-head">(d) Advanced Impulse δ(n+1)</span>
+  X(z) = Σ δ(n+1)·z⁻ⁿ = z¹ = z [only non-zero at n = −1]<br>
+  <span class="b hl-y">Z{δ(n+1)} = z &nbsp;&nbsp; ROC: Entire Z-plane except z = ∞</span>
+</div>
+
+<!-- 3.1.1 Properties -->
+<span class="anchor" id="ch3-2"></span>
+<h3>3.2 Properties of the Z-Transform</h3>
+
+<table>
+  <tr><th>Property</th><th>Time Domain</th><th>Z-Domain</th><th>ROC</th></tr>
+  <tr><td>Linearity</td><td>a·x₁(n) + b·x₂(n)</td><td>a·X₁(z) + b·X₂(z)</td><td>ROC₁ ∩ ROC₂</td></tr>
+  <tr><td>Time Shifting (Delay)</td><td>x(n − k)</td><td>z⁻ᵏ · X(z)</td><td>Same as X(z)</td></tr>
+  <tr><td>Time Shifting (Advance)</td><td>x(n + k)</td><td>zᵏ · X(z)</td><td>Same as X(z)</td></tr>
+  <tr><td>Scaling in Z (Exponential)</td><td>aⁿ · x(n)</td><td>X(z/a)</td><td>|a|·ROC</td></tr>
+  <tr><td>Time Reversal</td><td>x(−n)</td><td>X(z⁻¹)</td><td>1/ROC</td></tr>
+  <tr><td>Convolution</td><td>x₁(n) * x₂(n)</td><td>X₁(z) · X₂(z)</td><td>ROC₁ ∩ ROC₂</td></tr>
+  <tr><td>Multiplication (Z)</td><td>x₁(n) · x₂(n)</td><td>(1/2πj) ∮ X₁(v)X₂(z/v)v⁻¹dv</td><td>ROC₁ · ROC₂</td></tr>
+  <tr><td>Differentiation in Z</td><td>n · x(n)</td><td>−z · dX(z)/dz</td><td>Same as X(z)</td></tr>
+  <tr><td>Initial Value</td><td>x(0)</td><td>lim_{z→∞} X(z)</td><td>—</td></tr>
+  <tr><td>Final Value</td><td>lim_{n→∞} x(n)</td><td>lim_{z→1} (z−1)X(z)</td><td>—</td></tr>
+</table>
+
+<div class="box box-green">
+  <span class="b green">The Convolution Property — Central Importance:</span><br>
+  Z{x₁(n) * x₂(n)} = X₁(z) · X₂(z)<br><br>
+  This is perhaps the most important property for LTI system analysis! Convolution in the time domain (which requires summing an infinite series) becomes simple <span class="b hl-y">multiplication in the Z-domain</span>. This is why we use Z-transforms for filter design and analysis.
+</div>
+
+<!-- Common Z-transform Table -->
+<h4>Common Z-Transform Pairs Table</h4>
+
+<table>
+  <tr><th>x(n)</th><th>X(z)</th><th>ROC</th></tr>
+  <tr><td>δ(n)</td><td>1</td><td>All z</td></tr>
+  <tr><td>u(n)</td><td>1/(1 − z⁻¹) = z/(z−1)</td><td>|z| &gt; 1</td></tr>
+  <tr><td>aⁿu(n)</td><td>1/(1 − az⁻¹) = z/(z−a)</td><td>|z| &gt; |a|</td></tr>
+  <tr><td>−aⁿu(−n−1)</td><td>1/(1 − az⁻¹) = z/(z−a)</td><td>|z| &lt; |a|</td></tr>
+  <tr><td>n·aⁿu(n)</td><td>az⁻¹/(1 − az⁻¹)²</td><td>|z| &gt; |a|</td></tr>
+  <tr><td>n·u(n)</td><td>z⁻¹/(1 − z⁻¹)²</td><td>|z| &gt; 1</td></tr>
+  <tr><td>cos(ω₀n)u(n)</td><td>(1 − cos(ω₀)z⁻¹)/(1 − 2cos(ω₀)z⁻¹ + z⁻²)</td><td>|z| &gt; 1</td></tr>
+  <tr><td>sin(ω₀n)u(n)</td><td>sin(ω₀)z⁻¹/(1 − 2cos(ω₀)z⁻¹ + z⁻²)</td><td>|z| &gt; 1</td></tr>
+  <tr><td>aⁿcos(ω₀n)u(n)</td><td>(1 − acos(ω₀)z⁻¹)/(1 − 2acos(ω₀)z⁻¹ + a²z⁻²)</td><td>|z| &gt; |a|</td></tr>
+  <tr><td>aⁿsin(ω₀n)u(n)</td><td>asin(ω₀)z⁻¹/(1 − 2acos(ω₀)z⁻¹ + a²z⁻²)</td><td>|z| &gt; |a|</td></tr>
+</table>
+
+<!-- Example using properties -->
+<div class="problem-box">
+  <span class="prob-head">Worked Example — Z-Transform Using Properties</span>
+  Find Z{x(n)} where x(n) = (n − 2)(0.5)^{n−2} u(n − 2)
+</div>
+<div class="solution-box">
+  <span class="sol-head">Complete Step-by-Step Solution</span>
+  <span class="b">Step 1: Identify a known pair and property to use.</span><br>
+  From the table: Z{n·(0.5)ⁿ·u(n)} = 0.5z⁻¹ / (1 − 0.5z⁻¹)²<br>
+  (This is the differentiation property applied to aⁿu(n))<br><br>
+  <span class="b">Step 2: The given sequence x(n) = (n−2)·(0.5)^{n−2}·u(n−2).</span><br>
+  Compare with the pattern f(n−2) where f(n) = n·(0.5)ⁿ·u(n).<br>
+  Indeed, x(n) = f(n−2)! [substituting n → n−2 in f(n) gives (n−2)(0.5)^{n−2}u(n−2)]<br><br>
+  <span class="b">Step 3: Apply the Time-Shifting Property.</span><br>
+  Z{f(n−k)} = z⁻ᵏ · F(z)<br>
+  Here k = 2, F(z) = Z{f(n)} = 0.5z⁻¹ / (1 − 0.5z⁻¹)²<br><br>
+  <span class="b">Step 4: Calculate.</span><br>
+  X(z) = Z{x(n)} = z⁻² · [0.5z⁻¹ / (1 − 0.5z⁻¹)²]<br>
+  <span class="b hl-y">X(z) = 0.5z⁻³ / (1 − 0.5z⁻¹)²</span>
+</div>
+
+<!-- 3.3 System Function -->
+<h3>3.3 System Representation in the Z-Domain</h3>
+
+<div class="math-box">
+  System Function H(z):
+  <span class="math-line">H(z) = Y(z) / X(z) = [Σ_{k=0}^{M} bₖ·z⁻ᵏ] / [Σ_{k=0}^{N} aₖ·z⁻ᵏ]</span>
+  <span class="math-line">Y(z) = H(z) · X(z) &nbsp;&nbsp; where ROC_y = ROC_h ∩ ROC_x</span>
+</div>
+
+<div class="box">
+  <span class="b blue">What the System Function Tells Us:</span>
+  <ul>
+    <li><span class="b">Poles:</span> Values of z where H(z) → ∞ (denominator = 0). Poles inside the unit circle → stable causal system.</li>
+    <li><span class="b">Zeros:</span> Values of z where H(z) = 0 (numerator = 0).</li>
+    <li><span class="b">Frequency response:</span> H(e^{jω}) = H(z)|_{z=e^{jω}} gives the magnitude and phase response as a function of digital frequency ω.</li>
+    <li><span class="b">Stability:</span> For a causal LTI system, BIBO stable iff all poles are inside the unit circle (|z| &lt; 1).</li>
+  </ul>
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Worked Problem — Find H(z) and Check Stability</span>
+  Consider 2y[n] − 5y[n−1] + y[n−2] = x[n] − 7x[n−1] − 2x[n−2]<br>
+  (a) Find H(z)  (b) Find H(ω)  (c) Find poles and zeros
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  <span class="b">Step 1: Z-transform both sides</span><br>
+  2Y(z) − 5z⁻¹Y(z) + z⁻²Y(z) = X(z) − 7z⁻¹X(z) − 2z⁻²X(z)<br>
+  Y(z)[2 − 5z⁻¹ + z⁻²] = X(z)[1 − 7z⁻¹ − 2z⁻²]<br><br>
+  <span class="b">Step 2: Solve for H(z)</span><br>
+  <span class="b hl-y">H(z) = (1 − 7z⁻¹ − 2z⁻²) / (2 − 5z⁻¹ + z⁻²)</span><br><br>
+  Multiply top and bottom by z²:<br>
+  H(z) = (z² − 7z − 2) / (2z² − 5z + 1)<br><br>
+  <span class="b">Normalize (a₀ = 1):</span><br>
+  H(z) = (z² − 7z − 2) / (2z² − 5z + 1) — leave as is or divide by 2
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Worked Problem — y[n] − 3y[n−1] + 2y[n−2] = 3x[n]</span>
+  Find H(z) and determine poles/zeros.
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  Z-transform: Y(z) − 3z⁻¹Y(z) + 2z⁻²Y(z) = 3X(z)<br>
+  Y(z)[1 − 3z⁻¹ + 2z⁻²] = 3X(z)<br>
+  <span class="b hl-y">H(z) = 3 / (1 − 3z⁻¹ + 2z⁻²)</span><br><br>
+  Multiply by z²/z²:<br>
+  H(z) = 3z² / (z² − 3z + 2) = 3z² / (z−1)(z−2)<br><br>
+  <span class="b">Poles:</span> z = 1, z = 2<br>
+  <span class="b">Zeros:</span> z = 0 (double zero)<br><br>
+  <span class="b">Stability Check:</span> Pole at z = 2 is OUTSIDE the unit circle!<br>
+  → <span class="b hl-p">UNSTABLE (for causal system)</span>
+</div>
+
+<!-- 3.4 DTFT -->
+<span class="anchor" id="ch3-4"></span>
+<h3>3.4 The Discrete-Time Fourier Transform (DTFT)</h3>
+
+<p>If x(n) is absolutely summable (Σ |x(n)| &lt; ∞), then its DTFT is well-defined:</p>
+
+<div class="math-box">
+  DTFT: X(e^{jω}) = Σ x(n) · e^{−jωn} &nbsp;&nbsp; (sum over all n)
+  <span class="math-line">Inverse DTFT: x(n) = (1/2π) ∫_{−π}^{π} X(e^{jω}) e^{jωn} dω</span>
+  <span class="math-line">Note: X(e^{jω}) is periodic with period 2π</span>
+</div>
+
+<div class="box">
+  <span class="b blue">Key Properties of the DTFT:</span>
+  <ul>
+    <li>X(e^{jω}) is a <span class="b">continuous</span> function of ω (even though x(n) is discrete)</li>
+    <li>It is <span class="b">periodic with period 2π</span></li>
+    <li>The magnitude |X(e^{jω})| is the frequency response / spectrum</li>
+    <li>For real x(n): |X(e^{jω})| is even, ∠X(e^{jω}) is odd</li>
+    <li>Corresponds to Z-transform evaluated on the unit circle</li>
+  </ul>
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Worked Problem — Find DTFT of x[n] = {1, 0, −1}</span>
+  x[n] = δ(n+1) − δ(n−1) (or equivalently x(0)=0, x(1)=−1, x(−1)=1 — NO: x[n]=[1,0,−1] starting at n=0 means x(0)=1, x(1)=0, x(2)=−1)
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution — x[n] = {1, 0, −1} starting at n = 0</span>
+  x(0) = 1, x(1) = 0, x(2) = −1, all other n → 0<br><br>
+  X(e^{jω}) = Σ x(n)·e^{−jωn} = x(0)·e⁰ + x(1)·e^{−jω} + x(2)·e^{−j2ω}<br>
+  = 1 + 0·e^{−jω} + (−1)·e^{−j2ω}<br>
+  <span class="b hl-y">X(e^{jω}) = 1 − e^{−j2ω}</span><br><br>
+  Factor out e^{−jω}:<br>
+  = e^{−jω}[e^{jω} − e^{−jω}] = e^{−jω} · 2j·sin(ω)<br><br>
+  <span class="b">Magnitude:</span> |X(e^{jω})| = 2|sin(ω)|<br>
+  <span class="b">Phase:</span> ∠X(e^{jω}) = −ω + π/2 (for sin(ω) &gt; 0)
+</div>
+
+<h4>Frequency Response of an LTI System</h4>
+
+<div class="math-box">
+  H(e^{jω}) = H(z)|_{z = e^{jω}} = Y(e^{jω}) / X(e^{jω})
+  <span class="math-line">|H(e^{jω})| = Magnitude Response</span>
+  <span class="math-line">∠H(e^{jω}) = Phase Response</span>
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Worked Problem — y[n] = 0.9y[n−1] + x[n] (Low-Pass System)</span>
+  Determine the frequency response manually and plot using MATLAB.
+</div>
+<div class="solution-box">
+  <span class="sol-head">Manual Solution</span>
+  From difference equation: Y(z) = 0.9z⁻¹Y(z) + X(z)<br>
+  H(z) = 1 / (1 − 0.9z⁻¹)<br><br>
+  Evaluate on unit circle z = e^{jω}:<br>
+  H(e^{jω}) = 1 / (1 − 0.9e^{−jω})<br><br>
+  <span class="b">Magnitude:</span><br>
+  |H(e^{jω})| = 1 / |1 − 0.9e^{−jω}|<br>
+  = 1 / |1 − 0.9cos(ω) + j0.9sin(ω)|<br>
+  = 1 / √[(1 − 0.9cos(ω))² + (0.9sin(ω))²]<br>
+  = 1 / √[1 − 1.8cos(ω) + 0.81]<br>
+  = 1 / √[1.81 − 1.8cos(ω)]<br><br>
+  At ω = 0: |H(1)| = 1/√[1.81 − 1.8] = 1/√0.01 = 1/0.1 = <span class="b">10</span> (high gain at DC → low-pass!)<br>
+  At ω = π: |H(−1)| = 1/√[1.81 + 1.8] = 1/√3.61 ≈ <span class="b">0.527</span> (low gain at high freq → confirms LP)
+</div>
+
+<span class="code-label">📐 MATLAB: Frequency Response (Low-Pass System)</span>
+<div class="code">% y[n] = 0.9y[n-1] + x[n]
+b = [1];
+a = [1, -0.9];
+w = [0:1:100] * pi/100;       % frequency range 0 to pi (100 points)
+H = freqz(b, a, w);           % compute H(e^jw)
+magH = abs(H);
+phaseH = angle(H);
+
+subplot(2,1,1); plot(w/pi, magH); grid;
+xlabel('Normalized Frequency (\omega/\pi)'); ylabel('|H(e^{j\omega})|');
+title('Magnitude Response');
+
+subplot(2,1,2); plot(w/pi, phaseH); grid;
+xlabel('Normalized Frequency (\omega/\pi)'); ylabel('Phase (radians)');
+title('Phase Response');</div>
+
+<div class="problem-box">
+  <span class="prob-head">Problem — Band-Pass System</span>
+  y[n] − 2y[n−1] + 3y[n−2] = x[n] − 0.5x[n−1]<br>
+  Find H(z), H(e^{jω}), and plot magnitude/phase response.
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  Z-transform: Y(z)[1 − 2z⁻¹ + 3z⁻²] = X(z)[1 − 0.5z⁻¹]<br>
+  <span class="b hl-y">H(z) = (1 − 0.5z⁻¹) / (1 − 2z⁻¹ + 3z⁻²)</span><br><br>
+  Frequency response on unit circle:<br>
+  H(e^{jω}) = (1 − 0.5e^{−jω}) / (1 − 2e^{−jω} + 3e^{−j2ω})
+</div>
+
+<span class="code-label">📐 MATLAB: Band-Pass Frequency Response</span>
+<div class="code">% y[n]-2y[n-1]+3y[n-2] = x[n]-0.5x[n-1]
+b = [1, -0.5];             % numerator coefficients
+a = [1, -2, 3];            % denominator coefficients
+w = [0:1:100] * pi/100;
+H = freqz(b, a, w);
+magH = abs(H);
+phaseH = angle(H);
+
+subplot(2,1,1); plot(w/pi, magH); grid;
+xlabel('Normalized Frequency'); ylabel('|H|');
+title('Band-Pass: Magnitude Response');
+
+subplot(2,1,2); plot(w/pi, phaseH); grid;
+xlabel('Normalized Frequency'); ylabel('Phase');
+title('Band-Pass: Phase Response');</div>
+
+<div class="problem-box">
+  <span class="prob-head">Worked Problem — Convolution via Z-Transform</span>
+  x₁(n) = δ(n) + δ(n−1) − δ(n−3) and x₂(n) = 2δ(n−1) + 2δ(n−2) + δ(n−3)<br>
+  (a) Convolve to form x₃(n)  (b) Find X₁(z) and X₂(z)  (c) Show X₃(z) = X₁(z)·X₂(z)
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  <span class="b">(b) Z-Transforms:</span><br>
+  X₁(z) = 1 + z⁻¹ − z⁻³<br>
+  X₂(z) = 2z⁻¹ + 2z⁻² + z⁻³<br><br>
+  <span class="b">(c) Multiply X₁(z)·X₂(z):</span><br>
+  X₃(z) = (1 + z⁻¹ − z⁻³)(2z⁻¹ + 2z⁻² + z⁻³)<br>
+  = 2z⁻¹ + 2z⁻² + z⁻³ + 2z⁻² + 2z⁻³ + z⁻⁴ − 2z⁻⁴ − 2z⁻⁵ − z⁻⁶<br>
+  = 2z⁻¹ + 4z⁻² + 3z⁻³ + (1−2)z⁻⁴ − 2z⁻⁵ − z⁻⁶<br>
+  <span class="b hl-y">X₃(z) = 2z⁻¹ + 4z⁻² + 3z⁻³ − z⁻⁴ − 2z⁻⁵ − z⁻⁶</span><br><br>
+  <span class="b">(a) Therefore x₃(n) by inverse Z-transform:</span><br>
+  x₃(n) = 0 at n=0; 2 at n=1; 4 at n=2; 3 at n=3; −1 at n=4; −2 at n=5; −1 at n=6<br>
+  <span class="b hl-y">x₃(n) = {2, 4, 3, −1, −2, −1}</span> starting at n=1
+</div>
+
+<hr class="chapter-break">
+
+<!-- ═══════════════════════════════════════════════ CHAPTER 4 -->
+<span class="anchor" id="ch4"></span>
+<h2>Chapter 4 — Implementation of Discrete-Time Systems</h2>
+
+<p>We now use the theory from Chapters 2 and 3 for actual signal processing. To process signals, we design and implement systems using basic building blocks mapped from difference equations to block diagrams.</p>
+
+<!-- 4.1 Basic Elements -->
+<h3>4.1 Basic Elements of DT System Implementation</h3>
+
+<div class="compare">
+  <div class="compare-col">
+    <h5 class="blue">Adder</h5>
+    Two or more inputs → one output (sum). Addition of three or more signals is done by cascading two-input adders. Symbol: circle with + inside.
+  </div>
+  <div class="compare-col">
+    <h5 class="red">Multiplier (Gain)</h5>
+    Single input → single output. Multiplies the signal by a constant coefficient (gain). Multiplication by 1 is implicit and not shown. Symbol: triangle with coefficient.
+  </div>
+</div>
+<div class="definition-box">
+  <span class="def-term">Delay Element (Shifter / Memory) — z⁻¹</span>
+  Delays the signal passing through it by exactly <span class="b">one sample</span>. Implemented using a shift register (a memory location that shifts its content each clock cycle). The Z-domain equivalent is multiplication by z⁻¹. Multiple delays = z⁻ᴺ = N delay elements in series.
+</div>
+
+<!-- 4.2 IIR Structures -->
+<h3>4.2 IIR System Structures</h3>
+
+<p>The general system function of an IIR filter is:</p>
+<div class="math-box">
+  H(z) = [Σ_{k=0}^{M} bₖ·z⁻ᵏ] / [Σ_{k=0}^{N} aₖ·z⁻ᵏ] = B(z)/A(z)
+  <span class="math-line">with a₀ = 1 (by convention)</span>
+</div>
+
+<p>The corresponding difference equation:</p>
+<div class="math-box">
+  y(n) = Σ_{k=0}^{M} bₖ·x(n−k) − Σ_{k=1}^{N} aₖ·y(n−k)
+</div>
+
+<!-- Direct Form I -->
+<h4>4.2.1 Direct Form I Structure</h4>
+
+<div class="box">
+  <span class="b blue">Structure:</span> Implements the difference equation <span class="b">directly as given</span>, in two separate cascaded sections:
+  <ol>
+    <li><span class="b">Section 1 (Zeros/FIR part):</span> Moving average — implements the numerator B(z). Creates a tapped delay line with M delays feeding into multipliers with coefficients b₀, b₁, …, bₘ. Their weighted sum goes to the output.</li>
+    <li><span class="b">Section 2 (Poles/IIR part):</span> Recursive feedback — implements the denominator A(z). Takes the output y(n) through N delays, with feedback multipliers a₁, a₂, …, aₙ summed back to the output.</li>
+  </ol>
+  <br>
+  <span class="b red">Number of delay elements:</span> M + N total delay elements (two separate delay lines)<br>
+  For M = N = 4: requires 4 + 4 = <span class="hl-p">8 delay elements</span>
+</div>
+
+<!-- Direct Form II -->
+<h4>4.2.2 Direct Form II (Canonical) Structure</h4>
+
+<div class="box">
+  <span class="b blue">Key Idea:</span> Interchange the order of the two cascade sections in Direct Form I. The two delay lines are now adjacent — connected by a unity gain branch — so <span class="b hl-y">one delay line can be eliminated</span>.<br><br>
+  <span class="b">Structure:</span>
+  <ol>
+    <li>Input x(n) first goes through the <span class="b">recursive feedback section</span> (poles) to generate an intermediate sequence w(n)</li>
+    <li>w(n) then goes through the <span class="b">feedforward section</span> (zeros) to produce output y(n)</li>
+    <li>Both sections SHARE the same delay line</li>
+  </ol>
+  <span class="b red">Number of delay elements:</span> max(M, N) — the canonical (minimum) number<br>
+  For M = N = 4: requires only <span class="hl-g">4 delay elements</span> (saving 4 compared to Direct Form I)<br><br>
+  Both forms are equivalent from input/output perspective; internally they have different signals.
+</div>
+
+<!-- Cascade Form -->
+<h4>4.2.3 Cascade Form</h4>
+
+<div class="box">
+  <span class="b blue">Method:</span> Factor H(z) into smaller second-order sections called <span class="b hl-y">biquads</span> (second-order sections with 2 poles and 2 zeros):<br>
+  H(z) = b₀ · Π_k H_k(z) where each H_k(z) = (b₀ₖ + b₁ₖz⁻¹ + b₂ₖz⁻²)/(1 + a₁ₖz⁻¹ + a₂ₖz⁻²)<br><br>
+  Each biquad section is implemented in Direct Form II (canonical). The entire system is a cascade (series) of biquads.<br><br>
+  <span class="b green">Advantages:</span> Less sensitive to coefficient quantization errors; easier to control poles/zeros individually.
+</div>
+
+<!-- Parallel Form -->
+<h4>4.2.4 Parallel Form</h4>
+
+<div class="box">
+  <span class="b blue">Method:</span> Use <span class="b">partial fraction expansion</span> to decompose H(z) into a sum of simpler sections:<br>
+  H(z) = H₀ + Σ_k Hₖ(z) where each Hₖ(z) is a first-order or second-order section<br><br>
+  Each section is implemented in a direct form, and all sections run in PARALLEL — inputs of all sections connected to x(n), outputs summed to produce y(n).<br><br>
+  <span class="b green">Advantages:</span> Parallel computation (hardware can run sections simultaneously); poles of individual sections are independent.
+</div>
+
+<!-- Examples -->
+<div class="problem-box">
+  <span class="prob-head">Worked Example 1 — Direct Form I and II Signal Flow Graph</span>
+  Filter: 16y(n) + 12y(n−1) + 2y(n−2) − 4y(n−3) − y(n−4) = x(n) − 3x(n−1) + 11x(n−2) − 27x(n−3) + 18x(n−4)<br>
+  Draw signal flow graphs for (a) Direct Form I and (b) Direct Form II.
+</div>
+<div class="solution-box">
+  <span class="sol-head">Step 1: Find H(z)</span>
+  Divide all terms by 16 (to normalize a₀ = 1):<br>
+  y(n) + (12/16)y(n−1) + (2/16)y(n−2) − (4/16)y(n−3) − (1/16)y(n−4) = (1/16)x(n) − (3/16)x(n−1) + (11/16)x(n−2) − (27/16)x(n−3) + (18/16)x(n−4)<br><br>
+  <span class="b">Denominator (recursive) coefficients a:</span><br>
+  a₀ = 1, a₁ = 12/16 = 3/4, a₂ = 2/16 = 1/8, a₃ = −4/16 = −1/4, a₄ = −1/16<br><br>
+  <span class="b">Numerator (feedforward) coefficients b:</span><br>
+  b₀ = 1/16, b₁ = −3/16, b₂ = 11/16, b₃ = −27/16, b₄ = 18/16<br><br>
+  <span class="b">H(z) = B(z)/A(z)</span> where numerator has degree M=4 and denominator degree N=4.<br><br>
+  <span class="b">Direct Form I:</span> 4 (input) + 4 (output) = 8 delay elements total<br>
+  — Section 1: tapped delay line with x(n), x(n−1), x(n−2), x(n−3), x(n−4), multiplied by b₀ to b₄, summed<br>
+  — Section 2: that sum feeds into feedback loop where y(n−1), y(n−2), y(n−3), y(n−4) multiplied by a₁ to a₄ (negated), summed with section 1 output<br><br>
+  <span class="b">Direct Form II:</span> max(4,4) = 4 delay elements total (canonical, minimum memory)<br>
+  — State variable w(n) = x(n) − a₁w(n−1) − a₂w(n−2) − a₃w(n−3) − a₄w(n−4)<br>
+  — y(n) = b₀w(n) + b₁w(n−1) + b₂w(n−2) + b₃w(n−3) + b₄w(n−4)
+</div>
+
+<div class="problem-box">
+  <span class="prob-head">Worked Example 3 — H(z) Given as Transfer Function</span>
+  H(z) = (1 + 2z⁻¹ + z⁻²) / (1 − 0.5z⁻¹ + 0.25z⁻²)<br>
+  Draw signal flow graphs for Direct Form I and Direct Form II.
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution — Identify Coefficients</span>
+  Numerator: b₀ = 1, b₁ = 2, b₂ = 1 (M = 2)<br>
+  Denominator: a₀ = 1, a₁ = −0.5, a₂ = 0.25 (N = 2)<br><br>
+  Difference equation: y(n) = x(n) + 2x(n−1) + x(n−2) + 0.5y(n−1) − 0.25y(n−2)<br><br>
+  <span class="b">Direct Form I:</span> 2 + 2 = 4 delays<br>
+  <span class="b">Direct Form II:</span> max(2,2) = 2 delays<br><br>
+  <span class="b">Direct Form II state equations:</span><br>
+  w(n) = x(n) + 0.5w(n−1) − 0.25w(n−2) &nbsp;&nbsp; [feedback section]<br>
+  y(n) = w(n) + 2w(n−1) + w(n−2) &nbsp;&nbsp; [feedforward section]
+</div>
+
+<hr class="chapter-break">
+
+<!-- ═══════════════════════════════════════════════ DSP LAB -->
+<span class="anchor" id="lab"></span>
+<h2>DSP Laboratory — MATLAB Programs &amp; Experiments</h2>
+<p class="subtitle" style="font-size:20px;">Gollis University — Faculty of Telecommunications Engineering<br>Prepared by: Bewnet Getachew, Lecturer (2014)</p>
+
+<h3>List of Experiments</h3>
+<ol>
+  <li>Simulation of Amplitude Modulation (AM)</li>
+  <li>Simulation of Frequency Modulation (FM)</li>
+  <li>Simulation of DFT and IDFT</li>
+  <li>(a) Simulation of Low-Pass Filter (LPF) &nbsp;&nbsp; (b) Simulation of High-Pass Filter (HPF)</li>
+  <li>Simulation of M-ary PSK</li>
+  <li>Simulation of DPCM (Differential Pulse Code Modulation)</li>
+  <li>(i) DFT using DIT Algorithm &nbsp;&nbsp; (ii) IDFT using DIT</li>
+  <li>(i) DFT using DIF Algorithm &nbsp;&nbsp; (ii) IDFT using DIF</li>
+  <li>Design of IIR Butterworth Filter using Impulse Invariant Method</li>
+  <li>Design of FIR LPF using Hamming Window</li>
+  <li>(i) Linear Convolution &nbsp;&nbsp; (ii) Circular Convolution</li>
+  <li>(i) Auto-Correlation &nbsp;&nbsp; (ii) Cross-Correlation</li>
+</ol>
+
+<!-- Lab 1: AM -->
+<span class="anchor" id="lab1"></span>
+<h3>Lab 1 — Amplitude Modulation (AM)</h3>
+<p><span class="b blue">Aim:</span> To simulate amplitude modulation and demodulation.</p>
+<p><span class="b">Theory:</span> In AM, the amplitude of the carrier signal is varied proportionally to the instantaneous value of the message signal. The modulated signal is:<br>
+s(t) = Ac[1 + kₐm(t)]cos(2πfct) where kₐ = AM/Ac is the modulation index.</p>
+
+<span class="code-label">📐 MATLAB Program — AM Simulation</span>
+<div class="code">AM = input('Enter message signal amplitude: ');
+Ac = input('Enter carrier signal amplitude: ');
+fm = input('Enter message signal frequency (Hz): ');
+fc = input('Enter carrier signal frequency (Hz): ');
+n  = input('Enter number of cycles: ');
+
+T = 1/fm;
+t = 0 : T/100 : n*T;         % time vector
+
+m = AM * cos(2*pi*fm*t);     % message signal
+c = Ac * cos(2*pi*fc*t);     % carrier signal
+
+ka = AM / Ac;                 % modulation index
+s = c + c .* (1 + ka*m);     % AM modulated signal
+
+subplot(3,1,1); plot(m);
+xlabel('time'); ylabel('amplitude');
+title('Message Signal');
+
+subplot(3,1,2); plot(c);
+xlabel('time'); ylabel('amplitude');
+title('Carrier Signal');
+
+subplot(3,1,3); plot(s);
+xlabel('time'); ylabel('amplitude');
+title('Amplitude Modulated Signal');</div>
+
+<div class="code-output">Expected Output: Three subplots showing:
+(1) Sinusoidal message signal m(t)
+(2) High-frequency sinusoidal carrier c(t)
+(3) AM signal s(t) — carrier with envelope shaped by message</div>
+
+<!-- Lab 2: FM -->
+<span class="anchor" id="lab2"></span>
+<h3>Lab 2 — Frequency Modulation (FM)</h3>
+<p><span class="b blue">Aim:</span> To simulate frequency modulation and demodulation.</p>
+<p><span class="b">Theory:</span> In FM, the instantaneous frequency of the carrier is varied proportionally to the message signal. β = kf·AM/fm is the modulation index. The FM signal is:<br>
+s(t) = Ac·cos(2πfct − β·cos(2πfmt))</p>
+
+<span class="code-label">📐 MATLAB Program — FM Simulation</span>
+<div class="code">AM = input('Enter message signal amplitude: ');
+Ac = input('Enter carrier signal amplitude: ');
+fm = input('Enter message signal frequency (Hz): ');
+fc = input('Enter carrier signal frequency (Hz): ');
+kf = input('Enter frequency sensitivity (kf): ');
+
+T = 1/fm;
+t = 0 : T/200 : 2*T;
+
+m = AM * sin(2*pi*fm*t);     % message signal (sine)
+c = Ac * cos(2*pi*fc*t);     % carrier signal
+
+fi = kf * AM;                 % peak frequency deviation
+b  = fi / fm;                 % modulation index beta
+
+s = Ac * cos(2*pi*fc*t - (b * cos(2*pi*fm*t)));   % FM signal
+
+subplot(3,1,1); plot(m);
+xlabel('time'); ylabel('amplitude'); title('Message Signal');
+
+subplot(3,1,2); plot(c);
+xlabel('time'); ylabel('amplitude'); title('Carrier Signal');
+
+subplot(3,1,3); plot(s);
+xlabel('time'); ylabel('amplitude'); title('FM Signal');</div>
+
+<!-- Lab 3: DFT/IDFT -->
+<span class="anchor" id="lab3"></span>
+<h3>Lab 3 — DFT and IDFT (Direct Computation)</h3>
+<p><span class="b blue">Aim:</span> To simulate the DFT and IDFT directly from definition.</p>
+
+<div class="math-box">
+  DFT: X(k) = Σ_{n=0}^{N−1} x(n) · e^{−j2πkn/N} &nbsp;&nbsp; k = 0, 1, …, N−1
+  <span class="math-line">IDFT: x(n) = (1/N) Σ_{k=0}^{N−1} X(k) · e^{+j2πkn/N} &nbsp;&nbsp; n = 0, 1, …, N−1</span>
+</div>
+
+<span class="code-label">📐 MATLAB Program — DFT</span>
+<div class="code">x = input('Enter sequence (row vector): ');
+N = length(x);
+s = zeros(1, N);              % initialize DFT output
+
+for k = 1:N
+    for n = 1:N
+        s(k) = s(k) + x(n) * exp(-j*2*pi*(k-1)*(n-1)/N);
+    end
+end
+
+disp('DFT X(k) =');
+disp(s);</div>
+
+<span class="code-label">📐 MATLAB Program — IDFT</span>
+<div class="code">m = input('Enter DFT sequence X(k): ');   % e.g., enter s from above
+N = length(m);
+G = zeros(1, N);              % initialize IDFT output
+
+for n = 1:N
+    for k = 1:N
+        G(n) = G(n) + m(k) * exp(j*2*pi*(k-1)*(n-1)/N);
+    end
+end
+
+disp('IDFT x(n) =');
+disp(G/N);</div>
+
+<div class="code-output">Sample Run:
+enter sequence: [1 2 3 4 5]
+
+DFT X(k) =
+Columns 1 through 4:
+  15.0000   -2.5000 + 3.4410i   -2.5000 + 0.8123i   -2.5000 - 0.8123i
+Column 5:
+  -2.5000 - 3.4410i
+
+enter sequence s (for IDFT):
+IDFT x(n) =
+  1.0000 - 0.0000i   2.0000 - 0.0000i   3.0000   4.0000 + 0.0000i   5.0000 + 0.0000i</div>
+
+<!-- Lab 4: LPF/HPF -->
+<span class="anchor" id="lab4"></span>
+<h3>Lab 4(a) — Butterworth Low-Pass Filter (Analog)</h3>
+<p><span class="b blue">Aim:</span> To simulate the frequency response of a Butterworth Low-Pass Filter.</p>
+
+<span class="code-label">📐 MATLAB Program — LPF</span>
+<div class="code">function [] = LPF(AP, AS, wp, ws)
+% AP = passband ripple (dB), AS = stopband attenuation (dB)
+% wp = passband edge freq, ws = stopband edge freq
+
+b = (10^(0.1*AS) - 1) / (10^(0.1*AP) - 1);
+c = log10(b^0.5);
+d = log10(ws/wp);
+n = (c/d);
+t = ceil(n);              % filter order (rounded up)
+w = 0 : 0.5 : 800;
+
+m = (10^(0.1*AP) - 1)^(1/(2*t));
+wc = wp / m;              % cutoff frequency
+
+s = j*w / wc;             % normalized complex freq variable
+
+switch t
+    case 1, h = 1 ./ (s + 1);
+    case 2, h = 1 ./ ((s.^2) + 1.414*s + 1);
+    case 3, h = 1 ./ ((s + 1) .* (s.^2 + s + 1));
+    case 4, h = 1 ./ (((s.^2) + 0.76537*s + 1) .* ((s.^2) + 1.8477*s + 1));
+    otherwise, disp('Order exceeded');
+end
+
+plot(w, abs(h));
+xlabel('Frequency'); ylabel('Amplitude');
+title('Butterworth Low-Pass Filter Response');
+grid on;</div>
+
+<h3>Lab 4(b) — Butterworth High-Pass Filter (Analog)</h3>
+<p><span class="b blue">Aim:</span> To simulate the frequency response of a High-Pass Filter.</p>
+
+<span class="code-label">📐 MATLAB Program — HPF</span>
+<div class="code">function [] = HPF(AP, AS, wp, ws)
+% Note: for HPF, frequency transformation changes
+b = (10^(0.1*AS) - 1) / (10^(0.1*AP) - 1);
+c = log10(b^0.5);
+d = log10(wp/ws);           % Note: wp/ws (reversed for HPF)
+n = (c/d);
+t = ceil(n);
+w = 40 : 0.4 : 800;
+
+m = (10^(0.1*AP) - 1)^(1/(2*t));
+wc = wp / m;
+
+s = -j*wc ./ w;             % HPF frequency transformation (s → wc/s)
+
+switch t
+    case 1, h = 1 ./ (s + 1);
+    case 2, h = 1 ./ ((s.^2) + 1.414*s + 1);
+    case 3, h = 1 ./ ((s + 1) .* (s.^2 + s + 1));
+    case 4, h = 1 ./ (((s.^2) + 0.76537*s + 1) .* ((s.^2) + 1.8477*s + 1));
+    otherwise, disp('Order exceeded');
+end
+
+plot(w, abs(h));
+xlabel('Frequency'); ylabel('Amplitude');
+title('Butterworth High-Pass Filter Response');
+grid on;</div>
+
+<!-- Lab 5: M-ary PSK -->
+<span class="anchor" id="lab5"></span>
+<h3>Lab 5 — M-ary Phase Shift Keying (M-PSK)</h3>
+<p><span class="b blue">Aim:</span> To simulate M-ary PSK modulation.</p>
+<p><span class="b">Theory:</span> In M-PSK, the carrier phase takes M distinct values: 2πk/M for k = 0, 1, …, M−1. Groups of log₂(M) bits are encoded into one of M phases.</p>
+
+<span class="code-label">📐 MATLAB Program — M-ary PSK</span>
+<div class="code">clc; clear all; close all;
+
+a  = input('Enter the input binary sequence (row vector): ');
+M  = input('Enter the number of phase shifts M: ');
+fc = input('Enter the carrier frequency (Hz): ');
+am = 1;                      % carrier amplitude
+
+N = length(a);
+xx = ceil(N/M)*M - N;       % zero-pad to make length divisible by M
+
+if (xx)
+    for i = 1:xx
+        a = [a 0];
+    end
+end
+
+i = 1;
+N = length(a);
+L = ceil(N/M);               % number of symbols
+
+% Group bits into M-bit blocks (matrix b)
+for j = 1:M
+    for k = 1:L
+        b(j,k) = a(i);
+        i = i + 1;
+    end
+end
+
+[m1 n1] = size(b);
+T = 1/fc;
+Tm = T;
+t = 0 : T/100 : T;
+
+d = [];
+for i = 1:n1
+    n(i) = 0;
+    for j = 1:m1
+        n(i) = n(i) + (b(j,i) * 2^(j-1));  % convert binary to decimal
+    end
+    d = [d am*sin(2*pi*fc*t + 2*pi*n(i)/(log2(M)))]; % PSK signal
+end
+
+t1 = [t];
+for i = 1:n1-1
+    t1 = [t1 ((i*T)+t)];
+end
+
+plot(t1, d);
+xlabel('Time (s)'); ylabel('Amplitude');
+title(['M-ary PSK Signal (M=' num2str(M) ')']);</div>
+
+<div class="code-output">Sample run:
+Enter the input binary sequence: [1 0 1 1 0 0 0 1 1 1 0 0 1 1 1]
+Enter M: 3
+Enter carrier frequency: 100
+Output: M-PSK waveform plot</div>
+
+<!-- Lab 6: DPCM -->
+<span class="anchor" id="lab6"></span>
+<h3>Lab 6 — Differential Pulse Code Modulation (DPCM)</h3>
+<p><span class="b blue">Aim:</span> To simulate DPCM encoding and decoding.</p>
+<p><span class="b">Theory:</span> DPCM exploits the redundancy in adjacent samples. Instead of encoding each sample directly, it encodes the <span class="hl-y">difference</span> between the current sample and a predicted value (from previous samples). This typically requires fewer bits for the same quality.</p>
+
+<span class="code-label">📐 MATLAB Program — DPCM Main</span>
+<div class="code">close all; clear;
+
+% Signal sampling
+fs  = 1/2000;
+tn  = 0 : fs : 1/25;
+
+% Generate test signal (sine wave at 50 Hz)
+s = 0.5 * sin(2*pi*50*tn);
+
+% Parameters
+lpclen  = 20;               % LPC predictor order
+bitsize = input('bitsize = ');
+fprintf('\nPlease wait... data length is %i\n', length(s));
+
+% LPF parameters
+tap = 100;
+cf  = 0.15;
+
+% DPCM Encoding
+[Q, b, ai] = dpcm_enco_lpc(s, lpclen, bitsize);
+
+% DPCM Decoding
+[st] = dpcm_deco_lpc(b, ai, bitsize);
+
+% LPF smoothing
+Sa = lpf(tap, cf, st);
+
+% Plot results
+figure;
+subplot(3,1,1); plot(s,  'r'); ylabel('amplitude');
+title('DPCM with predictor (red=input, green=decoded, blue=LPF output)');
+subplot(3,1,2); plot(st, 'g'); ylabel('amplitude');
+subplot(3,1,3); plot(Sa, 'b'); ylabel('amplitude'); xlabel('index n');</div>
+
+<span class="code-label">📐 Sub-Function — DPCM Encoding (with LPC predictor)</span>
+<div class="code">function [Q, b, ai] = dpcm_enco_lpc(s, lpclen, bitsize)
+slen = length(s);
+e(1) = s(1);
+[Q(1), b(1,:)] = pcm_quan_enco(e(1), bitsize);
+st(1) = Q(1);
+
+for i = 2:slen  
+    if i <= lpclen
+        e(i)  = s(i) - st(i-1);
+        [Q(i), b(i,:)] = pcm_quan_enco(e(i), bitsize);
+        st(i) = st(i-1) + Q(i); 
+    else
+        [a, G] = lpc(s(i-lpclen:i-1), lpclen);
+        a = a * G;
+        m = 1:lpclen;      
+        j = 2:lpclen + 1;      
+        sth = sum(a(j) .* st(i-m));       
+        ai(i,:) = a;         
+        e(i)  = s(i) - sth;      
+        [Q(i), b(i,:)] = pcm_quan_enco(e(i), bitsize);
+        st(i) = sth + Q(i);          
+    end      
+end
+b = b';
+b = b(:)';
+end</div>
+
+<span class="code-label">📐 Sub-Function — DPCM Decoding</span>
+<div class="code">function [st] = dpcm_deco_lpc(b, ai, bitsize)
+[jj, size_ai] = size(ai);
+[Q] = pcm_deco_quan(b, bitsize);
+st  = cumsum(Q(1:size_ai-1));
+slen = length(Q);
+m = 1:size_ai-1;
+j = 2:size_ai;
+
+for i = size_ai:slen   
+    sth  = sum(ai(i,j) .* st(i-m));  
+    st(i) = Q(i) + sth;         
+end   
+end</div>
+
+<span class="code-label">📐 Sub-Function — LPF for DPCM Smoothing</span>
+<div class="code">function Sa = lpf(tap, cf, Sn)
+% tap: filter order; cf: normalized cutoff frequency; Sn: input sequence
+b  = fir1(tap, cf);               % design FIR low-pass filter
+Sa = conv2(Sn, b, 'same');        % apply filter (linear convolution)
+end</div>
+
+<div class="code-output">Sample Output:
+bitsize = 4
+data length is 81
+slen = 324
+Three subplot figure showing original signal, decoded signal, and LPF-smoothed output</div>
+
+<!-- Lab 7: DIT FFT -->
+<span class="anchor" id="lab7"></span>
+<h3>Lab 7(i) — DFT using DIT (Decimation In Time) FFT Algorithm</h3>
+<p><span class="b blue">Aim:</span> To compute the DFT using the DIT (Cooley-Tukey) FFT butterfly algorithm.</p>
+
+<div class="definition-box">
+  <span class="def-term">DIT FFT — Theory</span>
+  The FFT (Fast Fourier Transform) computes the N-point DFT in O(N log₂N) operations instead of O(N²) for the direct DFT. The DIT algorithm:<br>
+  1. <span class="b">Bit-reverse</span> the input sequence (reorder by bit-reversed index)<br>
+  2. Compute N/2 butterfly operations at each of log₂(N) stages<br>
+  3. Each butterfly: B = A + W·C, D = A − W·C, where W = e^{−j2πk/N} are <span class="b">twiddle factors</span>
+</div>
+
+<span class="code-label">📐 MATLAB Program — DIT FFT</span>
+<div class="code">function b = ditdft(a)
+a = bitrevorder(a);            % Step 1: bit-reverse the input
+N = length(a);
+l = log2(N);                   % number of stages
+
+for m = 1:1:l                  % for each stage m
+    % compute twiddle factors for this stage
+    for t = 0:1:((2^(m-1))-1)    
+        k(t+1)  = (N*t) / 2^m;
+        wn(t+1) = exp((-2*i*pi*k(t+1)) / N);
+    end
+    
+    % butterfly operations
+    for p = 1:2^m:(N - 2^(m-1))
+        r = 1;
+        x = p;
+        for q = x+2^(m-1) : 1 : (x+2^m)-1
+            b(p) = a(p) + a(q)*wn(r);   % butterfly output 1
+            b(q) = a(p) - a(q)*wn(r);   % butterfly output 2
+            p = p + 1;
+            r = r + 1;
+        end
+    end
+    a = b;                     % update for next stage
+end
+return;
+end</div>
+
+<div class="code-output">Sample Run:
+a = [1 2 2 2]
+b = ditdft(a)
+b = [7    -1    -1    -1]
+
+Verification using direct DFT: X(0)=1+2+2+2=7 ✓
+X(1) = 1 + 2·e^{-jπ/2} + 2·e^{-jπ} + 2·e^{-j3π/2}
+     = 1 + 2(0-j) + 2(-1) + 2(0+j) = 1-j·2-2+j·2 = -1 ✓</div>
+
+<h3>Lab 7(ii) — IDFT using DIT Algorithm</h3>
+<p><span class="b blue">Aim:</span> To compute the IDFT using the DIT algorithm (exploiting conjugate symmetry).</p>
+<p><span class="b">Theory:</span> The IDFT can be computed using the DFT engine by: (1) conjugate the input, (2) apply DFT, (3) divide by N, (4) conjugate the result.</p>
+
+<span class="code-label">📐 MATLAB Program — IDFT using DIT</span>
+<div class="code">function a = idftdit(b)
+% Inverse DFT using the DIT DFT function
+a = conj(b);             % Step 1: conjugate input
+a = ditdft(a);           % Step 2: apply forward DFT
+a = a / length(a);       % Step 3: divide by N
+a = conj(a);             % Step 4: conjugate result
+return;
+end</div>
+
+<div class="code-output">Sample Run:
+b = [7 -1 -1 -1];
+a = idftdit(b)
+a = [1   2   2   2]   ✓ (recovers original sequence)</div>
+
+<!-- Lab 8: DIF FFT -->
+<span class="anchor" id="lab8"></span>
+<h3>Lab 8(i) — DFT using DIF (Decimation In Frequency) FFT Algorithm</h3>
+<p><span class="b blue">Aim:</span> To compute the DFT using DIF FFT algorithm.</p>
+<p><span class="b">DIF vs DIT:</span> In DIT, bit-reversal is done on the INPUT (before the butterfly stages). In DIF, bit-reversal is done on the OUTPUT (after the butterfly stages). The butterfly structure is also different: in DIF, the twiddle factor multiplication comes AFTER the addition/subtraction.</p>
+
+<span class="code-label">📐 MATLAB Program — DIF FFT</span>
+<div class="code">function a = difdft(a)
+N = length(a);
+l = log2(N);
+
+for m = l:-1:1             % stages run from l down to 1 (reversed vs DIT)
+    for t = 0:1:((2^(m-1))-1)    
+        k(t+1)  = (N*t) / 2^m;
+        wn(t+1) = exp((-2*i*pi*k(t+1)) / N);
+    end
+    
+    for p = 1:2^m:(N - 2^(m-1))
+        r = 1;
+        x = p;
+        for q = x+2^(m-1) : 1 : (x+2^m)-1
+            b(p) = a(p) + a(q);           % add first
+            b(q) = (a(p) - a(q)) * wn(r); % then multiply by twiddle (DIF butterfly)
+            p = p + 1;
+            r = r + 1;
+        end
+    end
+    a = b;
+end
+
+a = bitrevorder(a);        % bit-reverse the OUTPUT (DIF specific)
+return;
+end</div>
+
+<div class="code-output">Sample Run:
+a = [1 2 3 4]
+X = difdft(a)
+X = 10.0000   -2.0000+2.0000i   -2.0000   -2.0000-2.0000i
+
+Verification:
+X(0) = 1+2+3+4 = 10 ✓
+X(1) = 1 + 2e^{-jπ/2} + 3e^{-jπ} + 4e^{-j3π/2} = 1-2j-3+4j = -2+2j ✓</div>
+
+<h3>Lab 8(ii) — IDFT using DIF Algorithm</h3>
+
+<span class="code-label">📐 MATLAB Program — IDFT using DIF</span>
+<div class="code">function r = idftdif(a)
+a = conj(a);             % conjugate input
+a = difdft(a);           % apply DIF DFT
+a = a / length(a);       % divide by N
+r = conj(a);             % conjugate result
+return;
+end</div>
+
+<div class="code-output">Sample Run:
+A = [10.0000  -2.0000+2.0000i  -2.0000  -2.0000-2.0000i]
+r = idftdif(A)
+a = [1  2  3  4]  ✓</div>
+
+<!-- Lab 9: Butterworth IIR -->
+<span class="anchor" id="lab9"></span>
+<h3>Lab 9 — IIR Butterworth Filter (Impulse Invariant Method)</h3>
+<p><span class="b blue">Aim:</span> To design an IIR Butterworth filter using the impulse invariant method.</p>
+
+<div class="definition-box">
+  <span class="def-term">Butterworth Filter Design</span>
+  The Butterworth filter has a <span class="b">maximally flat magnitude response</span> in the passband. The filter order N and cutoff frequency wc are determined from the passband and stopband specifications:<br>
+  N = ⌈log(√((10^{0.1·As}−1)/(10^{0.1·Ap}−1))) / log(ws/wp)⌉
+</div>
+
+<span class="code-label">📐 MATLAB Program — Butterworth LPF Design</span>
+<div class="code">clear all; clc; close all;
+
+ap = input('Enter passband attenuation (dB): ');
+as = input('Enter stopband attenuation (dB): ');
+wp = input('Enter passband edge frequency (rad/s): ');
+ws = input('Enter stopband edge frequency (rad/s): ');
+
+% Compute order
+N  = ceil(log(sqrt((10^(0.1*as)-1) / (10^(0.1*ap)-1))) / log(ws/wp))
+% Compute cutoff frequency
+wc = ws / ((10^(0.1*as) - 1)^(1/(2*N)))
+
+% Define transfer function based on order N
+switch N
+    case 1, H = @(s) 1/(s/wc + 1);
+    case 2, H = @(s) 1/((s/wc)^2 + 2^.5*s/wc + 1);
+    case 3, H = @(s) 1/((s/wc + 1)*((s/wc)^2 + s/wc + 1));
+    case 4, H = @(s) 1/(((s/wc)^2 + .7654*s/wc + 1)*((s/wc)^2 + 1.8477*s/wc + 1));
+end
+
+% Compute and plot frequency response
+j = 1;
+for w = 0:1:2*ws
+    a(j) = abs(H(1i*w));       % magnitude at each frequency
+    j = j + 1;
+end
+w = 0:1:2*ws;
+semilogx(w, a);
+xlabel('Frequency (rad/s)'); ylabel('|H(jw)|');
+title(['Butterworth LP Filter - Order ' num2str(N)]);</div>
+
+<!-- Lab 10: Hamming Window FIR -->
+<span class="anchor" id="lab10"></span>
+<h3>Lab 10 — FIR LPF using Hamming Window</h3>
+<p><span class="b blue">Aim:</span> To design a FIR low-pass filter using the Hamming window technique.</p>
+
+<div class="definition-box">
+  <span class="def-term">FIR Filter Design by Windowing</span>
+  1. Specify the ideal (brick-wall) low-pass filter with cutoff wc<br>
+  2. Compute the ideal impulse response hd(n) = sin(wc·n)/(π·n)<br>
+  3. Apply a window function w(n) to truncate the ideal response<br>
+  4. h(n) = hd(n) · w(n) is the practical FIR filter<br>
+  Hamming window: w(n) = 0.54 − 0.46·cos(2πn/(M−1)) → ~40 dB stopband attenuation
+</div>
+
+<span class="code-label">📐 MATLAB Program — Hamming Window FIR LPF</span>
+<div class="code">clear all; close all;
+
+ws = 0.15;              % stopband edge frequency (normalized)
+wp = 0.05;              % passband edge frequency (normalized)
+t  = ws - wp;           % transition band width
+wc = (ws + wp) / 2;    % cutoff frequency (midpoint of transition band)
+
+M = ceil(6.6*pi / t) + 1;   % filter length (Hamming window formula)
+x = (M-1) / 2;              % center of the filter
+
+n = [0:M-1];
+m = n - x + eps;             % offset to avoid division by zero
+
+hd = sin(wc*m) ./ (pi*m);   % ideal impulse response (sinc function)
+
+% Compute Hamming window
+for i = 1:length(hd) 
+    wham(i) = 0.54 - 0.46*cos(2*pi*(i-1)/(M-1));
+end 
+
+h = hd .* wham;              % actual FIR filter coefficients
+H = fft(h);                  % frequency response
+
+% Plot results
+subplot(2,2,1); stem(hd);
+title('Ideal Impulse Response hd(n)');
+xlabel('n'); ylabel('hd(n)'); 
+
+subplot(2,2,2); stem(n, wham);
+title('Hamming Window w(n)');
+xlabel('n'); ylabel('w(n)'); 
+
+subplot(2,2,3:4); stem(n, h);
+title('Actual FIR Filter Impulse Response h(n)');
+xlabel('n'); ylabel('h(n)');</div>
+
+<!-- Lab 11: Convolution -->
+<span class="anchor" id="lab11"></span>
+<h3>Lab 11(i) — Linear Convolution (Manual Algorithm)</h3>
+<p><span class="b blue">Aim:</span> To compute the linear convolution of two sequences without using MATLAB's built-in conv() function.</p>
+
+<span class="code-label">📐 MATLAB Program — Linear Convolution</span>
+<div class="code">x = input('Enter first sequence: ');
+h = input('Enter second sequence: ');
+
+m = length(x); 
+n = length(h);
+l = m + n - 1;               % length of convolution result
+
+r = zeros(1, l);             % initialize output
+
+for k = 1:l
+    for j = max(1, k+1-n) : min(k, m)
+        r(k) = r(k) + x(j) * h(k+1-j);
+    end
+end
+
+disp('Linear Convolution r(n) =');
+disp(r);</div>
+
+<div class="code-output">Sample Run:
+Enter first sequence:  [1 2 3]
+Enter second sequence: [1 2 3 4]
+
+Convolution r(n) = [1  4  10  16  17  12]
+
+Verification (manually):
+r(0) = 1·1 = 1
+r(1) = 1·2 + 2·1 = 4
+r(2) = 1·3 + 2·2 + 3·1 = 10
+r(3) = 1·4 + 2·3 + 3·2 = 16
+r(4) = 2·4 + 3·3 = 17
+r(5) = 3·4 = 12   ✓</div>
+
+<h3>Lab 11(ii) — Circular Convolution</h3>
+<p><span class="b blue">Aim:</span> To compute the N-point circular convolution of two sequences.</p>
+
+<div class="definition-box">
+  <span class="def-term">Circular vs Linear Convolution</span>
+  In <span class="b">circular convolution</span> with period N, indices wrap around (modulo N). If the input sequences have lengths L₁ and L₂, the circular convolution with N ≥ L₁ + L₂ − 1 gives the same result as linear convolution. <br>
+  Circular convolution is what the DFT computes: Y(k) = X(k)·H(k) in frequency domain → y(n) = x(n) ⊛ h(n) in time domain.
+</div>
+
+<span class="code-label">📐 MATLAB Program — Circular Convolution</span>
+<div class="code">a = input('Enter first sequence: ');
+b = input('Enter second sequence: ');
+
+x = length(a);
+y = length(b);
+z = max(x, y);
+
+% Zero-pad shorter sequence to equal length
+if x > y
+    for i = y+1:x, b(i) = 0; end
+elseif x < y
+    for j = x+1:y, a(j) = 0; end
+end
+
+c = zeros(1, z);             % initialize circular convolution output
+
+for i = 1:z    
+    c(i) = 0;     
+    for k = 1:z
+        j = (i - k) + 1;
+        if (j <= 0), j = z + j; end   % wrap around (modulo N indexing)
+        c(i) = c(i) + (a(k) * b(j));
+    end
+end 
+
+disp('Circular Convolution c(n) =');
+disp(c);</div>
+
+<div class="code-output">Sample Run:
+Enter 1st sequence: [1 2 2 2]
+Enter 2nd sequence: [1 2 3]
+
+Circular convolution (N=4, zero-padded: [1 2 3 0]):
+c = [11   10   9   12]
+
+Note: The circular convolution wraps the index. Different from linear convolution!
+Linear convolution would give: [1 4 9 12 10 6] (length 6)
+Circular with N=4 "folds" the tail back onto the beginning.</div>
+
+<!-- Lab 12: Correlation -->
+<span class="anchor" id="lab12"></span>
+<h3>Lab 12(i) — Auto-Correlation</h3>
+<p><span class="b blue">Aim:</span> To find the auto-correlation of a given sequence.</p>
+
+<div class="definition-box">
+  <span class="def-term">Auto-Correlation (Definition)</span>
+  The auto-correlation of x(n) measures the similarity of the signal with a time-shifted version of itself:<br>
+  r_xx(l) = Σ x(n) · x(n−l) = x(l) * x(−l)<br>
+  <span class="b">Length of result:</span> 2N − 1 for a length-N sequence<br>
+  <span class="b">Property:</span> r_xx(l) = r_xx(−l) — auto-correlation is always even-symmetric<br>
+  <span class="b">Peak:</span> r_xx(0) = Σ x²(n) = signal energy (always maximum at l = 0)
+</div>
+
+<span class="code-label">📐 MATLAB Program — Auto-Correlation</span>
+<div class="code">a  = input('Enter the sequence: ');
+n1 = length(a);
+n  = 2*n1 - 1;               % length of auto-correlation output
+
+b  = zeros(1, n);
+c  = zeros(1, n);
+d  = zeros(1, n);
+
+n2 = n - n1;
+
+% Place sequence at start of b
+for i = 1:n1, b(i) = a(i); end
+
+% Place sequence at offset n2 in c
+for i = n2:n-1, c(i+1) = a(i+1-n2); end
+
+% Compute correlation by shifting b past c
+for i = 1:n
+    d(i) = sum(b .* c);
+    for j = n:-1:2, b(j) = b(j-1); end  % shift b right by 1
+    b(1) = 0;
+end
+
+disp('Auto-Correlation d(n) =');
+disp(d);</div>
+
+<div class="code-output">Sample Run:
+Enter sequence: [1 2 3 4]
+
+Auto-correlation: d = [4  11  20  30  20  11  4]
+
+Verification (key values):
+d(0) = Σ x²(n) = 1² + 2² + 3² + 4² = 1+4+9+16 = 30  ✓ (center value, peak)
+d(1) = Σ x(n)x(n-1) = 2·1+3·2+4·3 = 2+6+12 = 20  ✓
+d(-1) = d(1) = 20  ✓ (even symmetry confirmed)</div>
+
+<h3>Lab 12(ii) — Cross-Correlation</h3>
+<p><span class="b blue">Aim:</span> To find the cross-correlation between two given sequences.</p>
+
+<div class="definition-box">
+  <span class="def-term">Cross-Correlation (Definition)</span>
+  The cross-correlation of x(n) and h(n) measures similarity between two different signals:<br>
+  r_xh(l) = Σ x(n) · h(n−l) = x(l) * h(−l)<br>
+  <span class="b">Application:</span> Detecting a known signal h(n) within noise-corrupted x(n) — radar, sonar, communications
+</div>
+
+<span class="code-label">📐 MATLAB Program — Cross-Correlation</span>
+<div class="code">x  = input('Enter first sequence: ');
+h1 = input('Enter second sequence: ');
+
+m = length(x);
+n = length(h1);
+
+% Time-reverse h1 to get h
+h(n:-1:1) = h1(1:n);        % h(k) = h1(n+1-k)
+
+l = m + n - 1;              % length of cross-correlation
+
+r = zeros(1, l);
+
+for k = 1:l
+    for j = max(1, k+1-n) : min(k, m)
+        r(k) = r(k) + x(j) * h(k+1-j);
+    end
+end
+
+disp('Cross-Correlation r(n) =');
+disp(r);</div>
+
+<div class="code-output">Sample Run:
+Enter first sequence:  [1 2 2 2]
+Enter second sequence: [2 2 3]
+
+Cross-correlation r = [3  8  12  14  8  4]
+
+Note: Cross-correlation is NOT generally symmetric (unlike auto-correlation).
+Peak value indicates the delay where the two signals are most similar.</div>
+
+<hr class="chapter-break">
+
+<!-- ═══════════════════════════════════════════════ PRACTICE PROBLEMS -->
+<span class="anchor" id="problems"></span>
+<h2>Practice Problems — Full Solutions</h2>
+
+<!-- P1 -->
+<div class="problem-box">
+  <span class="prob-head">Problem 1 — System Classification</span>
+  Classify y(n) = n²·e^{x(n)} into: Linear/Nonlinear, Time-Variant/Time-Invariant, Causal/Non-Causal
+</div>
+<div class="solution-box">
+  <span class="sol-head">Complete Solution</span>
+  <span class="b blue">1. Linearity Test:</span><br>
+  Let y₁(n) = n²·e^{x₁(n)} and y₂(n) = n²·e^{x₂(n)}<br>
+  Apply input: x₃(n) = α·x₁(n) + β·x₂(n)<br>
+  y₃(n) = T[x₃(n)] = n²·e^{α·x₁(n) + β·x₂(n)} = n²·e^{α·x₁(n)}·e^{β·x₂(n)}<br>
+  Expected (if linear): α·y₁(n) + β·y₂(n) = αn²·e^{x₁(n)} + βn²·e^{x₂(n)}<br>
+  y₃(n) ≠ expected (generally) → <span class="b red">NONLINEAR</span> ✓<br>
+  The exponential operation e^{x(n)} violates superposition.<br><br>
+  <span class="b blue">2. Time Invariance Test:</span><br>
+  y₁(n) = T[x(n)] = n²·e^{x(n)}<br>
+  Delay the output: y₁(n−k) = (n−k)²·e^{x(n−k)}<br>
+  Apply delayed input: y₂(n) = T[x(n−k)] = n²·e^{x(n−k)}<br>
+  Comparison: y₂(n) = n²·e^{x(n−k)} vs y₁(n−k) = (n−k)²·e^{x(n−k)}<br>
+  n² ≠ (n−k)² in general → y₂(n) ≠ y₁(n−k) → <span class="b red">TIME VARIANT</span> ✓<br>
+  The coefficient n² shifts differently than the signal.<br><br>
+  <span class="b blue">3. Causality Test:</span><br>
+  y(n) = n²·e^{x(n)}: the output at time n depends only on x(n) — the current input value only.<br>
+  There is no dependence on x(n+1), x(n+2), etc. (no future values)<br>
+  → <span class="b green">CAUSAL</span> ✓
+</div>
+
+<!-- P2 -->
+<div class="problem-box">
+  <span class="prob-head">Problem 2 — Linear Convolution (Full Solution)</span>
+  Compute y(n) = x(n) * h(n) for x(n) = {3, 11, 7, 0, −1, 4, 2} and h(n) = {2, 3, 0, −5, 2, 1}
+</div>
+<div class="solution-box">
+  <span class="sol-head">Complete Step-by-Step Solution (Tabular Method)</span>
+  Both sequences start at n = 0. Length of y = 7 + 6 − 1 = 12.<br><br>
+  <span class="b">Computing y(n) = Σ x(k)·h(n−k):</span><br>
+  y(0) = x(0)·h(0) = 3·2 = <span class="b">6</span><br>
+  y(1) = x(0)·h(1) + x(1)·h(0) = 3·3 + 11·2 = 9 + 22 = <span class="b">31</span><br>
+  y(2) = x(0)·h(2) + x(1)·h(1) + x(2)·h(0) = 3·0 + 11·3 + 7·2 = 0+33+14 = <span class="b">47</span><br>
+  y(3) = x(0)·h(3)+x(1)·h(2)+x(2)·h(1)+x(3)·h(0) = 3·(−5)+11·0+7·3+0·2 = −15+0+21+0 = <span class="b">6</span><br>
+  y(4) = x(0)·h(4)+x(1)·h(3)+x(2)·h(2)+x(3)·h(1)+x(4)·h(0)<br>
+       = 3·2+11·(−5)+7·0+0·3+(−1)·2 = 6−55+0+0−2 = <span class="b">−51</span><br>
+  y(5) = x(0)·h(5)+x(1)·h(4)+x(2)·h(3)+x(3)·h(2)+x(4)·h(1)+x(5)·h(0)<br>
+       = 3·1+11·2+7·(−5)+0·0+(−1)·3+4·2 = 3+22−35+0−3+8 = <span class="b">−5</span><br>
+  y(6) = x(1)·h(5)+x(2)·h(4)+x(3)·h(3)+x(4)·h(2)+x(5)·h(1)+x(6)·h(0)<br>
+       = 11·1+7·2+0·(−5)+(−1)·0+4·3+2·2 = 11+14+0+0+12+4 = <span class="b">41</span><br>
+  y(7) = x(2)·h(5)+x(3)·h(4)+x(4)·h(3)+x(5)·h(2)+x(6)·h(1)<br>
+       = 7·1+0·2+(−1)·(−5)+4·0+2·3 = 7+0+5+0+6 = <span class="b">18</span><br>
+  y(8) = x(3)·h(5)+x(4)·h(4)+x(5)·h(3)+x(6)·h(2)<br>
+       = 0·1+(−1)·2+4·(−5)+2·0 = 0−2−20+0 = <span class="b">−22</span><br>
+  y(9) = x(4)·h(5)+x(5)·h(4)+x(6)·h(3)<br>
+       = (−1)·1+4·2+2·(−5) = −1+8−10 = <span class="b">−3</span><br>
+  y(10) = x(5)·h(5)+x(6)·h(4) = 4·1+2·2 = 4+4 = <span class="b">8</span><br>
+  y(11) = x(6)·h(5) = 2·1 = <span class="b">2</span><br><br>
+  <span class="b hl-y">y(n) = {6, 31, 47, 6, −51, −5, 41, 18, −22, −3, 8, 2}</span>
+</div>
+
+<!-- P3 -->
+<div class="problem-box">
+  <span class="prob-head">Problem 3 — Convolution with Causal Sequences</span>
+  x(n) = {−1, 3, 0, 1, −2} (causal, starts at n=0)<br>
+  h(n) = {2, 0, −1, 1} (impulse response of causal system)<br>
+  Find y(n) = x(n) * h(n).
+</div>
+<div class="solution-box">
+  <span class="sol-head">Complete Solution</span>
+  Length of y = 5 + 4 − 1 = 8<br><br>
+  y(0) = x(0)·h(0) = (−1)·2 = <span class="b">−2</span><br>
+  y(1) = x(0)·h(1)+x(1)·h(0) = (−1)·0+3·2 = 0+6 = <span class="b">6</span><br>
+  y(2) = x(0)·h(2)+x(1)·h(1)+x(2)·h(0) = (−1)·(−1)+3·0+0·2 = 1+0+0 = <span class="b">1</span><br>
+  y(3) = x(0)·h(3)+x(1)·h(2)+x(2)·h(1)+x(3)·h(0) = (−1)·1+3·(−1)+0·0+1·2 = −1−3+0+2 = <span class="b">−2</span><br>
+  y(4) = x(1)·h(3)+x(2)·h(2)+x(3)·h(1)+x(4)·h(0) = 3·1+0·(−1)+1·0+(−2)·2 = 3+0+0−4 = <span class="b">−1</span><br>
+  y(5) = x(2)·h(3)+x(3)·h(2)+x(4)·h(1) = 0·1+1·(−1)+(−2)·0 = 0−1+0 = <span class="b">−1</span><br>
+  y(6) = x(3)·h(3)+x(4)·h(2) = 1·1+(−2)·(−1) = 1+2 = <span class="b">3</span><br>
+  y(7) = x(4)·h(3) = (−2)·1 = <span class="b">−2</span><br><br>
+  <span class="b hl-y">y(n) = {−2, 6, 1, −2, −1, −1, 3, −2}</span>
+</div>
+
+<!-- P4 -->
+<div class="problem-box">
+  <span class="prob-head">Problem 4 — Z-Transform with Time-Shifting Property</span>
+  Find X(z) = Z{(n−2)·(0.5)^{n−2}·u(n−2)}
+</div>
+<div class="solution-box">
+  <span class="sol-head">Complete Solution</span>
+  <span class="b">Step 1:</span> Recognize the form. Let f(n) = n·(0.5)ⁿ·u(n).<br>
+  The given sequence is x(n) = f(n−2), i.e., f shifted by 2.<br><br>
+  <span class="b">Step 2:</span> Find F(z) = Z{f(n)} = Z{n·(0.5)ⁿ·u(n)}<br>
+  From the table (derivative property): Z{n·aⁿ·u(n)} = az⁻¹/(1−az⁻¹)²<br>
+  With a = 0.5: F(z) = 0.5z⁻¹ / (1 − 0.5z⁻¹)²<br><br>
+  <span class="b">Step 3:</span> Apply Time-Shifting Property: Z{f(n−k)} = z⁻ᵏ·F(z)<br>
+  X(z) = Z{f(n−2)} = z⁻² · F(z) = z⁻² · [0.5z⁻¹/(1−0.5z⁻¹)²]<br><br>
+  <span class="b hl-y">X(z) = 0.5z⁻³ / (1 − 0.5z⁻¹)²</span>
+</div>
+
+<!-- P5 -->
+<div class="problem-box">
+  <span class="prob-head">Problem 5 — Difference Equation Sequence Generation</span>
+  Determine and plot the sequence y(n) = x(n) − α·x(n−1) where x(n) = αⁿu(n).
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution</span>
+  x(n) = αⁿu(n): values are α⁰=1, α¹, α², α³, … for n = 0, 1, 2, 3, …<br>
+  x(n−1) = α^{n−1}u(n−1): values are 0 at n=0, α⁰=1 at n=1, α¹ at n=2, …<br><br>
+  y(n) = x(n) − α·x(n−1) = αⁿu(n) − α·α^{n−1}u(n−1)<br>
+  = αⁿu(n) − αⁿu(n−1)<br>
+  = αⁿ[u(n) − u(n−1)]<br>
+  = αⁿ·δ(n) &nbsp;&nbsp; [since u(n) − u(n−1) = δ(n)]<br>
+  = α⁰·δ(n) = δ(n)<br>
+  <span class="b hl-y">y(n) = δ(n)</span> — a unit impulse!<br><br>
+  This is an important result: the first-difference filter applied to a geometric sequence produces an impulse. This shows that y(n) = x(n) − αx(n−1) is an inverse filter for the system that has impulse response αⁿu(n).
+</div>
+
+<!-- P6: Cross-correlation -->
+<div class="problem-box">
+  <span class="prob-head">Problem 6 — Demonstrate Convolution = Correlation Connection</span>
+  Show that x(n) * h(n) = R_xh(n) where h(n) is the correlation of x with itself shifted.
+</div>
+<div class="solution-box">
+  <span class="sol-head">Key Relationships</span>
+  <span class="b">Auto-correlation:</span> R_xx(l) = x(l) * x(−l) = Σ x(n)·x(n−l)<br>
+  <span class="b">Cross-correlation:</span> R_xh(l) = x(l) * h(−l) = Σ x(n)·h(n−l)<br><br>
+  Note: Correlation is convolution with one sequence time-reversed!<br>
+  <span class="b hl-y">R_xh(l) = x(l) ★ h(l) = x(l) * h(−l)</span><br>
+  where ★ denotes cross-correlation.<br><br>
+  <span class="b">In Z-domain:</span><br>
+  Z{x(n) * h(n)} = X(z)·H(z)<br>
+  Z{R_xh(n)} = X(z)·H(z⁻¹) &nbsp; (using time-reversal: Z{h(−n)} = H(z⁻¹))
+</div>
+
+<!-- P7: Stability check -->
+<div class="problem-box">
+  <span class="prob-head">Problem 7 — BIBO Stability Check</span>
+  Check if y[n] = 0.9y[n−1] + x[n] is BIBO stable.
+</div>
+<div class="solution-box">
+  <span class="sol-head">Solution — Method 1: Impulse Response</span>
+  For a causal system with difference equation y[n] = αy[n−1] + x[n]:<br>
+  The impulse response h(n) = αⁿu(n) (can be verified by substituting x(n) = δ(n))<br>
+  Here α = 0.9, so h(n) = (0.9)ⁿu(n)<br><br>
+  Check absolute summability:<br>
+  Σ |h(n)| = Σ_{n=0}^{∞} (0.9)ⁿ = 1/(1−0.9) = 1/0.1 = 10 &lt; ∞<br>
+  <span class="b hl-g">→ BIBO STABLE</span><br><br>
+  <span class="b">Method 2: Pole Location</span><br>
+  H(z) = 1/(1−0.9z⁻¹) = z/(z−0.9)<br>
+  Single pole at z = 0.9. Since |0.9| = 0.9 &lt; 1 → inside unit circle → <span class="b hl-g">STABLE</span>
+</div>
+
+<!-- Final summary table -->
+<h3>Summary — System Classification Quick Reference</h3>
+<table>
+  <tr><th>System y(n) = …</th><th>Linear?</th><th>Time-Inv?</th><th>Causal?</th><th>Stable?</th></tr>
+  <tr><td>3·x(n)</td><td class="green">Yes</td><td class="green">Yes</td><td class="green">Yes</td><td class="green">Yes</td></tr>
+  <tr><td>x(n) + x(n−1)</td><td class="green">Yes</td><td class="green">Yes</td><td class="green">Yes</td><td class="green">Yes</td></tr>
+  <tr><td>x²(n)</td><td class="red">No</td><td class="green">Yes</td><td class="green">Yes</td><td>Depends</td></tr>
+  <tr><td>n·x(n)</td><td class="green">Yes</td><td class="red">No</td><td class="green">Yes</td><td class="red">No</td></tr>
+  <tr><td>x(n²)</td><td class="green">Yes</td><td class="red">No</td><td class="red">No</td><td>Depends</td></tr>
+  <tr><td>n²·e^{x(n)}</td><td class="red">No</td><td class="red">No</td><td class="green">Yes</td><td>Depends</td></tr>
+  <tr><td>ax(n−1) + x(−n)</td><td class="green">Yes</td><td class="red">No</td><td class="red">No</td><td>Depends</td></tr>
+  <tr><td>0.9y(n−1) + x(n)</td><td class="green">Yes</td><td class="green">Yes</td><td class="green">Yes</td><td class="green">Yes</td></tr>
+  <tr><td>2y(n−1) + x(n)</td><td class="green">Yes</td><td class="green">Yes</td><td class="green">Yes</td><td class="red">No (pole at z=2)</td></tr>
+</table>
+
+<hr class="chapter-break">
+
+<!-- ═══════════════════════════════════════════════ REFERENCE -->
+<h2>Quick Reference — Key Formulas</h2>
+
+<div class="math-box">
+  CONVOLUTION: y(n) = x(n)*h(n) = Σ x(k)h(n−k) = Σ h(k)x(n−k)
+  <span class="math-line">Length: L_y = L_x + L_h − 1</span>
+</div>
+<div class="math-box">
+  ENERGY: E = Σ |x(n)|² &nbsp;&nbsp; POWER: P = lim_{N→∞} (1/(2N+1)) Σ |x(n)|²
+</div>
+<div class="math-box">
+  Z-TRANSFORM: X(z) = Σ x(n)z⁻ⁿ
+  <span class="math-line">DTFT: X(e^{jω}) = X(z)|_{z=e^{jω}} = Σ x(n)e^{−jωn}</span>
+</div>
+<div class="math-box">
+  DFT: X(k) = Σ_{n=0}^{N−1} x(n)e^{−j2πkn/N}
+  <span class="math-line">IDFT: x(n) = (1/N) Σ_{k=0}^{N−1} X(k)e^{+j2πkn/N}</span>
+</div>
+<div class="math-box">
+  BIBO STABLE ↔ Σ|h(n)| &lt; ∞ ↔ All poles inside unit circle
+  <span class="math-line">CAUSAL ↔ h(n) = 0 for n &lt; 0</span>
+  <span class="math-line">PERIODIC x(n) ↔ ω₀/2π is rational</span>
+</div>
+
+<div class="box" style="transform:none;margin-top:var(--lh);">
+  <span class="b blue">References (Gollis University DSP Course):</span>
+  <ol>
+    <li>Oppenheim, A.V. and Schefar — Digital Signal Processing, PHI</li>
+    <li>Oppenheim — Applications of Digital Signal Processing, PHI</li>
+    <li>Proakis and Manolakis — Digital Signal Processing, Pearson</li>
+    <li>Antoniou, A. — Digital Filters: Analysis, Design, Applications, McGraw Hill</li>
+    <li>Vinay K. Ingle, Proakis — Digital Signal Processing using MATLAB, Bookware series</li>
+    <li>Sajeeth K. Mithra — Digital Signal Processing, TMH</li>
+    <li>P. Rameshbabu — Digital Signal Processing, Scitech publishers</li>
+    <li>Ifeachor and Jervis — Digital Signal Processing: A Practical Approach, Addison Wesley</li>
+    <li>Lyons R.G. — Understanding Digital Signal Processing, Addison Wesley</li>
+  </ol>
+</div>
+
+<div class="divider">✦ ✦ ✦ END OF COMPLETE DSP MASTER NOTEBOOK ✦ ✦ ✦</div>
+<p style="text-align:center;font-family:'Caveat',cursive;font-size:28px;color:var(--blue);">
+  Good Luck on Your Exams! 🎓📡
+</p>
+
+</div><!-- end .notebook -->
+</body>
+</html>
